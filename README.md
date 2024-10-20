@@ -1,4 +1,4 @@
-# MD Dumper CLI
+# MD Dumper
 
 This software is used with the project here : https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
