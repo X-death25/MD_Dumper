@@ -150,7 +150,6 @@ int device_found			 = -1;
 #define PRODUCT_ID   0x5740
 libusb_context       *context    = NULL   ;
 libusb_device        **devs               ;
-int                  rc          = 0      ;
 ssize_t              count                ; //holding number of devices in list
    
 
@@ -512,8 +511,8 @@ int Detect_Device(void)
 		libusb_device *device = devs[idx];
 		struct libusb_device_descriptor desc = {0};
 
-		rc = libusb_get_device_descriptor(device, &desc);
-		assert(rc == 0);
+		res = libusb_get_device_descriptor(device, &desc);
+		assert(res == 0);
 
 		if(desc.idVendor=VENDOR_ID && desc.idProduct==PRODUCT_ID) device_found=idx;
 		}
@@ -523,7 +522,7 @@ int Detect_Device(void)
 		SDL_Log("MD Dumper Device Found !\n");
 		libusb_device *device = devs[device_found];
 		struct libusb_device_descriptor desc = {0};
-		rc = libusb_get_device_descriptor(device, &desc);
+		res = libusb_get_device_descriptor(device, &desc);
 
 		SDL_Log("LibUSB Device ID = %d\n",device_found);
 		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
@@ -534,6 +533,10 @@ int Detect_Device(void)
 			{
 			SDL_Log("Unable to open MD Dumper Device.\n");
 			return 1;
+			}
+		else
+			{
+			SDL_Log("MD Dumper Device opened !\n");
 			}
 		}
 	else
