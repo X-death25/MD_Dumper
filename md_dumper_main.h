@@ -522,7 +522,7 @@ int Detect_Device(void)
 		{
 		SDL_Log("MD Dumper Device Found !\n");
 		libusb_device *device = devs[idx];
-		libusb_device_descriptor desc = {0};
+		struct libusb_device_descriptor desc = {0};
 		rc = libusb_get_device_descriptor(device, &desc);
 
 		SDL_Log("LibUsb Device ID = %d\n",device_found);
