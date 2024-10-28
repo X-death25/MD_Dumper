@@ -527,6 +527,14 @@ int Detect_Device(void)
 
 		SDL_Log("LibUsb Device ID = %d\n",device_found);
 		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
+		
+		libusb_open(device, &handle);
+
+		if (!handle)
+			{
+			SDL_Log("Unable to open device.\n");
+			return 1;
+			}
 		}
 	else
 		{
@@ -540,14 +548,6 @@ int Detect_Device(void)
      * intending to allow multiple demo boards to be connected at once, you
      * will need to use libusb_get_device_list() instead. Refer to the libusb
      * documentation for details. */
-
-    libusb_open(device, &handle);
-
-    if (!handle)
-    {
-        SDL_Log("Unable to open device.\n");
-        return 1;
-    }
 
 	if(libusb_kernel_driver_active(handle, 0))
 	{
