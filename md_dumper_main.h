@@ -542,22 +542,24 @@ int Detect_Device(void)
 		return 1;
 		}
 	
-	for (int if_num = 0; if_num < 2; if_num++) {
+	int if_num_max=2;
+	for (int if_num = 0; if_num < if_num_max; if_num++) {
         if (libusb_kernel_driver_active(handle, if_num)) 
             if(libusb_detach_kernel_driver(handle, if_num)!=0)
 				libusb_close(handle);
         res = libusb_claim_interface(handle, if_num);
         if (res < 0) 
+			{
             SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
+			if(if_num==if_num_max-1)
+				{
+				SDL_Log("Exiting...");
+				return 1;
+				}
+			}
 		else
             SDL_Log("Interface %d claimed\n", if_num);
     }
-
-	if(if_num==2)
-		{
-		SDL_Log("Exiting...", if_num, libusb_error_name(res));
-		return 1;
-		}
 
     // Clean Buffer
     for (i = 0; i < 64; i++)
