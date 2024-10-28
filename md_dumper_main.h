@@ -521,7 +521,7 @@ int Detect_Device(void)
 	if(device_found!=-1)
 		{
 		SDL_Log("MD Dumper Device Found !\n");
-		libusb_device *device = devs[idx];
+		libusb_device *device = devs[device_found];
 		struct libusb_device_descriptor desc = {0};
 		rc = libusb_get_device_descriptor(device, &desc);
 
@@ -541,7 +541,7 @@ int Detect_Device(void)
      * will need to use libusb_get_device_list() instead. Refer to the libusb
      * documentation for details. */
 
-    libusb_open(dev, &handle);
+    libusb_open(device, &handle);
 
     if (!handle)
     {
