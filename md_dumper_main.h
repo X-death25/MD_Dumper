@@ -549,23 +549,38 @@ int Detect_Device(void)
      * will need to use libusb_get_device_list() instead. Refer to the libusb
      * documentation for details. */
 
-	if(libusb_kernel_driver_active(handle, 0))
-	{
-		if(libusb_detach_kernel_driver(handle, 0) == 0)
+
+    if(libusb_kernel_driver_active(handle, 0) == 1)
+    {
+        SDL_Log("Kernel Driver Active");
+        if(libusb_detach_kernel_driver(handle, 0) == 0)
             SDL_Log("Kernel Driver Detached!");
         else
         {
             SDL_Log("Couldn't detach kernel driver!\n");
             libusb_close(handle);
         }
-	}
-
+    }
     res = libusb_claim_interface(handle, 0);
-
     if (res != 0)
-	{
-        SDL_Log("Error claiming interface.\n");
-        return 1;
+    {
+        if(libusb_kernel_driver_active(handle, 1) == 1)
+        {
+            SDL_Log("Kernel Driver Active");
+            if(libusb_detach_kernel_driver(handle, 1) == 0)
+                SDL_Log("Kernel Driver Detached!");
+            else
+            {
+                SDL_Log("Couldn't detach kernel driver!\n");
+                libusb_close(handle);
+            }
+        }
+        res = libusb_claim_interface(handle, 1);
+        if (res != 0)
+        {
+            SDL_Log("Error claiming interface.\n");
+            return 1;
+        }
     }
 
     // Clean Buffer
