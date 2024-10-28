@@ -525,7 +525,7 @@ int Detect_Device(void)
 		struct libusb_device_descriptor desc = {0};
 		rc = libusb_get_device_descriptor(device, &desc);
 
-		SDL_Log("LibUsb Device ID = %d\n",device_found);
+		SDL_Log("LibUSB Device ID = %d\n",device_found);
 		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
 		
 		libusb_open(device, &handle);
