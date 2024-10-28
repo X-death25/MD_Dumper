@@ -782,44 +782,49 @@ int main(int argc, char *argv[])
 
     if ( gui_tab_mode==0 && data_type==0 && dump_mode==0 )
     {
-        return Read_ROM_Auto();
+        Read_ROM_Auto();
     }
     else if ( gui_tab_mode==0 && data_type==0 && dump_mode==1 )
     {
-        return Read_ROM_Manual();
+        Read_ROM_Manual();
     }
     else if ( gui_tab_mode==0 && data_type==0 && dump_mode==2 )
     {
-        return Read_ROM_Bankswitch();
+        Read_ROM_Bankswitch();
     }
     else if ( gui_tab_mode==0 && data_type==1 && dump_mode==0 )
     {
-        return Read_RAM_Auto();
+        Read_RAM_Auto();
     }
     else if ( gui_tab_mode==0 && data_type==1 && dump_mode==1 )
     {
-        return Read_RAM_Manual();
+        Read_RAM_Manual();
     }
     else if ( gui_tab_mode==0 && data_type==1 && dump_mode==2 )
     {
-        return Read_RAM_Bankswitch();
+        Read_RAM_Bankswitch();
     }
     else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==0 )
     {
-        return Erase_Flash();
+        Erase_Flash();
     }
     else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==1 )
     {
-        return Write_Flash();
+        Write_Flash();
     }
     else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==0 )
     {
-        return Erase_RAM();
+        Erase_RAM();
     }
     else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==1 )
     {
-        return Write_RAM();
+        Write_RAM();
     }
+    
+    libusb_release_interface(handle, 0);
+    libusb_close(handle);
+    libusb_exit(context);
+    
     return 0;
 }
 

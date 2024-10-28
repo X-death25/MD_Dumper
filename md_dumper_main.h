@@ -145,6 +145,14 @@ unsigned char usb_buffer_out[64] = {0};  /* 64 byte transfer buffer OUT */
 libusb_device_handle* handle = 0;        /* handle for USB device */
 int numBytes                 = 0;        /* Actual bytes transferred. */
 unsigned char usb_buffer_in[64] = {0};   /* 64 byte transfer buffer IN */
+int device_found			 = -1;
+#define VENDOR_ID    0x0483
+#define PRODUCT_ID   0x5740
+libusb_context       *context    = NULL   ;
+libusb_device        **devs               ;
+int                  rc          = 0      ;
+ssize_t              count                ; //holding number of devices in list
+   
 
 // MD Dumper Var
 
@@ -479,7 +487,8 @@ int Detect_Device(void)
 {
     /* Initialise libusb. */
     SDL_Log("Init LibUSB... \n");
-    res = libusb_init(0);
+    
+    res = libusb_init(&context);
     if (res != 0)
     {
         SDL_Log("Error initialising libusb.\n");
@@ -488,14 +497,51 @@ int Detect_Device(void)
 
     SDL_Log("LibUSB Init Sucessfully ! \n");
 
+
     SDL_Log("Detecting MD Dumper... \n");
+	
+	count = libusb_get_device_list(context, &devs);
+	if (count <= 0)
+    {
+        SDL_Log("Error getting device list\n");
+        return 1;
+    }
+
+	for (size_t idx = 0; idx < count; ++idx)
+		{
+		libusb_device *device = devs[idx];
+		libusb_device_descriptor desc = {0};
+
+		rc = libusb_get_device_descriptor(device, &desc);
+		assert(rc == 0);
+
+		if(desc.idVendor=VENDOR_ID && desc.idProduct==PRODUCT_ID) device_found=idx;
+		}
+	
+	if(device_found!=-1)
+		{
+		SDL_Log("MD Dumper Device Found !\n");
+		libusb_device *device = devs[idx];
+		libusb_device_descriptor desc = {0};
+		rc = libusb_get_device_descriptor(device, &desc);
+
+		SDL_Log("LibUsb Device ID = %d\n",device_found);
+		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
+		}
+	else
+		{
+		SDL_Log("MD Dumper Device Not Found !\n");
+		return ;
+		}
+	
+	
 
     /* Get the first device with the matching Vendor ID and Product ID. If
      * intending to allow multiple demo boards to be connected at once, you
      * will need to use libusb_get_device_list() instead. Refer to the libusb
      * documentation for details. */
 
-    handle = libusb_open_device_with_vid_pid(0, 0x0483, 0x5740);
+    libusb_open(dev, &handle);
 
     if (!handle)
     {
@@ -503,41 +549,23 @@ int Detect_Device(void)
         return 1;
     }
 
-    /* Claim interface #0. */
-
-    if(libusb_kernel_driver_active(handle, 0) == 1)
-    {
-        SDL_Log("Kernel Driver Active");
-        if(libusb_detach_kernel_driver(handle, 0) == 0)
+	if(libusb_kernel_driver_active(handle, 0))
+	{
+		if(libusb_detach_kernel_driver(handle, 0) == 0)
             SDL_Log("Kernel Driver Detached!");
         else
         {
             SDL_Log("Couldn't detach kernel driver!\n");
             libusb_close(handle);
         }
-    }
+	}
+
     res = libusb_claim_interface(handle, 0);
-    //SDL_Log("Test 1 : %d\n",res);
+
     if (res != 0)
-    {
-        if(libusb_kernel_driver_active(handle, 1) == 1)
-        {
-            SDL_Log("Kernel Driver Active");
-            if(libusb_detach_kernel_driver(handle, 1) == 0)
-                SDL_Log("Kernel Driver Detached!");
-            else
-            {
-                SDL_Log("Couldn't detach kernel driver!\n");
-                libusb_close(handle);
-            }
-        }
-        res = libusb_claim_interface(handle, 1);
-        //SDL_Log("Test 2 : %d\n",res);
-        if (res != 0)
-        {
-            SDL_Log("Error claiming interface.\n");
-            return 1;
-        }
+	{
+        SDL_Log("Error claiming interface.\n");
+        return 1;
     }
 
     // Clean Buffer
