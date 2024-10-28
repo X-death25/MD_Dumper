@@ -539,7 +539,7 @@ int Detect_Device(void)
 	else
 		{
 		SDL_Log("MD Dumper Device Not Found !\n");
-		return ;
+		return 1;
 		}
 	
 	
