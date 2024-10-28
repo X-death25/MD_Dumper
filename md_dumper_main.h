@@ -546,11 +546,9 @@ int Detect_Device(void)
         if (libusb_kernel_driver_active(handle, if_num)) 
             if(libusb_detach_kernel_driver(handle, if_num)!=0)
 				libusb_close(handle);
-        res = libusb_claim_interface(devh, if_num);
+        res = libusb_claim_interface(handle, if_num);
         if (res < 0) {
-            fprintf(stderr, "Error claiming interface: %s\n",
-                    libusb_error_name(rc));
-            goto out;
+            SDL_Log("Error claiming interface: %s\n", libusb_error_name(res));
         }
     }
 	
