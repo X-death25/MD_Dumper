@@ -510,7 +510,7 @@ int Detect_Device(void)
 	for (size_t idx = 0; idx < count; ++idx)
 		{
 		libusb_device *device = devs[idx];
-		libusb_device_descriptor desc = {0};
+		struct libusb_device_descriptor desc = {0};
 
 		rc = libusb_get_device_descriptor(device, &desc);
 		assert(rc == 0);
