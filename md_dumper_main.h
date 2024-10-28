@@ -526,13 +526,13 @@ int Detect_Device(void)
 		rc = libusb_get_device_descriptor(device, &desc);
 
 		SDL_Log("LibUsb Device ID = %d\n",device_found);
-		SDL_Log("LibUSB Device Vendor = %04x:%04x %04x\n",desc.idVendor,desc.idProduct,desc.bcdDevice);
+		SDL_Log("LibUSB Device Vendor = %04x:%04x %04x\n",desc.idVendor,desc.idProduct);
 		
 		libusb_open(device, &handle);
 
 		if (!handle)
 			{
-			SDL_Log("Unable to open device.\n");
+			SDL_Log("Unable to open MD Dumper Device.\n");
 			return 1;
 			}
 		}
@@ -547,43 +547,17 @@ int Detect_Device(void)
             if(libusb_detach_kernel_driver(handle, if_num)!=0)
 				libusb_close(handle);
         res = libusb_claim_interface(handle, if_num);
-        if (res < 0) {
-            SDL_Log("Error claiming interface: %s\n", libusb_error_name(res));
-        }
+        if (res < 0) 
+            SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
+		else
+            SDL_Log("Interface %d claimed\n", if_num);
     }
-	
-    if(libusb_kernel_driver_active(handle, 0) == 1)
-    {
-        SDL_Log("Kernel Driver Active");
-        if(libusb_detach_kernel_driver(handle, 0) == 0)
-            SDL_Log("Kernel Driver Detached!");
-        else
-        {
-            SDL_Log("Couldn't detach kernel driver!\n");
-            libusb_close(handle);
-        }
-    }
-    res = libusb_claim_interface(handle, 0);
-    if (res != 0)
-    {
-        if(libusb_kernel_driver_active(handle, 1) == 1)
-        {
-            SDL_Log("Kernel Driver Active");
-            if(libusb_detach_kernel_driver(handle, 1) == 0)
-                SDL_Log("Kernel Driver Detached!");
-            else
-            {
-                SDL_Log("Couldn't detach kernel driver!\n");
-                libusb_close(handle);
-            }
-        }
-        res = libusb_claim_interface(handle, 1);
-        if (res != 0)
-        {
-            SDL_Log("Error claiming interface.\n");
-            return 1;
-        }
-    }
+
+	if(if_num==2)
+		{
+		SDL_Log("Exiting...", if_num, libusb_error_name(res));
+		return 1;
+		}
 
     // Clean Buffer
     for (i = 0; i < 64; i++)
