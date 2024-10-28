@@ -821,7 +821,7 @@ int main(int argc, char *argv[])
         Write_RAM();
     }
     
-    libusb_release_interface(handle,0);
+    libusb_release_interface(handle,if_num);
     libusb_close(handle);
     libusb_exit(context);
     

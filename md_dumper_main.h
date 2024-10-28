@@ -146,6 +146,7 @@ libusb_device_handle* handle = 0;        /* handle for USB device */
 int numBytes                 = 0;        /* Actual bytes transferred. */
 unsigned char usb_buffer_in[64] = {0};   /* 64 byte transfer buffer IN */
 int device_found			 = -1;
+int if_num;
 #define VENDOR_ID    0x0483
 #define PRODUCT_ID   0x5740
 libusb_context       *context    = NULL   ;
@@ -546,7 +547,7 @@ int Detect_Device(void)
 		}
 	
 	int if_num_max=2;
-	for (int if_num = 0; if_num < if_num_max; if_num++) {
+	for (if_num = 0; if_num < if_num_max; if_num++) {
         if (libusb_kernel_driver_active(handle, if_num))
 			{
             res = libusb_detach_kernel_driver(handle, if_num);
