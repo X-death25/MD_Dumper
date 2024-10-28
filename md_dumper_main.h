@@ -526,7 +526,7 @@ int Detect_Device(void)
 		rc = libusb_get_device_descriptor(device, &desc);
 
 		SDL_Log("LibUsb Device ID = %d\n",device_found);
-		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
+		SDL_Log("LibUSB Device Vendor = %04x:%04x %04x\n",desc.idVendor,desc.idProduct,desc.bcdDevice);
 		
 		libusb_open(device, &handle);
 
@@ -542,14 +542,18 @@ int Detect_Device(void)
 		return 1;
 		}
 	
+	for (int if_num = 0; if_num < 2; if_num++) {
+        if (libusb_kernel_driver_active(handle, if_num)) 
+            if(libusb_detach_kernel_driver(handle, if_num)!=0)
+				libusb_close(handle);
+        res = libusb_claim_interface(devh, if_num);
+        if (res < 0) {
+            fprintf(stderr, "Error claiming interface: %s\n",
+                    libusb_error_name(rc));
+            goto out;
+        }
+    }
 	
-
-    /* Get the first device with the matching Vendor ID and Product ID. If
-     * intending to allow multiple demo boards to be connected at once, you
-     * will need to use libusb_get_device_list() instead. Refer to the libusb
-     * documentation for details. */
-
-
     if(libusb_kernel_driver_active(handle, 0) == 1)
     {
         SDL_Log("Kernel Driver Active");
