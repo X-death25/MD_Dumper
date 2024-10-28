@@ -547,10 +547,16 @@ int Detect_Device(void)
 	
 	int if_num_max=2;
 	for (int if_num = 0; if_num < if_num_max; if_num++) {
-        if (libusb_kernel_driver_active(handle, if_num)) 
-            if(libusb_detach_kernel_driver(handle, if_num)!=0)
-				libusb_close(handle);
+        SDL_Log("A\n");
+        if (libusb_kernel_driver_active(handle, if_num))
+			{
+			SDL_Log("B\n");
+            res = libusb_detach_kernel_driver(handle, if_num);
+			assert(res == 0);
+			}
+		SDL_Log("C\n");
         res = libusb_claim_interface(handle, if_num);
+        SDL_Log("D\n");
         if (res < 0) 
 			{
             SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
