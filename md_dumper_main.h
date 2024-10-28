@@ -552,7 +552,6 @@ int Detect_Device(void)
 			{
 			SDL_Log("B\n");
             res = libusb_detach_kernel_driver(handle, if_num);
-			assert(res == 0);
 			}
 		SDL_Log("C\n");
         res = libusb_claim_interface(handle, if_num);
@@ -567,7 +566,10 @@ int Detect_Device(void)
 				}
 			}
 		else
+			{
             SDL_Log("Interface %d claimed\n", if_num);
+			if_num=2;
+			}
     }
 
     // Clean Buffer
