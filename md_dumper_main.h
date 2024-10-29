@@ -538,7 +538,7 @@ int Detect_Device(void)
 			{
 			SDL_Log("MD Dumper Device opened !\n");
 			
-			int if_num_max=2;
+			int if_num_max=256;
 			for (if_num = 0; if_num < if_num_max; if_num++) 
 				{
 				if (libusb_kernel_driver_active(handle, if_num))
@@ -547,8 +547,8 @@ int Detect_Device(void)
 					if(res!=0)
 						{
 						SDL_Log("Could not detach kernel driver: %s !\n", libusb_error_name(res));
-						libusb_free_device_list(device, 1);
-						libusb_close(handle);
+						//libusb_free_device_list(device, 1);
+						//libusb_close(handle);
 						}
 					}
 				res = libusb_claim_interface(handle, if_num);
