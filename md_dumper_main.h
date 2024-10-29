@@ -538,6 +538,30 @@ int Detect_Device(void)
 		else
 			{
 			SDL_Log("MD Dumper Device opened !\n");
+
+			int if_num_max=2;
+			for (if_num = 0; if_num < if_num_max; if_num++) 
+				{
+				if (libusb_kernel_driver_active(handle, if_num))
+					{
+					res = libusb_detach_kernel_driver(handle, if_num);
+					}
+				res = libusb_claim_interface(handle, if_num);
+				if (res < 0) 
+					{
+					SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
+					if(if_num==if_num_max-1)
+						{
+						SDL_Log("Exiting...");
+						return 1;
+						}
+					}
+				else
+					{
+					SDL_Log("Interface %d claimed\n", if_num);
+					if_num=2;
+					}
+				}
 			}
 		}
 	else
@@ -545,30 +569,6 @@ int Detect_Device(void)
 		SDL_Log("MD Dumper Device Not Found !\n");
 		return 1;
 		}
-	
-	int if_num_max=2;
-	for (if_num = 0; if_num < if_num_max; if_num++) {
-        if (libusb_kernel_driver_active(handle, if_num))
-			{
-            res = libusb_detach_kernel_driver(handle, if_num);
-            res = libusb_attach_kernel_driver(handle, if_num);
-			}
-        res = libusb_claim_interface(handle, if_num);
-        if (res < 0) 
-			{
-            SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
-			if(if_num==if_num_max-1)
-				{
-				SDL_Log("Exiting...");
-				return 1;
-				}
-			}
-		else
-			{
-            SDL_Log("Interface %d claimed\n", if_num);
-			if_num=2;
-			}
-    }
 
     // Clean Buffer
     for (i = 0; i < 64; i++)
