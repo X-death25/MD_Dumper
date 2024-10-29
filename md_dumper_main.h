@@ -488,7 +488,7 @@ int Detect_Device(void)
     /* Initialise libusb. */
     SDL_Log("Init LibUSB... \n");
     
-    res = libusb_init(&context);
+    res = winusb_init(&context);
     if (res != 0)
     {
         SDL_Log("Error initialising libusb.\n");
@@ -500,7 +500,7 @@ int Detect_Device(void)
 
     SDL_Log("Detecting MD Dumper... \n");
 	
-	count = libusb_get_device_list(context, &devs);
+	count = winusb_get_device_list(context, &devs);
 	if (count <= 0)
     {
         SDL_Log("Error getting device list\n");
@@ -528,7 +528,7 @@ int Detect_Device(void)
 		SDL_Log("LibUSB Device ID = %d\n",device_found);
 		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
 		
-		libusb_open(device, &handle);
+		winusb_open(device, &handle);
 
 		if (!handle)
 			{
@@ -552,7 +552,7 @@ int Detect_Device(void)
 			{
             res = libusb_detach_kernel_driver(handle, if_num);
 			}
-        res = libusb_claim_interface(handle, if_num);
+        res = winusb_claim_interface(handle, if_num);
         if (res < 0) 
 			{
             SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
