@@ -496,7 +496,6 @@ int Detect_Device(void)
     }
 
     SDL_Log("LibUSB Init Sucessfully ! \n");
-	libusb_debug();
 
     SDL_Log("Detecting MD Dumper... \n");
 	
