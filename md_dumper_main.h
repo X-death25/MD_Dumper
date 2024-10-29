@@ -550,6 +550,12 @@ int Detect_Device(void)
         if (libusb_kernel_driver_active(handle, if_num))
 			{
             res = libusb_detach_kernel_driver(handle, if_num);
+            if(res!=0)
+				{
+				SDL_Log("A !\n");
+				libusb_free_device_list(device, 1);
+				libusb_close(handle);
+				}
 			}
         res = libusb_claim_interface(handle, if_num);
         if (res < 0) 
