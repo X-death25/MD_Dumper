@@ -546,7 +546,7 @@ int Detect_Device(void)
 					res = libusb_detach_kernel_driver(handle, if_num);
 					if(res!=0)
 						{
-						SDL_Log("A !\n");
+						SDL_Log("Could not detach : %s !\n", libusb_error_name(res));
 						libusb_free_device_list(device, 1);
 						libusb_close(handle);
 						}
