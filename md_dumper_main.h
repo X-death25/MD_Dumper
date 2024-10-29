@@ -544,7 +544,7 @@ int Detect_Device(void)
 				{
 				if (libusb_kernel_driver_active(handle, if_num))
 					{
-					res = libusb_detach_kernel_driver(handle, if_num);
+					res = libusb_attach_kernel_driver(handle, if_num);
 					}
 				res = libusb_claim_interface(handle, if_num);
 				if (res < 0) 
