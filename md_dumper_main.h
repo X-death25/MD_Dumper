@@ -540,7 +540,7 @@ int Detect_Device(void)
 			int if_num_max=2;
 			for (if_num = 0; if_num < if_num_max; if_num++) 
 				{
-				res = libusb_kernel_driver_active(handle, if_num)
+				res = libusb_kernel_driver_active(handle, if_num);
 				if (res)
 					{
 					SDL_Log("Kernel Driver Active : %s\n", libusb_error_name(res));
