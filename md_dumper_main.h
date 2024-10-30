@@ -542,8 +542,18 @@ int Detect_Device(void)
 				{
 				if (libusb_kernel_driver_active(handle, if_num))
 					{
-					libusb_detach_kernel_driver(handle, if_num);
-					libusb_attach_kernel_driver(handle, if_num);
+					SDL_Log("Kernel Driver Active\n");
+					if(libusb_detach_kernel_driver(handle, if_num)==0)
+						{
+						SDL_Log("Kernel Driver Detached!\n");
+						}
+					else
+						{
+						SDL_Log("Couldn't detach Kernel Driver!\n");
+						libusb_free_device_list(device, 1);
+						libusb_close(handle);
+						return 1;
+						}
 					}
 				res = libusb_claim_interface(handle, if_num);
 				if (res < 0) 
