@@ -551,7 +551,7 @@ int Detect_Device(void)
 						}
 					else
 						{
-						SDL_Log("Couldn't detach Kernel Driver! : %s\n", libusb_error_name(res)");
+						SDL_Log("Couldn't detach Kernel Driver! : %s\n", libusb_error_name(res));
 						libusb_free_device_list(device, 1);
 						libusb_close(handle);
 						return 1;
