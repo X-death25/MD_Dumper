@@ -484,28 +484,25 @@ unsigned int trim(unsigned char * buf, unsigned char is_out)
 
 
 int Detect_Device(void)
-{
-    /* Initialise libusb. */
+	{
+		
     SDL_Log("Init LibUSB... \n");
-    
     res = libusb_init(&context);
     if (res != 0)
-    {
+		{
         SDL_Log("Error initialising libusb.\n");
         return 1;
-    }
-
+		}
     SDL_Log("LibUSB Init Sucessfully ! \n");
 
 
     SDL_Log("Detecting MD Dumper... \n");
-	
 	count = libusb_get_device_list(context, &devs);
 	if (count <= 0)
-    {
+		{
         SDL_Log("Error getting device list\n");
         return 1;
-    }
+		}
 
 	for (size_t idx = 0; idx < count; ++idx)
 		{
@@ -529,7 +526,8 @@ int Detect_Device(void)
 		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
 		
 		libusb_open(device, &handle);
-
+		SDL_Log("Handle result : %s\n", libusb_error_name(res));
+		
 		if (!handle)
 			{
 			SDL_Log("Unable to open MD Dumper Device.\n");
@@ -544,7 +542,8 @@ int Detect_Device(void)
 				{
 				if (libusb_kernel_driver_active(handle, if_num))
 					{
-					res = libusb_attach_kernel_driver(handle, if_num);
+					libusb_detach_kernel_driver(handle, if_num);
+					libusb_attach_kernel_driver(handle, if_num);
 					}
 				res = libusb_claim_interface(handle, if_num);
 				if (res < 0) 
