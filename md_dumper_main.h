@@ -488,7 +488,6 @@ int Detect_Device(void)
 		
     SDL_Log("Init LibUSB... \n");
     res = libusb_init(&context);
-    libusb_set_option(context, LIBUSB_OPTION_LOG_LEVEL, LIBUSB_LOG_LEVEL_DEBUG);
     if (res != 0)
 		{
         SDL_Log("Error initialising libusb.\n");
@@ -555,7 +554,6 @@ int Detect_Device(void)
 						SDL_Log("Couldn't detach Kernel Driver! : %s\n", libusb_error_name(res));
 						libusb_free_device_list(&device, 1);
 						libusb_close(handle);
-						fflush(stdout);
 						return 1;
 						}
 					}
@@ -566,7 +564,6 @@ int Detect_Device(void)
 					if(if_num==if_num_max-1)
 						{
 						SDL_Log("Exiting...");
-						fflush(stdout);
 						return 1;
 						}
 					}

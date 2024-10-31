@@ -5,7 +5,7 @@
  * Copyright © 2012 Pete Batard <pete@akeo.ie>
  * Copyright © 2012-2023 Nathan Hjelm <hjelmn@cs.unm.edu>
  * Copyright © 2014-2020 Chris Dickens <christopher.a.dickens@gmail.com>
- * For more information, please visit: https://libusb.info
+ * For more information, please visit: http://libusb.info
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,9 +50,9 @@ typedef SSIZE_T ssize_t;
 #include <time.h>
 
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
-#define LIBUSB_FLEXIBLE_ARRAY		/* [] - valid C99 code */
+#define ZERO_SIZED_ARRAY		/* [] - valid C99 code */
 #else
-#define LIBUSB_FLEXIBLE_ARRAY	0	/* [0] - non-standard, but usually working code */
+#define ZERO_SIZED_ARRAY	0	/* [0] - non-standard, but usually working code */
 #endif /* __STDC_VERSION__ */
 
 /* 'interface' might be defined as a macro on Windows, so we need to
@@ -130,14 +130,11 @@ typedef SSIZE_T ssize_t;
  * \ingroup libusb_misc
  * libusb's API version.
  *
- * Since version 1.0.18, to help with feature detection, libusb defines
+ * Since version 1.0.13, to help with feature detection, libusb defines
  * a LIBUSB_API_VERSION macro that gets increased every time there is a
  * significant change to the API, such as the introduction of a new call,
  * the definition of a new macro/enum member, or any other element that
  * libusb applications may want to detect at compilation time.
- *
- * Between versions 1.0.13 and 1.0.17 (inclusive) the older spelling of
- * LIBUSBX_API_VERSION was used.
  *
  * The macro is typically used in an application as follows:
  * \code
@@ -148,34 +145,10 @@ typedef SSIZE_T ssize_t;
  *
  * Internally, LIBUSB_API_VERSION is defined as follows:
  * (libusb major << 24) | (libusb minor << 16) | (16 bit incremental)
- *
- * The incremental component has changed as follows:
- * <ul>
- * <li>libusbx version 1.0.13: LIBUSBX_API_VERSION = 0x01000100
- * <li>libusbx version 1.0.14: LIBUSBX_API_VERSION = 0x010000FF
- * <li>libusbx version 1.0.15: LIBUSBX_API_VERSION = 0x01000101
- * <li>libusbx version 1.0.16: LIBUSBX_API_VERSION = 0x01000102
- * <li>libusbx version 1.0.17: LIBUSBX_API_VERSION = 0x01000102
- * <li>libusb version 1.0.18: LIBUSB_API_VERSION = 0x01000102
- * <li>libusb version 1.0.19: LIBUSB_API_VERSION = 0x01000103
- * <li>libusb version 1.0.20: LIBUSB_API_VERSION = 0x01000104
- * <li>libusb version 1.0.21: LIBUSB_API_VERSION = 0x01000105
- * <li>libusb version 1.0.22: LIBUSB_API_VERSION = 0x01000106
- * <li>libusb version 1.0.23: LIBUSB_API_VERSION = 0x01000107
- * <li>libusb version 1.0.24: LIBUSB_API_VERSION = 0x01000108
- * <li>libusb version 1.0.25: LIBUSB_API_VERSION = 0x01000109
- * <li>libusb version 1.0.26: LIBUSB_API_VERSION = 0x01000109
- * <li>libusb version 1.0.27: LIBUSB_API_VERSION = 0x0100010A
- * </ul>
  */
 #define LIBUSB_API_VERSION 0x0100010A
 
-/** \def LIBUSBX_API_VERSION
- * \ingroup libusb_misc
- *
- * This is the older spelling, kept for backwards compatibility of code
- * needing to test for older library versions where the newer spelling
- * did not exist. */
+/* The following is kept for compatibility, but will be deprecated in the future */
 #define LIBUSBX_API_VERSION LIBUSB_API_VERSION
 
 #if defined(__cplusplus)
@@ -335,12 +308,10 @@ enum libusb_descriptor_type {
 #define LIBUSB_DT_SS_ENDPOINT_COMPANION_SIZE	6
 #define LIBUSB_DT_BOS_SIZE			5
 #define LIBUSB_DT_DEVICE_CAPABILITY_SIZE	3
-#define LIBUSB_DT_INTERFACE_ASSOCIATION_SIZE	8
 
 /* BOS descriptor sizes */
 #define LIBUSB_BT_USB_2_0_EXTENSION_SIZE	7
 #define LIBUSB_BT_SS_USB_DEVICE_CAPABILITY_SIZE	10
-#define LIBUSB_BT_SSPLUS_USB_DEVICE_CAPABILITY_SIZE	12
 #define LIBUSB_BT_CONTAINER_ID_SIZE		20
 #define LIBUSB_BT_PLATFORM_DESCRIPTOR_MIN_SIZE		20
 
@@ -564,10 +535,7 @@ enum libusb_bos_type {
 	LIBUSB_BT_CONTAINER_ID = 0x04,
 
 	/** Platform descriptor */
-	LIBUSB_BT_PLATFORM_DESCRIPTOR = 0x05,
-
-	/* SuperSpeedPlus device capability */
-	LIBUSB_BT_SUPERSPEED_PLUS_CAPABILITY = 0x0A,
+	LIBUSB_BT_PLATFORM_DESCRIPTOR = 0x05
 };
 
 /** \ingroup libusb_desc
@@ -889,7 +857,7 @@ struct libusb_bos_dev_capability_descriptor {
 	uint8_t  bDevCapabilityType;
 
 	/** Device Capability data (bLength - 3 bytes) */
-	uint8_t  dev_capability_data[LIBUSB_FLEXIBLE_ARRAY];
+	uint8_t  dev_capability_data[ZERO_SIZED_ARRAY];
 };
 
 /** \ingroup libusb_desc
@@ -914,7 +882,7 @@ struct libusb_bos_descriptor {
 	uint8_t  bNumDeviceCaps;
 
 	/** bNumDeviceCap Device Capability Descriptors */
-	struct libusb_bos_dev_capability_descriptor *dev_capability[LIBUSB_FLEXIBLE_ARRAY];
+	struct libusb_bos_dev_capability_descriptor *dev_capability[ZERO_SIZED_ARRAY];
 };
 
 /** \ingroup libusb_desc
@@ -986,100 +954,6 @@ struct libusb_ss_usb_device_capability_descriptor {
 };
 
 /** \ingroup libusb_desc
- *  enum used in \ref libusb_ssplus_sublink_attribute
- */
-enum libusb_superspeedplus_sublink_attribute_sublink_type {
-	LIBUSB_SSPLUS_ATTR_TYPE_SYM = 0,
-	LIBUSB_SSPLUS_ATTR_TYPE_ASYM = 1,
-};
-
-/** \ingroup libusb_desc
- *  enum used in \ref libusb_ssplus_sublink_attribute
- */
-enum libusb_superspeedplus_sublink_attribute_sublink_direction {
-	LIBUSB_SSPLUS_ATTR_DIR_RX = 0,
-	LIBUSB_SSPLUS_ATTR_DIR_TX = 1,
-};
-
-/** \ingroup libusb_desc
- *  enum used in \ref libusb_ssplus_sublink_attribute
- *   Bit   = Bits per second
- *   Kb = Kbps
- *   Mb = Mbps
- *   Gb = Gbps
- */
-enum libusb_superspeedplus_sublink_attribute_exponent {
-	LIBUSB_SSPLUS_ATTR_EXP_BPS = 0,
-	LIBUSB_SSPLUS_ATTR_EXP_KBS = 1,
-	LIBUSB_SSPLUS_ATTR_EXP_MBS = 2,
-	LIBUSB_SSPLUS_ATTR_EXP_GBS = 3,
-};
-
-/** \ingroup libusb_desc
- *  enum used in \ref libusb_ssplus_sublink_attribute
- */
-enum libusb_superspeedplus_sublink_attribute_link_protocol {
-	LIBUSB_SSPLUS_ATTR_PROT_SS = 0,
-	LIBUSB_SSPLUS_ATTR_PROT_SSPLUS = 1,
-};
-
-/** \ingroup libusb_desc
- * Expose \ref libusb_ssplus_usb_device_capability_descriptor.sublinkSpeedAttributes
- */
-struct libusb_ssplus_sublink_attribute {
-	/** Sublink Speed Attribute ID (SSID).
-	 This field is an ID that uniquely identifies the speed of this sublink */
-	uint8_t ssid;
-
-	/** This field defines the
-	 base 10 exponent times 3, that shall be applied to the
-     mantissa. */
-	enum libusb_superspeedplus_sublink_attribute_exponent exponent;
-
-	/** This field identifies whether the
-	 Sublink Speed Attribute defines a symmetric or
-     asymmetric bit rate.*/
-	enum libusb_superspeedplus_sublink_attribute_sublink_type type;
-
-	/** This field  indicates if this
-	 Sublink Speed Attribute defines the receive or
-     transmit bit rate. */
-	enum libusb_superspeedplus_sublink_attribute_sublink_direction direction;
-
-	/** This field identifies the protocol
-	 supported by the link. */
-	enum libusb_superspeedplus_sublink_attribute_link_protocol protocol;
-
-	/** This field defines the mantissa that shall be applied to the exponent when
-     calculating the maximum bit rate. */
-	uint16_t mantissa;
-};
-
-/** \ingroup libusb_desc
- * A structure representing the SuperSpeedPlus descriptor
- * This descriptor is documented in section 9.6.2.5 of the USB 3.1 specification.
- */
-struct libusb_ssplus_usb_device_capability_descriptor {
-	/** Sublink Speed Attribute Count */
-	uint8_t  numSublinkSpeedAttributes;
-
-	/** Sublink Speed ID Count */
-	uint8_t  numSublinkSpeedIDs;
-
-	/** Unique ID to indicates the minimum lane speed */
-	uint8_t ssid;
-
-	/** This field indicates the minimum receive lane count.*/
-	uint8_t minRxLaneCount;
-
-	/** This field indicates the minimum transmit lane count*/
-	uint8_t minTxLaneCount;
-
-	/** num attrtibutes=  \ref libusb_ssplus_usb_device_capability_descriptor.numSublinkSpeedAttributes= */
-	struct libusb_ssplus_sublink_attribute sublinkSpeedAttributes[];
-};
-
-/** \ingroup libusb_desc
  * A structure representing the Container ID descriptor.
  * This descriptor is documented in section 9.6.2.3 of the USB 3.0 specification.
  * All multiple-byte fields, except UUIDs, are represented in host-endian format.
@@ -1130,7 +1004,7 @@ struct libusb_platform_descriptor {
 	uint8_t  PlatformCapabilityUUID[16];
 
 	/** Capability data (bLength - 20) */
-	uint8_t  CapabilityData[LIBUSB_FLEXIBLE_ARRAY];
+	uint8_t  CapabilityData[ZERO_SIZED_ARRAY];
 };
 
 /** \ingroup libusb_asyncio
@@ -1207,7 +1081,7 @@ struct libusb_version {
  * libusb_exit() will not destroy resources that the other user is still
  * using.
  *
- * Sessions are created by libusb_init_context() and destroyed through libusb_exit().
+ * Sessions are created by libusb_init() and destroyed through libusb_exit().
  * If your application is guaranteed to only ever include a single libusb
  * user (i.e. you), you do not have to worry about contexts: pass NULL in
  * every function call where a context is required, and the default context
@@ -1266,10 +1140,7 @@ enum libusb_speed {
 	LIBUSB_SPEED_SUPER = 4,
 
 	/** The device is operating at super speed plus (10000MBit/s). */
-	LIBUSB_SPEED_SUPER_PLUS = 5,
-
-	/** The device is operating at super speed plus x2 (20000MBit/s). */
-	LIBUSB_SPEED_SUPER_PLUS_X2 = 6,
+	LIBUSB_SPEED_SUPER_PLUS = 5
 };
 
 /** \ingroup libusb_misc
@@ -1513,7 +1384,7 @@ struct libusb_transfer {
 	int num_iso_packets;
 
 	/** Isochronous packet descriptors, for isochronous transfers only. */
-	struct libusb_iso_packet_descriptor iso_packet_desc[LIBUSB_FLEXIBLE_ARRAY];
+	struct libusb_iso_packet_descriptor iso_packet_desc[ZERO_SIZED_ARRAY];
 };
 
 /** \ingroup libusb_misc
@@ -1580,7 +1451,6 @@ enum libusb_log_cb_mode {
 enum libusb_option {
 	/** Set the log message verbosity.
 	 *
-	 * This option must be provided an argument of type \ref libusb_log_level.
 	 * The default level is LIBUSB_LOG_LEVEL_NONE, which means no messages are ever
 	 * printed. If you choose to increase the message verbosity level, ensure
 	 * that your application does not close the stderr file descriptor.
@@ -1591,21 +1461,22 @@ enum libusb_option {
 	 * your software.
 	 *
 	 * If the LIBUSB_DEBUG environment variable was set when libusb was
-	 * initialized, this option does nothing: the message verbosity is fixed
+	 * initialized, this function does nothing: the message verbosity is fixed
 	 * to the value in the environment variable.
 	 *
-	 * If libusb was compiled without any message logging, this option does
+	 * If libusb was compiled without any message logging, this function does
 	 * nothing: you'll never get any messages.
 	 *
-	 * If libusb was compiled with verbose debug message logging, this option
+	 * If libusb was compiled with verbose debug message logging, this function
 	 * does nothing: you'll always get messages from all levels.
 	 */
 	LIBUSB_OPTION_LOG_LEVEL = 0,
 
 	/** Use the UsbDk backend for a specific context, if available.
 	 *
-	 * This option should be set at initialization with libusb_init_context()
-	 * otherwise unspecified behavior may occur.
+	 * This option should be set immediately after calling libusb_init(), or set at
+	 * initialization with libusb_init_context() otherwise unspecified behavior
+	 * may occur.
 	 *
 	 * Only valid on Windows. Ignored on all other platforms.
 	 */
@@ -1624,23 +1495,20 @@ enum libusb_option {
 	 * This is typically needed on Android, where access to USB devices
 	 * is limited.
 	 *
-	 * This option should only be used with libusb_init_context()
-	 * otherwise unspecified behavior may occur.
-	 *
 	 * Only valid on Linux. Ignored on all other platforms.
 	 */
 	LIBUSB_OPTION_NO_DEVICE_DISCOVERY = 2,
 
 #define LIBUSB_OPTION_WEAK_AUTHORITY LIBUSB_OPTION_NO_DEVICE_DISCOVERY
 
-	/** Set the context log callback function.
+	/** Set the context log callback functon.
 	 *
 	 * Set the log callback function either on a context or globally. This
-	 * option must be provided an argument of type \ref libusb_log_cb.
-	 * Using this option with a NULL context is equivalent to calling
-	 * libusb_set_log_cb() with mode \ref LIBUSB_LOG_CB_GLOBAL.
-	 * Using it with a non-NULL context is equivalent to calling
-	 * libusb_set_log_cb() with mode \ref LIBUSB_LOG_CB_CONTEXT.
+	 * option must be provided an argument of type libusb_log_cb. Using this
+	 * option with a NULL context is equivalent to calling libusb_set_log_cb
+	 * with mode LIBUSB_LOG_CB_GLOBAL. Using it with a non-NULL context is
+	 * equivalent to calling libusb_set_log_cb with mode
+	 * LIBUSB_LOG_CB_CONTEXT.
 	 */
 	LIBUSB_OPTION_LOG_CB = 3,
 
@@ -1670,7 +1538,7 @@ struct libusb_init_option {
   enum libusb_option option;
   /** An integer value used by the option (if applicable). */
   union {
-    int ival;
+    int64_t ival;
     libusb_log_cb log_cbval;
   } value;
 };
@@ -1683,7 +1551,7 @@ void LIBUSB_CALL libusb_set_debug(libusb_context *ctx, int level);
 void LIBUSB_CALL libusb_set_log_cb(libusb_context *ctx, libusb_log_cb cb, int mode);
 const struct libusb_version * LIBUSB_CALL libusb_get_version(void);
 int LIBUSB_CALL libusb_has_capability(uint32_t capability);
-const char * LIBUSB_CALL libusb_error_name(int error_code);
+const char * LIBUSB_CALL libusb_error_name(int errcode);
 int LIBUSB_CALL libusb_setlocale(const char *locale);
 const char * LIBUSB_CALL libusb_strerror(int errcode);
 
@@ -1727,12 +1595,6 @@ int LIBUSB_CALL libusb_get_ss_usb_device_capability_descriptor(
 	struct libusb_ss_usb_device_capability_descriptor **ss_usb_device_cap);
 void LIBUSB_CALL libusb_free_ss_usb_device_capability_descriptor(
 	struct libusb_ss_usb_device_capability_descriptor *ss_usb_device_cap);
-int LIBUSB_CALL libusb_get_ssplus_usb_device_capability_descriptor(
-	libusb_context *ctx,
-	struct libusb_bos_dev_capability_descriptor *dev_cap,
-	struct libusb_ssplus_usb_device_capability_descriptor **ssplus_usb_device_cap);
-void LIBUSB_CALL libusb_free_ssplus_usb_device_capability_descriptor(
-	struct libusb_ssplus_usb_device_capability_descriptor *ssplus_usb_device_cap);
 int LIBUSB_CALL libusb_get_container_id_descriptor(libusb_context *ctx,
 	struct libusb_bos_dev_capability_descriptor *dev_cap,
 	struct libusb_container_id_descriptor **container_id);
@@ -2143,16 +2005,16 @@ static inline unsigned char *libusb_get_iso_packet_buffer_simple(
 /* sync I/O */
 
 int LIBUSB_CALL libusb_control_transfer(libusb_device_handle *dev_handle,
-	uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex,
+	uint8_t request_type, uint8_t bRequest, uint16_t wValue, uint16_t wIndex,
 	unsigned char *data, uint16_t wLength, unsigned int timeout);
 
 int LIBUSB_CALL libusb_bulk_transfer(libusb_device_handle *dev_handle,
 	unsigned char endpoint, unsigned char *data, int length,
-	int *transferred, unsigned int timeout);
+	int *actual_length, unsigned int timeout);
 
 int LIBUSB_CALL libusb_interrupt_transfer(libusb_device_handle *dev_handle,
 	unsigned char endpoint, unsigned char *data, int length,
-	int *transferred, unsigned int timeout);
+	int *actual_length, unsigned int timeout);
 
 /** \ingroup libusb_desc
  * Retrieve a descriptor from the default control pipe.
