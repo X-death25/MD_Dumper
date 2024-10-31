@@ -555,6 +555,7 @@ int Detect_Device(void)
 						SDL_Log("Couldn't detach Kernel Driver! : %s\n", libusb_error_name(res));
 						libusb_free_device_list(&device, 1);
 						libusb_close(handle);
+						fflush(stdout);
 						return 1;
 						}
 					}
@@ -565,6 +566,7 @@ int Detect_Device(void)
 					if(if_num==if_num_max-1)
 						{
 						SDL_Log("Exiting...");
+						fflush(stdout);
 						return 1;
 						}
 					}
