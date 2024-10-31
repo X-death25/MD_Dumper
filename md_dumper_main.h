@@ -488,6 +488,7 @@ int Detect_Device(void)
 		
     SDL_Log("Init LibUSB... \n");
     res = libusb_init(&context);
+    libusb_debug()
     if (res != 0)
 		{
         SDL_Log("Error initialising libusb.\n");
