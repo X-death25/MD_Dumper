@@ -1,6 +1,7 @@
 #!/bin/bash
 # sudo apt-get install mingw-w64 g++-mingw-w64
 
+export PKG_CONFIG_PATH="./windows_deps/files/lib/pkgconfig"
 cmake -Wno-dev -DINCLUDE_EXTRA_CMAKELISTS=ON -DCMAKE_TOOLCHAIN_FILE=./Toolchain-Ubuntu-mingw64.cmake .
 make
 mkdir Windows_Build
