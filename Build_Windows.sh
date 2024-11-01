@@ -8,4 +8,4 @@ cp *.csv ./Windows_Build/
 cp MD_Dumper.exe ./Windows_Build/
 cp -dR images ./Windows_Build/
 cp -dR MD_Dumper_GUI.bat ./Windows_Build/
-cp ./windows_deps/files/bin/*.dll ./Windows_Build
+cp ./windows_deps/bin/*.dll ./Windows_Build
