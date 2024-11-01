@@ -41,17 +41,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install gcc-mingw-w64 g++-mingw-w64
-        sudo cp -dR windows_deps/files/* /usr/i686-w64-mingw32/
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -Wno-dev -DINCLUDE_EXTRA_CMAKELISTS=ON
-        -DCMAKE_TOOLCHAIN_FILE=../Toolchain-Ubuntu-mingw64.cmake
-        -S ${{ github.workspace }}
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
