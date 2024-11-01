@@ -1,9 +1,7 @@
 #!/bin/bash
 # sudo apt-get install mingw-w64 g++-mingw-w64
 
-export PKG_CONFIG_PATH="./windows_deps/files/lib/pkgconfig"
-cmake -Wno-dev -DINCLUDE_EXTRA_CMAKELISTS=ON -DCMAKE_TOOLCHAIN_FILE=./Toolchain-Ubuntu-mingw64.cmake .
-make
+i686-w64-mingw32-gcc-12-win32 main.c -I./windows_deps/include/SDL2 -I./windows_deps/include/libusb-1.0 -L./windows_deps/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lusb-1.0 -mwindows -o MD_Dumper.exe
 mkdir Windows_Build
 cp -dR Informations.txt ./Windows_Build/
 cp *.csv ./Windows_Build/
