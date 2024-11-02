@@ -670,8 +670,8 @@ int main(int argc, char *argv[])
 			erase_or_write=0;
 			
 			if (strcmp(argv[2], "serial_spi") == 0)						dump_sram_type_opts = 2;
-			else if (strcmp(argv[2], "serial_i2c") == 0)				dump_sram_type_opts = 1;
-			else if (strcmp(argv[2], "parallel_sram") == 0)				dump_sram_type_opts = 0;
+			else if (strcmp(argv[2], "serial_i2c") == 0)					dump_sram_type_opts = 1;
+			else if (strcmp(argv[2], "parallel_sram") == 0)					dump_sram_type_opts = 0;
 			else
 			{
 				SDL_Log("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
@@ -685,8 +685,8 @@ int main(int argc, char *argv[])
 			erase_or_write=1;
 			
 			if (strcmp(argv[2], "serial_spi") == 0)						dump_sram_type_opts = 2;
-			else if (strcmp(argv[2], "serial_i2c") == 0)				dump_sram_type_opts = 1;
-			else if (strcmp(argv[2], "parallel_sram") == 0)				dump_sram_type_opts = 0;
+			else if (strcmp(argv[2], "serial_i2c") == 0)					dump_sram_type_opts = 1;
+			else if (strcmp(argv[2], "parallel_sram") == 0)					dump_sram_type_opts = 0;
 			else
 			{
 				SDL_Log("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
