@@ -134,62 +134,62 @@ struct csv_parser p2;
 
 // LibUSB Specific Var
 int res							= 0;						/* return codes from libusb functions */
-unsigned char usb_buffer_out[64]	= {0};  					/* 64 byte transfer buffer OUT */
-libusb_device_handle* handle 		= 0;	   					/* handle for USB device */
+unsigned char usb_buffer_out[64]			= {0};  					/* 64 byte transfer buffer OUT */
+libusb_device_handle* handle 				= 0;	   					/* handle for USB device */
 int numBytes						= 0;						/* Actual bytes transferred. */
-unsigned char usb_buffer_in[64]		= {0};   					/* 64 byte transfer buffer IN */
+unsigned char usb_buffer_in[64]				= {0};   					/* 64 byte transfer buffer IN */
 int device_found					= -1;
 int if_num;
 int if_num_max						= 2;
 #define VENDOR_ID					0x0483
-#define PRODUCT_ID   				0x5740
-libusb_context *context				= NULL;
+#define PRODUCT_ID   					0x5740
+libusb_context *context					= NULL;
 libusb_device **devs;
 ssize_t count;													// holding number of devices in list
    
 
 // MD Dumper Var
-unsigned long address				= 0;
+unsigned long address					= 0;
 unsigned long i						= 0;
 unsigned long j						= 0;
 unsigned long k						= 0;
-unsigned char *buffer_header		= NULL;
-unsigned char *buffer_rom			= NULL;
-unsigned char md_dumper_type		= 0;
-unsigned char sms_mode				= 0;
+unsigned char *buffer_header				= NULL;
+unsigned char *buffer_rom				= NULL;
+unsigned char md_dumper_type				= 0;
+unsigned char sms_mode					= 0;
 unsigned char dump_name[32];
 unsigned char region[5];
 char *game_region					= NULL;
 const char unk[]					= {"unknown"};
 int checksum_header					= 0;
-int use_gui							= 0;						/* 0=CLI Mode, 1=GUI Mode */
+int use_gui						= 0;						/* 0=CLI Mode, 1=GUI Mode */
 int gui_tab_mode					= 0;						/* 0=Read Mode, 1=Write Mode */
 int data_type						= 0;						/* 0=ROM, 1=RAM */
 int dump_mode						= 0;						/* 0=Auto, 1=Manual, 2=Bankswitch */
-int dump_rom_size_opts				= 0;						/* 0=32KB, 1=64KB, 2=128KB, 3=256KB, 4=512KB, 5=1024KB, 6=2048KB, 7=4096KB, 8=8192KB */
-int dump_cart_mode_opts				= 0;						/* 0=GG MODE, 1=MD MODE, 2=SMS MODE */
-int dump_sram_size_opts				= 0;						/* 0=8192, 1=32768 */
-int dump_sram_type_opts				= 0;						/* 0=parallel_sram, 1=serial_i2c, 2=serial_spi */
+int dump_rom_size_opts					= 0;						/* 0=32KB, 1=64KB, 2=128KB, 3=256KB, 4=512KB, 5=1024KB, 6=2048KB, 7=4096KB, 8=8192KB */
+int dump_cart_mode_opts					= 0;						/* 0=GG MODE, 1=MD MODE, 2=SMS MODE */
+int dump_sram_size_opts					= 0;						/* 0=8192, 1=32768 */
+int dump_sram_type_opts					= 0;						/* 0=parallel_sram, 1=serial_i2c, 2=serial_spi */
 int erase_or_write					= 0;						/* 0=erase, 1=write */
 
 int game_size						= 0;
-unsigned long save_size1			= 0;
-unsigned long save_size2			= 0;
-unsigned long save_size				= 0;
-unsigned long save_address			= 0;
+unsigned long save_size1				= 0;
+unsigned long save_size2				= 0;
+unsigned long save_size					= 0;
+unsigned long save_address				= 0;
 unsigned char *BufferROM;
 unsigned char *BufferSAVE;
 char empty_flash[512];
 char dump_flash[512];
 FILE *myfile;
-unsigned char NumberOfBank			= 0;
-unsigned char ActualBank			= 0;
-unsigned long offset				= 0;
-unsigned short rom_id				= 0;
-unsigned short flash_id				= 0;
-unsigned char chip_id				= 0;
-unsigned char manufacturer_id		= 0;
-const char * wheel[] 				= { "-","\\","|","/"};		// Erase wheel
+unsigned char NumberOfBank				= 0;
+unsigned char ActualBank				= 0;
+unsigned long offset					= 0;
+unsigned short rom_id					= 0;
+unsigned short flash_id					= 0;
+unsigned char chip_id					= 0;
+unsigned char manufacturer_id				= 0;
+const char * wheel[] 					= { "-","\\","|","/"};		// Erase wheel
 
 //*****************************************************
 // Hardware TYPES
