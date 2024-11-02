@@ -104,8 +104,8 @@ int main(int argc, char *argv[])
 			if(gui_tab_mode==0 && (dump_mode==0 || dump_mode==2))		texture = SDL_CreateTextureFromSurface(renderer, image1);
 			else if(gui_tab_mode==0 && data_type==1 && dump_mode==1)	texture = SDL_CreateTextureFromSurface(renderer, image2);
 			else if(gui_tab_mode==0 && data_type==0 && dump_mode==1)	texture = SDL_CreateTextureFromSurface(renderer, image3);
-			else if(gui_tab_mode==1 && data_type==0)					texture = SDL_CreateTextureFromSurface(renderer, image4);
-			else if(gui_tab_mode==1 && data_type==1)					texture = SDL_CreateTextureFromSurface(renderer, image5);
+			else if(gui_tab_mode==1 && data_type==0)			texture = SDL_CreateTextureFromSurface(renderer, image4);
+			else if(gui_tab_mode==1 && data_type==1)			texture = SDL_CreateTextureFromSurface(renderer, image5);
 			
 			SDL_RenderCopy(renderer, texture, NULL, NULL);
 			SDL_SetRenderDrawColor(renderer, 250, 173, 5, 255);
