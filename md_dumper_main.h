@@ -4,12 +4,12 @@
 #include <libusb.h>												//Library for detecting the MD Dumper device
 
 //Read CSV Files
-#include "csv.h"
-#include "csv.c"
+#include "libs/csv.h"
+#include "libs/csv.c"
 
 //File Manager Library
-#include "sfd.h"
-#include "sfd.c"
+#include "libs/sfd.h"
+#include "libs/sfd.c"
 
 // USB Special Command
 #define WAKEUP						0x10	
