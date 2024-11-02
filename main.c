@@ -707,10 +707,10 @@ int main(int argc, char *argv[])
 	else if ( gui_tab_mode==0 && data_type==1 && dump_mode==0 )			Read_RAM_Auto();
 	else if ( gui_tab_mode==0 && data_type==1 && dump_mode==1 )			Read_RAM_Manual();
 	else if ( gui_tab_mode==0 && data_type==1 && dump_mode==2 )			Read_RAM_Bankswitch();
-	else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==0 )	Erase_Flash();
-	else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==1 )	Write_Flash();
-	else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==0 )	Erase_RAM();
-	else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==1 )	Write_RAM();
+	else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==0 )		Erase_Flash();
+	else if ( gui_tab_mode==1 && data_type==0 && erase_or_write==1 )		Write_Flash();
+	else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==0 )		Erase_RAM();
+	else if ( gui_tab_mode==1 && data_type==1 && erase_or_write==1 )		Write_RAM();
 	
 	libusb_release_interface(handle,if_num);
 	libusb_close(handle);
