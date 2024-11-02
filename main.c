@@ -572,7 +572,7 @@ int main(int argc, char *argv[])
 				data_type=0;
 				dump_mode=1;
 				
-				if (strcmp(argv[3], "32") == 0)							dump_rom_size_opts = 0;
+				if (strcmp(argv[3], "32") == 0)						dump_rom_size_opts = 0;
 				else if (strcmp(argv[3], "64") == 0)					dump_rom_size_opts = 1;
 				else if (strcmp(argv[3], "128") == 0)					dump_rom_size_opts = 2;
 				else if (strcmp(argv[3], "256") == 0)					dump_rom_size_opts = 3;
@@ -587,7 +587,7 @@ int main(int argc, char *argv[])
 					return 1;
 				}
 				
-				if (strcmp(argv[4], "gg") == 0)							dump_cart_mode_opts = 0;
+				if (strcmp(argv[4], "gg") == 0)						dump_cart_mode_opts = 0;
 				else if (strcmp(argv[4], "md") == 0)					dump_cart_mode_opts = 1;
 				else if (strcmp(argv[4], "sms") == 0)					dump_cart_mode_opts = 2;
 				else
@@ -622,7 +622,7 @@ int main(int argc, char *argv[])
 				data_type=1;
 				dump_mode=1;
 				
-				if (strcmp(argv[3], "8192") == 0)						dump_sram_size_opts = 0;
+				if (strcmp(argv[3], "8192") == 0)					dump_sram_size_opts = 0;
 				else if (strcmp(argv[3], "32768") == 0)					dump_sram_size_opts = 1;
 				else
 				{
@@ -631,8 +631,8 @@ int main(int argc, char *argv[])
 				}
 				
 				if (strcmp(argv[4], "parallel_sram") == 0)				dump_sram_type_opts = 0;
-				else if (strcmp(argv[4], "serial_i2c") == 0)			dump_sram_type_opts = 1;
-				else if (strcmp(argv[4], "serial_spi") == 0)			dump_sram_type_opts = 2;
+				else if (strcmp(argv[4], "serial_i2c") == 0)				dump_sram_type_opts = 1;
+				else if (strcmp(argv[4], "serial_spi") == 0)				dump_sram_type_opts = 2;
 				else
 				{
 					SDL_Log("You must write one of the following values to set the cartridge type : parallel_sram, serial_i2c or serial_spi.\n");
