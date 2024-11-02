@@ -170,11 +170,11 @@ int Write_Flash(void)
 {
 	SDL_Log("Write Mode : Write Flash Data\n");
 	sfd_Options opt =
-		{
-			.title		= "Select your Flash Data File",
-			.filter_name  = "Flash Data",
-			.filter	   = "*.*",
-		};
+	{
+		.title		= "Select your Flash Data File",
+		.filter_name  = "Flash Data",
+		.filter	   = "*.*",
+	};
 	
 	const char *filename = sfd_open_dialog(&opt);
 	if (filename) SDL_Log("You selected the file: '%s'\n", filename);
@@ -600,11 +600,11 @@ int Write_RAM(void)
 {
 	SDL_Log("Write Mode : Write Save Data\n");
 	sfd_Options opt =
-		{
-			.title		= "Select your Save Data File",
-			.filter_name  = "Save Data",
-			.filter	   = "*.*",
-		};
+	{
+		.title		= "Select your Save Data File",
+		.filter_name  = "Save Data",
+		.filter	   = "*.*",
+	};
 	const char *filename = sfd_open_dialog(&opt);
 	if (filename)	SDL_Log("You selected the file: '%s'\n", filename);
 	else
