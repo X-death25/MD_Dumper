@@ -36,15 +36,15 @@ int main(int argc, char *argv[])
 	//Using GUI Mode ?
 	int lang=0;
 	if(strcmp(argv[1], "-gui") == 0)
-		{
+	{
 		use_gui=1;
 		lang=0;
-		}
+	}
 	else if(strcmp(argv[1], "-gui_fr") == 0)
-		{
+	{
 		use_gui=1;
 		lang=1;
-		}
+	}
 	
 	if (use_gui==1)
 	{  
