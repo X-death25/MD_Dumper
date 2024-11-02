@@ -14,18 +14,18 @@
 // USB Special Command
 #define WAKEUP						0x10	
 #define READ_MD						0x11
-#define READ_MD_SAVE				0x12
-#define WRITE_MD_SAVE				0x13
-#define WRITE_MD_FLASH				0x14
-#define ERASE_MD_FLASH				0x15
+#define READ_MD_SAVE					0x12
+#define WRITE_MD_SAVE					0x13
+#define WRITE_MD_FLASH					0x14
+#define ERASE_MD_FLASH					0x15
 #define READ_SMS					0x16
 #define INFOS_ID					0x18
 #define MAPPER_SSF2					0x20
-#define CREATE_MX_BUFFER			0x60
-#define WRITE_MX_BUFFER				0x61
-#define FLASH_MX_BUFFER				0x62
-#define SECTOR_ERASE				0x64
-#define SEND_FLASH_ALGO				0x65
+#define CREATE_MX_BUFFER				0x60
+#define WRITE_MX_BUFFER					0x61
+#define FLASH_MX_BUFFER					0x62
+#define SECTOR_ERASE					0x64
+#define SEND_FLASH_ALGO					0x65
 
 
 // Version
@@ -36,48 +36,48 @@ char * game_rom						= NULL;
 char * game_name					= NULL;
 
 // CSV Gamelist specific Variable
-#define BUFFER_SIZE 				1024
-#define MAX_NON_EMPTY_CELLS 		50							// Ajustez cette valeur selon vos besoins
-#define CHKSM_TEXT_SIZE				16
-#define ROM_TEXT_SIZE				3
-#define COL3_TEXT_SIZE				4							// Taille maximale pour les valeurs texte de la colonne C
+#define BUFFER_SIZE 					1024
+#define MAX_NON_EMPTY_CELLS 				50							// Ajustez cette valeur selon vos besoins
+#define CHKSM_TEXT_SIZE					16
+#define ROM_TEXT_SIZE					3
+#define COL3_TEXT_SIZE					4							// Taille maximale pour les valeurs texte de la colonne C
 #define TEXT_SIZE					16
 
 FILE *fp;
 struct csv_parser p;
 size_t bytes_read;
-unsigned char options				= 0;
+unsigned char options					= 0;
 
 char buffer[BUFFER_SIZE];
 size_t bytes_read;
 int current_row						= 0;
 int current_col						= 0;
-char cell_A2[BUFFER_SIZE]			= "";						// Variable pour stocker la donnée de la cellule A2
-int non_empty_cells_in_col_A		= 0;						// Compteur de cellules non vides en colonne A
+char cell_A2[BUFFER_SIZE]				= "";						// Variable pour stocker la donnée de la cellule A2
+int non_empty_cells_in_col_A				= 0;						// Compteur de cellules non vides en colonne A
 int Index_chksm						= 0;
 
 // Tableau pour stocker les valeurs non vides en colonne A CHKSM sous forme de texte
 char chksm_text_values[MAX_NON_EMPTY_CELLS][CHKSM_TEXT_SIZE + 1];
-int chksm_text_values_count			= 0;
+int chksm_text_values_count				= 0;
 // Tableau pour stocker les valeurs de la troisième colonne rom_size
 char rom_size_text_values[MAX_NON_EMPTY_CELLS][CHKSM_TEXT_SIZE + 1];
-int rom_size_text_values_count		= 0;
+int rom_size_text_values_count				= 0;
 // Tableau pour stocker les différentes valeurs du fichier csv
 char txt_csv_chksm[4];
-unsigned short csv_chksm			= 0;
+unsigned short csv_chksm				= 0;
 unsigned char txt_csv_game_size[4+1];
-unsigned char csv_game_size			= 0;
+unsigned char csv_game_size				= 0;
 char txt_mapper_number[1];
-unsigned char csv_mapper_number		= 0;
+unsigned char csv_mapper_number				= 0;
 char txt_save_type[1];
-unsigned char csv_save_type			= 0;
+unsigned char csv_save_type				= 0;
 char txt_save_size[2];
-unsigned char csv_save_size			= 0;
+unsigned char csv_save_size				= 0;
 
 // csv SMS-GG CRC specific Variable
-#define MAX_NON_EMPTY_CELLS2		2500 						// Ajustez cette valeur selon vos besoins
+#define MAX_NON_EMPTY_CELLS2				2500 						// Ajustez cette valeur selon vos besoins
 #define TEXT_SIZE3					97 							// taille de toute la chaine
-#define BUFFER_SIZE3				4096
+#define BUFFER_SIZE3					4096
 
 FILE *fp3;
 struct csv_parser p3;
@@ -85,12 +85,12 @@ char buffer3[BUFFER_SIZE3];
 
 int current_row3					= 0;
 int current_col3					= 0;
-int non_empty_cells_in_col_A3		= 0;						// Compteur de cellules non vides en colonne A
+int non_empty_cells_in_col_A3				= 0;						// Compteur de cellules non vides en colonne A
 char smsgg_text_values[1500][TEXT_SIZE3+ 1];
-int smsgg_text_values_count			= 0;
-unsigned int HeaderCRC				= 0;
-unsigned char *SMS_Header			= NULL;
-unsigned char gg_mode				= 1;						// 1 for GG 0 for SMS
+int smsgg_text_values_count				= 0;
+unsigned int HeaderCRC					= 0;
+unsigned char *SMS_Header				= NULL;
+unsigned char gg_mode					= 1;						// 1 for GG 0 for SMS
 
 // Tableau pour stocker les différentes valeurs du fichier csv sms-gg-crc
 char txt_csv_chksm1[8];
@@ -110,9 +110,9 @@ unsigned char txt_csv_region2[20+1];
 
 int current_row2					= 0;
 int current_col2					= 0;
-int non_empty_cells_in_col_A2		= 0; 						// Compteur de cellules non vides en colonne A
+int non_empty_cells_in_col_A2				= 0; 						// Compteur de cellules non vides en colonne A
 char chipid_text_values[MAX_NON_EMPTY_CELLS][CHIPID_TEXT_SIZE + 1];
-int chipid_text_values_count 		= 0;
+int chipid_text_values_count 				= 0;
 
 char txt_csv_deviceID[4];
 unsigned short csv_deviceID=0;
@@ -133,7 +133,7 @@ FILE *fp2;
 struct csv_parser p2;
 
 // LibUSB Specific Var
-int res								= 0;						/* return codes from libusb functions */
+int res							= 0;						/* return codes from libusb functions */
 unsigned char usb_buffer_out[64]	= {0};  					/* 64 byte transfer buffer OUT */
 libusb_device_handle* handle 		= 0;	   					/* handle for USB device */
 int numBytes						= 0;						/* Actual bytes transferred. */
