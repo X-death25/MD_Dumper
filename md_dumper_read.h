@@ -89,7 +89,8 @@ int Read_ROM_Auto(void)
 		trim((unsigned char *)dump_name, 0);
 		SDL_Log("%.*s\n",32, (char *)dump_name);
 		//trim((unsigned char *)dump_name, 0);
-		if(memcmp((unsigned char *)dump_name,"SONIC THE			   HEDGEHOG",32) == 0)
+		
+		if(memcmp((unsigned char *)dump_name,"SONIC THE               HEDGEHOG",32) == 0)
 		{
 			//SDL_Log("%.*s\n",32, (char *)game_name);
 			game_size=2560*1024;
@@ -115,7 +116,7 @@ int Read_ROM_Auto(void)
 			fwrite(BufferROM, 1,game_size, myfile);
 			fclose(myfile);
 		}
-		else if(memcmp((unsigned char *)dump_name,"								",32) == 0) // Tanglewood use fake header
+		else if(memcmp((unsigned char *)dump_name,"                                ",32) == 0) // Tanglewood use fake header
 		{
 			//SDL_Log("TANGLEWOOD (R)				  ");
 			game_size=4096*1024;
@@ -140,7 +141,7 @@ int Read_ROM_Auto(void)
 			fwrite(BufferROM, 1,game_size, myfile);
 			fclose(myfile);
 		}
-		else if(memcmp((unsigned char *)dump_name,"SONIC THE			 HEDGEHOG 2",32) == 0)
+		else if(memcmp((unsigned char *)dump_name,"SONIC THE             HEDGEHOG 2",32) == 0)
 		{
 			//printf("%.*s\n",32, (char *)game_name);
 			game_size=3328*1024;
@@ -210,7 +211,7 @@ int Read_ROM_Auto(void)
 			fwrite(BufferROM, 1,3328*1024, myfile);
 			fclose(myfile);
 		}
-		else if(memcmp((unsigned char *)dump_name,"SONIC THE			 HEDGEHOG 3",32) == 0)
+		else if(memcmp((unsigned char *)dump_name,"SONIC THE             HEDGEHOG 3",32) == 0)
 		{
 			//printf("%.*s\n",32, (char *)game_name);
 			game_size=4096*1024;
