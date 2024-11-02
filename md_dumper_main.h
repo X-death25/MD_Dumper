@@ -76,7 +76,6 @@ char txt_save_size[2];
 unsigned char csv_save_size=0;
 
 // csv SMS-GG CRC specific Variable
-
 #define MAX_NON_EMPTY_CELLS2 2500 // Ajustez cette valeur selon vos besoins
 #define TEXT_SIZE3 97 // taille de toute la chaine
 #define BUFFER_SIZE3 4096
@@ -95,7 +94,6 @@ unsigned char *SMS_Header = NULL;
 unsigned char gg_mode=1; // 1 for GG 0 for SMS
 
 // Tableau pour stocker les différentes valeurs du fichier csv sms-gg-crc
-
 char txt_csv_chksm1[8];
 unsigned long csv_chksm1=0;
 unsigned char txt_csv_chksm2[8];
@@ -108,7 +106,6 @@ unsigned char txt_csv_game_name2[48+1];
 unsigned char txt_csv_region2[20+1];
 
 //CSV Flashlist specific Variables
-
 #define CHIPID_TEXT_SIZE 48 // taille de toute la chaine
 #define TEXT_SIZE2 48
 
@@ -137,7 +134,6 @@ FILE *fp2;
 struct csv_parser p2;
 
 // LibUSB Specific Var
-
 int res                      = 0;        /* return codes from libusb functions */
 int kernelDriverDetached     = 0;        /* Set to 1 if kernel driver detached */
 unsigned long len            = 0;        /* Number of bytes transferred. */
@@ -155,7 +151,6 @@ ssize_t              count                ; //holding number of devices in list
    
 
 // MD Dumper Var
-
 unsigned long address=0;
 unsigned long i=0;
 unsigned long j=0;
@@ -170,9 +165,7 @@ char *game_region = NULL;
 const char unk[] = {"unknown"};
 int checksum_header = 0;
 int use_gui=0;							/* 0=CLI Mode, 1=GUI Mode */
-
 int gui_tab_mode=0;						/* 0=Read Mode, 1=Write Mode */
-
 int data_type=0;						/* 0=ROM, 1=RAM */
 int dump_mode=0; 						/* 0=Auto, 1=Manual, 2=Bankswitch */
 int dump_rom_size_opts=0; 				/* 0=32KB, 1=64KB, 2=128KB, 3=256KB, 4=512KB, 5=1024KB, 6=2048KB, 7=4096KB, 8=8192KB */
@@ -199,7 +192,6 @@ unsigned short flash_id=0;
 unsigned char chip_id=0;
 unsigned char manufacturer_id=0;
 const char * wheel[] = { "-","\\","|","/"}; //erase wheel
-int lockon_mode=0;
 
 //*****************************************************
 // Hardware TYPES
@@ -210,7 +202,6 @@ int lockon_mode=0;
 // 4 = Extended SSF2 Mapper ( Overdrive 2 / DOA )
 // 5 = WaterMelon T-5740 Mapper Pier Solar
 //*****************************************************
-
 unsigned char Hardwaretype=0;
 
 //Others Functions
@@ -796,10 +787,6 @@ void Game_Header_Infos(void)
             SDL_Log(" Domestic: %.*s\n", 48, (char *)game_name);
             memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+80, 48);
             trim((unsigned char *)dump_name, 0);
-
-            if(memcmp((unsigned char *)game_name,"SONIC & KNUCKLES",16) == 0)
-                lockon_mode=1;
-
             SDL_Log(" International: %.*s\n", 48, game_name);
             SDL_Log(" Release date: %.*s\n", 16, buffer_header+0x10);
             SDL_Log(" Version: %.*s\n", 14, buffer_header+0x80);
