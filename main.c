@@ -535,10 +535,10 @@ int main(int argc, char *argv[])
 	{
 		SDL_Log("\n");
 		SDL_Log("----------------------------------------------------------------\n");
-		SDL_Log("8b   d8 888b.	  888b. 8	8 8b   d8 888b. 8888 888b.\n");
-		SDL_Log("8YbmdP8 8   8	  8   8 8	8 8YbmdP8 8  .8 8www 8  .8\n");
-		SDL_Log("8	 8 8   8 wwww 8   8 8b..d8 8	 8 8wwP' 8	8wwK'\n");
-		SDL_Log("8	 8 888P'	  888P' `Y88P' 8	 8 8	 8888 8  Yb\n");
+		SDL_Log("8b   d8 888b.      888b. 8    8 8b   d8 888b. 8888 888b. \n");
+		SDL_Log("8YbmdP8 8   8      8   8 8    8 8YbmdP8 8  .8 8www 8  .8 \n");
+		SDL_Log("8     8 8   8 wwww 8   8 8b..d8 8     8 8wwP' 8    8wwK' \n");
+		SDL_Log("8     8 888P'      888P' `Y88P' 8     8 8     8888 8  Yb \n");
 		SDL_Log("----------------------------------------------------------------\n");
 		SDL_Log("\n");
 		SDL_Log("Release : 02 Nov. 2024 \n");
