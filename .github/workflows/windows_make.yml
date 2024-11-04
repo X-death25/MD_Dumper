@@ -1,6 +1,6 @@
 # This starter workflow is for a CMake project running on multiple platforms. There is a different starter workflow if you just want a single platform.
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
-name: Linux Cmake Action
+name: Windows Cmake Action
 
 on:
   push:
@@ -39,27 +39,17 @@ jobs:
       id: strings
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get -y install libusb-1.0-0-dev libsdl2-dev libsdl2-image-dev libsdl2-2.0-0 libsdl2-image-2.0-0 
+        sudo apt update
+        sudo apt install gcc-mingw-w64 g++-mingw-w64
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
-    - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: |
-        chmod +x ./Build_Linux.sh
-        ./Build_Linux.sh
+        chmod +x ./Build_Windows.sh
+        ./Build_Windows.sh
 
     - uses: actions/upload-artifact@v4
       with:
-        name: MD_Dumper_Linux
-        path: ./Linux_Build
+        name: MD_Dumper_Windows
+        path: ./Windows_Build
