@@ -16,6 +16,11 @@ LICENSE Informations
   More info: https://fontenddev.com/fonts/enter-command/
   Font found here : https://www.dafont.com/fr/enter-command.font
 
+- Xirod : https://www.dafont.com/fr/xirod.font
+  The fonts included in this archive are released under a “no rights reserved” Creative Commons Zero license. Please do not ask permission to do anything 
+  with these fonts. Whatever you want to do with these fonts, the answer will be yes. Please read about the CC0 Public Domain license before contacting the author.   
+  Font licensed under CC0 Public Domain : https://creativecommons.org/publicdomain/zero/1.0/
+
 # Librarires 
 
 #####
