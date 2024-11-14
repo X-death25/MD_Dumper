@@ -4,9 +4,27 @@
 
 MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu
 
-This software is used with the project here : https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
-It allows you to dump Mega Drive cartridges and Master System cartridges (tested by using SEGA Master System converter, could work with others adaptaters). You can use the command line mode or the GUI mode according to your preferences.
+Supported Features
+-----
+
+| Feature | Implemented |
+| ------- | ----------- |
+| ROM Dump up to 32 MEG  Classic              | :white_check_mark: |
+| ROM Dump up to 128 MEG  Bankswitch          | :white_check_mark: |
+| SRAM Backup Memory Classic                  | :white_check_mark: |
+| SRAM Backup Memory Bankswitch               | :white_check_mark: |
+| Rewrite Krikzz flashkit cart or compatible  | :white_check_mark: |
+| Rewrite 64 MEG flash cartridge (bankswitch) | :arrows_counterclockwise: |
+| ROM Dump in Sega Lock-on mode               | :white_check_mark: |
+| ROM Dump in Super Street Fighter II mapper  | :white_check_mark: |
+| Master System / MARK III ROM Dump           | :white_check_mark: |
+| GAME GEAR ROM Dump                          | :white_check_mark: |
+| Open-Everdrive support                      | :arrows_counterclockwise: |
+
+You could find all documentation in the wiki
+
+https://github.com/X-death25/MD_Dumper/wiki
 
 <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" width="49%" /> <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" width="49%" />
 
