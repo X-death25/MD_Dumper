@@ -63,6 +63,16 @@ Write mode :
 -gui|-gui_fr  : Using GUI Window (ENG|FR)
 ```
 
+## Special thanks
+
+- paulfertser for his code on how to use usb hid on stm32 , it's the first piece of my first version of md dumper https://github.com/paulfertser/stm32-tx-hid
+- libopencm3 for the very cool STM32 dev lib.
+- ichigobankai for some low level arm optimisation and the Master System / Geame gear part. 
+- Marv17 for a lot of hardware and software test.
+- Jackobo (Akina Usagi) for the beautiful GUI.
+- Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
+
+
 ## Notes
 
 You will find license and links about the librairies and font used in this project in "Informations.txt" if interested.
