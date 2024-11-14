@@ -28,6 +28,8 @@ You could find all documentation in the wiki here :
 
 https://github.com/X-death25/MD_Dumper/wiki
 
+## Preview
+
 <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" width="49%" /> <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" width="49%" />
 
 ## Where i can buy it ?
