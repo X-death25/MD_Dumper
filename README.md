@@ -22,12 +22,17 @@ Supported Features
 | GAME GEAR ROM Dump                          | :white_check_mark: |
 | Open-Everdrive support                      | :arrows_counterclockwise: |
 
-You could find all documentation for the "how to use it" in the wiki
+## How to use it
+
+You could find all documentation in the wiki here :
 
 https://github.com/X-death25/MD_Dumper/wiki
 
 <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/01.png" width="49%" /> <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/card.jpg" width="49%" />
 
+## Where i can buy it ?
+
+https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
 ## Commands
 
