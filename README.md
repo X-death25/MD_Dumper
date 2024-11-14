@@ -1,6 +1,6 @@
 # MD Dumper
 
-<img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="125%" /> 
+<img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="100%" /> 
 
 MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu
 
