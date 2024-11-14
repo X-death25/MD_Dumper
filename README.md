@@ -22,7 +22,7 @@ Supported Features
 | GAME GEAR ROM Dump                          | :white_check_mark: |
 | Open-Everdrive support                      | :arrows_counterclockwise: |
 
-You could find all documentation in the wiki
+You could find all documentation for the "how to use it" in the wiki
 
 https://github.com/X-death25/MD_Dumper/wiki
 
