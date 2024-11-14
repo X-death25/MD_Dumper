@@ -2,7 +2,9 @@
 
 <img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="100%" /> 
 
-MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu
+MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu.
+8 bit Master System and Game Gear dump is supported.
+You could also use included csv file for increase special game compatibility as well as extended flash memory support for thirs party cartridge.
 
 
 Supported Features
@@ -67,7 +69,7 @@ Write mode :
 
 - paulfertser for his code on how to use usb hid on stm32 , it's the first piece of my first version of md dumper https://github.com/paulfertser/stm32-tx-hid
 - libopencm3 for the very cool STM32 dev lib.
-- ichigobankai for some low level arm optimisation and the Master System / Geame gear part. 
+- ichigobankai for some low level arm optimisation and the Master System / Game gear part. 
 - Marv17 for a lot of hardware and software test.
 - Jackobo (Akina Usagi) for the beautiful GUI.
 - Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
