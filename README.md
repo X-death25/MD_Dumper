@@ -1,6 +1,6 @@
 # MD Dumper
 
-<img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="49%" /> 
+<img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="150%" /> 
 
 This software is used with the project here : https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
