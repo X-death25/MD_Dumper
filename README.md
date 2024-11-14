@@ -2,6 +2,8 @@
 
 <img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="125%" /> 
 
+MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu
+
 This software is used with the project here : https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
 It allows you to dump Mega Drive cartridges and Master System cartridges (tested by using SEGA Master System converter, could work with others adaptaters). You can use the command line mode or the GUI mode according to your preferences.
