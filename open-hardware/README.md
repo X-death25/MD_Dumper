@@ -7,7 +7,7 @@ MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / 
 You could also use included csv file for increase special game compatibility as well as extended flash memory support for third party cartridges.
 
 
-Supported Features
+Supported Features in the open-hardware version
 -----
 
 | Feature | Implemented |
@@ -17,12 +17,12 @@ Supported Features
 | SRAM Backup Memory Classic                  | :white_check_mark: |
 | SRAM Backup Memory Bankswitch               | :white_check_mark: |
 | Rewrite Krikzz flashkit cart or compatible  | :white_check_mark: |
-| Rewrite 64 MEG flash cartridge (bankswitch) | :arrows_counterclockwise: |
-| ROM Dump in Sega Lock-on mode               | :white_check_mark: |
+| Rewrite 64 MEG flash cartridge (bankswitch) | :x:                |
+| ROM Dump in Sega Lock-on mode               | :x:                |
 | ROM Dump in Super Street Fighter II mapper  | :white_check_mark: |
-| Master System / MARK III ROM Dump           | :white_check_mark: |
-| GAME GEAR ROM Dump                          | :white_check_mark: |
-| Open-Everdrive support                      | :arrows_counterclockwise: |
+| Master System / MARK III ROM Dump           | :x:                |
+| GAME GEAR ROM Dump                          | :x:                |
+| Open-Everdrive support                      | :x:                |
 
 ## How to use it
 
