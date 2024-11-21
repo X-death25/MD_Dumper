@@ -77,6 +77,10 @@ Write mode :
 - Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
 
 
-## Notes
+## Licenses:
 
-You will find license and links about the librairies and font used in this project in "Informations.txt" if interested.
+- Software : GPL v3
+- Hardware : Firmware is closed source
+- Documentation / WIKI : CC0 1.0
+
+
