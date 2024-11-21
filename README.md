@@ -75,12 +75,14 @@ Write mode :
 - Marv17 for a lot of hardware and software test.
 - Jackobo (Akina Usagi) for the beautiful GUI.
 - Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
-
+- Libcsv used in the software https://github.com/rgamble/libcsv  author : rgamble
 
 ## Licenses:
 
 - Software : GPL v3
-- Hardware : Firmware is closed source
+- Hardware (Tindie Version ) : Firmware is closed source
+- Hardware (open hardware Version ) : GPL v3
 - Documentation / WIKI : CC0 1.0
 
+You can find copy of GPL v3 and CC0 1.0 in the licences folder
 
