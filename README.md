@@ -81,7 +81,7 @@ Write mode :
 
 - Software : GPL v3
 - Hardware (Tindie Version ) : Firmware is closed source
-- Hardware (open hardware Version ) : GPL v3
+- Hardware (open-hardware folder ) : GPL v3
 - Documentation / WIKI : CC0 1.0
 
 You can find copy of GPL v3 and CC0 1.0 in the licences folder
