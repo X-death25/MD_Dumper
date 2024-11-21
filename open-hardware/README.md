@@ -20,6 +20,7 @@ Supported Features in the open-hardware version
 | Rewrite 64 MEG flash cartridge (bankswitch) | :x:                |
 | ROM Dump in Sega Lock-on mode               | :x:                |
 | ROM Dump in Super Street Fighter II mapper  | :white_check_mark: |
+| Extended CSV features                       | :x:                |
 | Master System / MARK III ROM Dump           | :x:                |
 | GAME GEAR ROM Dump                          | :x:                |
 | Open-Everdrive support                      | :x:                |
