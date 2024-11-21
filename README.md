@@ -81,15 +81,15 @@ Write mode :
 Linked Repositories
 -----
 
-My other projects related to Megadrive Hardware/Software developpement
+My other projects related to Megadrive Hardware/Software developpement <br>
 
--=X-Flash=-
+-=X-Flash=- 
 Altera EPM240 CPLD based Megadrive cartridge used for advanced research <br>
-https://github.com/X-death25/X-Flash
+https://github.com/X-death25/X-Flash <br>
 
 -=X-open ED=-
-Open Source Alternative to Open-Everdrive BIOS
-https://github.com/X-death25/X-open-ED
+Open Source Alternative to Open-Everdrive BIOS <br>
+https://github.com/X-death25/X-open-ED <br>
 
 
 ## Licenses:
