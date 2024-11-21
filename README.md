@@ -78,6 +78,20 @@ Write mode :
 - Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
 - Libcsv used in the software https://github.com/rgamble/libcsv  author : rgamble
 
+Linked Repositories
+-----
+
+My other projects related to Megadrive Hardware/Software developpement
+
+-=X-Flash=-
+Altera EPM240 CPLD based Megadrive cartridge used for advanced research <br>
+https://github.com/X-death25/X-Flash
+
+-=X-open ED=-
+Open Source Alternative to Open-Everdrive BIOS
+https://github.com/X-death25/X-open-ED
+
+
 ## Licenses:
 
 - Software : GPL v3
