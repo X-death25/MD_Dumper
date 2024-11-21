@@ -83,11 +83,11 @@ Linked Repositories
 
 My other projects related to Megadrive Hardware/Software developpement <br>
 
--=X-Flash=- 
+-=X-Flash=- <br>
 Altera EPM240 CPLD based Megadrive cartridge used for advanced research <br>
 https://github.com/X-death25/X-Flash <br>
 
--=X-open ED=-
+-=X-open ED=- <br>
 Open Source Alternative to Open-Everdrive BIOS <br>
 https://github.com/X-death25/X-open-ED <br>
 
