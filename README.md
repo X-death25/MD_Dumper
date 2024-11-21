@@ -22,6 +22,7 @@ Supported Features
 | ROM Dump in Super Street Fighter II mapper  | :white_check_mark: |
 | Master System / MARK III ROM Dump           | :white_check_mark: |
 | GAME GEAR ROM Dump                          | :white_check_mark: |
+| Extended CSV features                       | :white_check_mark: |
 | Open-Everdrive support                      | :arrows_counterclockwise: |
 
 ## How to use it
