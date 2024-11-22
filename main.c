@@ -1,7 +1,7 @@
 /*
 
 MD Dumper CLI Version
-X-death - 07/2024
+X-death - 11/2024
 
 MD Dumper SDL GUI Version
 Jackobo Le Chocobo (Akina Usagi) - 31/08/2024
