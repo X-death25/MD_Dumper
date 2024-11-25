@@ -3,7 +3,7 @@
 <img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="100%" /> 
 
 MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu.  
-8 bit Master System and Game Gear dump is supported.  
+8 bit Master System and Game Gear dump is also supported.  
 You could also use included csv file for increase special game compatibility as well as extended flash memory support for third party cartridges.
 
 
