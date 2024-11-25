@@ -39,6 +39,14 @@ https://github.com/X-death25/MD_Dumper/wiki
 
 ## Where i can buy it ?
 
+This product is an unofficial and
+unlicensed hardware release for the SEGA
+Mega Drive console, and is not affiliated
+with SEGA Enterprises Ltd, SEGA
+Corporation, or SEGA Holdings Co.
+SEGA® and MEGA DRIVE are trademarks
+of SEGA Holdings Co.
+
 https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
 
 ## Commands
