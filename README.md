@@ -47,7 +47,13 @@ Corporation, or SEGA Holdings Co.
 SEGA® and MEGA DRIVE are trademarks
 of SEGA Holdings Co.
 
+You can buy last version of hardware in my Tindie page <br>
+
 https://www.tindie.com/products/xdeath/usb-megadrive-genesis-cartridge-readerwriter/
+
+If you are a maker you can also use the open source version in the Open-hardware folder <br>
+
+https://github.com/X-death25/MD_Dumper/tree/main/open-hardware
 
 ## Commands
 
