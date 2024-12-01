@@ -4,7 +4,8 @@
 
 MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu.  
 8 bit Master System and Game Gear dump is supported.  
-You could also use included csv file for increase special game compatibility as well as extended flash memory support for third party cartridges.
+This page is for the open-source hardware version. 
+
 
 
 Supported Features in the open-hardware version
