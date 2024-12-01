@@ -34,7 +34,8 @@ https://github.com/X-death25/MD_Dumper/wiki
 
 ## Preview
 
-<img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/eco.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/eco.png" width="49%" /> 
+<img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/eco.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/eco.png" width="49%" />
+<img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/kicad_eco.png" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/kicad_eco.png" width="49%" /> 
 
 
 <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/preview01.PNG" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/preview01.png" width="49%" /> <img src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/preview02.PNG" data-canonical-src="https://github.com/X-death25/MD_Dumper_CLI/blob/main/github_gfx/preview02.png" width="49%" />
