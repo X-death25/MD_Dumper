@@ -88,7 +88,7 @@ Write mode :
 - libopencm3 for the very cool STM32 dev lib.
 - ichigobankai for some low level arm optimisation and the Master System / Game gear part. 
 - Marv17 for a lot of hardware and software test.
-- Jackobo (Akina Usagi) for the beautiful GUI.
+- Jackobo (Takeshi Imbert) for the beautiful GUI.
 - Sik for his wonderfull website about Megadrive hardware / dev info https://plutiedev.com/
 - Libcsv used in the software https://github.com/rgamble/libcsv  author : rgamble
 
