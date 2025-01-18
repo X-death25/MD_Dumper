@@ -1,11 +1,8 @@
-# MD Dumper
+# MD Dumper open-hardware version
 
 <img src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" data-canonical-src="https://github.com/X-death25/MD_Dumper/blob/main/github_gfx/md_dumper_title.png" width="100%" /> 
 
-MD-Dumper is an USB-C alternative of Krizz FlashKit programmer you can backup / restore your cartridge and save for use it in Flashcart or Emu.  
-8 bit Master System and Game Gear dump is supported.  
 This page is for the open-source hardware version. 
-
 
 
 Supported Features in the open-hardware version
