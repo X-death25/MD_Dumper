@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 		//Init Window
 		SDL_Init(SDL_INIT_VIDEO);
-		SDL_Window * window = SDL_CreateWindow("MD Dumper version 02 Nov. 2024", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 424*gui_scale, 240*gui_scale, 0);
+		SDL_Window * window = SDL_CreateWindow("MD Dumper version January 2025", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 424*gui_scale, 240*gui_scale, 0);
 		SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
 		
 		SDL_Surface * image1;
