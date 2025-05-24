@@ -1,6 +1,10 @@
+#ifdef SDLGUI	
 // SDL Libraries for GUI
 #include <SDL.h>												//Main Library file
 #include <SDL_image.h>											//For PNG loading files
+#define SDL_Log(...) printf(__VA_ARGS__)
+#endif
+
 #include <libusb.h>												//Library for detecting the MD Dumper device
 
 //Read CSV Files
@@ -205,26 +209,23 @@ unsigned char Hardwaretype=0;
 //Others Functions
 void Display_Help(char *prog_name)
 {
-	SDL_Log("\n");
-	SDL_Log("How to use the program:\n");
-	SDL_Log("\n");
-	SDL_Log("GUI Mode:\n");
-	SDL_Log("  %s -gui|-gui_fr \n", prog_name);
-	SDL_Log("\n");
-	SDL_Log("CLI Mode:\n");
-	SDL_Log("\n");
-	SDL_Log("  %s -read auto  -  Auto Mode\n", prog_name);
-	SDL_Log("  %s -read bankswitch  -  Bankswitch Mode\n", prog_name);
-	SDL_Log("  %s -read manual (32|64|128|256|512|1024|2048|4096|8192) (gg|md|sms) -  Manual Mode\n", prog_name);
-	SDL_Log("  %s -backup auto  -  Auto Mode\n", prog_name);
-	SDL_Log("  %s -backup bankswitch  -  Bankswitch Mode\n", prog_name);
-	SDL_Log("  %s -backup manual (8192|32768) (serial_spi|serial_i2c|parallel_sram) -  Manual Mode\n", prog_name);
-	SDL_Log("\n");
-	SDL_Log("  %s -erase_flash -  Erase Flash Data\n", prog_name);
-	SDL_Log("  %s -write_flash -  Write Flash Data\n", prog_name);
-	SDL_Log("  %s -erase_memory (serial_spi|serial_i2c|parallel_sram) -  Erase Save/Memory Data\n", prog_name);
-	SDL_Log("  %s -restore_memory (serial_spi|serial_i2c|parallel_sram) - Write Save/Memory Data\n", prog_name);
-	SDL_Log("\n");
+	printf("\n");
+	printf("How to use the program:\n");
+	printf("\n");
+	printf("CLI Mode:\n");
+	printf("\n");
+	printf("  %s -read auto  -  Auto Mode\n", prog_name);
+	printf("  %s -read bankswitch  -  Bankswitch Mode\n", prog_name);
+	printf("  %s -read manual (32|64|128|256|512|1024|2048|4096|8192) (gg|md|sms) -  Manual Mode\n", prog_name);
+	printf("  %s -backup auto  -  Auto Mode\n", prog_name);
+	printf("  %s -backup bankswitch  -  Bankswitch Mode\n", prog_name);
+	printf("  %s -backup manual (8192|32768) (serial_spi|serial_i2c|parallel_sram) -  Manual Mode\n", prog_name);
+	printf("\n");
+	printf("  %s -erase_flash -  Erase Flash Data\n", prog_name);
+	printf("  %s -write_flash -  Write Flash Data\n", prog_name);
+	printf("  %s -erase_memory (serial_spi|serial_i2c|parallel_sram) -  Erase Save/Memory Data\n", prog_name);
+	printf("  %s -restore_memory (serial_spi|serial_i2c|parallel_sram) - Write Save/Memory Data\n", prog_name);
+	printf("\n");
 }
 
 void cb1(void *s, size_t len, void *data)
@@ -377,8 +378,8 @@ unsigned int crc32(unsigned int seed, const void* data, int data_size)
 
 	void timer_show()
 	{
-		SDL_Log("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000);
-		SDL_Log(" (%ldms)\n", (microsec_end - microsec_start));
+		printf("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000);
+		printf(" (%ldms)\n", (microsec_end - microsec_start));
 	}
 #else 				//Others
 	struct timeval ostime;
@@ -399,8 +400,8 @@ unsigned int crc32(unsigned int seed, const void* data, int data_size)
 
 	void timer_show()
 	{
-		SDL_Log("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000000);
-		SDL_Log(" (%ldms)\n", (microsec_end - microsec_start)/1000);
+		printf("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000000);
+		printf(" (%ldms)\n", (microsec_end - microsec_start)/1000);
 	}
 #endif
 
@@ -478,20 +479,20 @@ unsigned int trim(unsigned char * buf, unsigned char is_out)
 
 int Detect_Device(void)
 {		
-	SDL_Log("Init LibUSB... \n");
+	printf("Init LibUSB... \n");
 	res = libusb_init(&context);
 	if (res != 0)
 	{
-		SDL_Log("Error initialising libusb.\n");
+		printf("Error initialising libusb.\n");
 		return 1;
 	}
-	SDL_Log("LibUSB Init Sucessfully ! \n");
+	printf("LibUSB Init Sucessfully ! \n");
 
-	SDL_Log("Detecting MD Dumper... \n");
+	printf("Detecting MD Dumper... \n");
 	count = libusb_get_device_list(context, &devs);
 	if (count <= 0)
 	{
-		SDL_Log("Error getting device list\n");
+		printf("Error getting device list\n");
 		return 1;
 	}
 
@@ -508,25 +509,25 @@ int Detect_Device(void)
 	
 	if(device_found!=-1)
 	{
-		SDL_Log("MD Dumper Device Found !\n");
+		printf("MD Dumper Device Found !\n");
 		libusb_device *device = devs[device_found];
 		struct libusb_device_descriptor desc = {0};
 		res = libusb_get_device_descriptor(device, &desc);
 
-		SDL_Log("LibUSB Device ID = %d\n",device_found);
-		SDL_Log("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
+		printf("LibUSB Device ID = %d\n",device_found);
+		printf("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
 		
 		libusb_open(device, &handle);
-		SDL_Log("Handle result : %s\n", libusb_error_name(res));
+		printf("Handle result : %s\n", libusb_error_name(res));
 		
 		if (!handle)
 		{
-			SDL_Log("Unable to open MD Dumper Device.\n");
+			printf("Unable to open MD Dumper Device.\n");
 			return 1;
 		}
 		else
 		{
-			SDL_Log("MD Dumper Device opened !\n");
+			printf("MD Dumper Device opened !\n");
 
 			for (if_num = 0; if_num < if_num_max; if_num++) 
 			{
@@ -538,16 +539,16 @@ int Detect_Device(void)
 				res = libusb_claim_interface(handle, if_num);
 				if (res < 0) 
 				{
-					SDL_Log("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
+					printf("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
 					if(if_num==if_num_max-1)
 					{
-						SDL_Log("Exiting...");
+						printf("Exiting...");
 						return 1;
 					}
 				}
 				else
 				{
-					SDL_Log("Interface %d claimed\n", if_num);
+					printf("Interface %d claimed\n", if_num);
 					if_num=2;
 				}
 			}
@@ -555,7 +556,7 @@ int Detect_Device(void)
 	}
 	else
 	{
-		SDL_Log("MD Dumper Device Not Found !\n");
+		printf("MD Dumper Device Not Found !\n");
 		return 1;
 	}
 
@@ -575,43 +576,43 @@ int Detect_Device(void)
 	usb_buffer_out[0] = WAKEUP;// Affect request to  WakeUP Command
 	libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0); // Send Packets to Sega Dumper
 	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
-	SDL_Log("\n");
-	SDL_Log("MD Dumper %.*s",6, (char *)usb_buffer_in);
-	SDL_Log("\n");
+	printf("\n");
+	printf("MD Dumper %.*s",6, (char *)usb_buffer_in);
+	printf("\n");
 	
 	md_dumper_type = usb_buffer_in[24];
 	switch ( md_dumper_type )
 	{
 		case 0:
-			SDL_Log("MD Dumper type : Old Version \n");
+			printf("MD Dumper type : Old Version \n");
 			break;
 		case 1:
-			SDL_Log("MD Dumper type : BluePill non aligned \n");
+			printf("MD Dumper type : BluePill non aligned \n");
 			break;
 		case 2:
-			SDL_Log("MD Dumper type : BluePill aligned \n");
+			printf("MD Dumper type : BluePill aligned \n");
 			break;
 		case 3:
-			SDL_Log("MD Dumper type : SMD ARM TQFP100 Aligned  \n");
+			printf("MD Dumper type : SMD ARM TQFP100 Aligned  \n");
 			break;
 		case 4:
-			SDL_Log("MD Dumper type : Marv17 aligned tqfp48  \n");
+			printf("MD Dumper type : Marv17 aligned tqfp48  \n");
 			break;
 	}
 
-	SDL_Log("Hardware Firmware version : %d.%d\n", usb_buffer_in[20],usb_buffer_in[21]);
+	printf("Hardware Firmware version : %d.%d\n", usb_buffer_in[20],usb_buffer_in[21]);
 
 	sms_mode = usb_buffer_in[25];
 	if ( sms_mode == 0 )
 	{
-		SDL_Log("Dumper started in 16 bit mode \n");
+		printf("Dumper started in 16 bit mode \n");
 		//Hardwaretype = 0 ;
 	}
 	if ( sms_mode == 1 )
 	{
-		SDL_Log("Dumper started in 8 bit mode \n");
+		printf("Dumper started in 8 bit mode \n");
 	}
-	SDL_Log("\n");
+	printf("\n");
 
 	return 0;
 }
@@ -620,9 +621,9 @@ int Open_CSV_Files(void)
 {
 	if (csv_init(&p, options) != 0)
 	{
-		SDL_Log("\n");
-		SDL_Log("\n");
-		SDL_Log("ERROR Failed to init CSV Parser for Gamelist ...\n");
+		printf("\n");
+		printf("\n");
+		printf("ERROR Failed to init CSV Parser for Gamelist ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p,';');
@@ -630,9 +631,9 @@ int Open_CSV_Files(void)
 	FILE *fp = fopen("gameslist.csv", "r");
 	if (!fp)
 	{
-		SDL_Log("\n");
-		SDL_Log("\n");
-		SDL_Log("ERROR Can't find gamelist.csv ...\n");
+		printf("\n");
+		printf("\n");
+		printf("ERROR Can't find gamelist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -643,9 +644,9 @@ int Open_CSV_Files(void)
 		if (csv_parse(&p, buffer, bytes_read, cb1, cb2, NULL) != bytes_read)
 		{
 			buffer_header[i]=0x00;
-			SDL_Log("\n");
-			SDL_Log("\n");
-			SDL_Log("ERROR while parsing file ...\n");
+			printf("\n");
+			printf("\n");
+			printf("ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -655,18 +656,18 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	SDL_Log("\n");
-	SDL_Log("CSV Gamelist file opened sucessfully\n");
+	printf("\n");
+	printf("CSV Gamelist file opened sucessfully\n");
 	//Afficher le nombre de cellules non vides en colonne A
-	SDL_Log("Add : %d Special Games into MD Dumper Database \n", non_empty_cells_in_col_A);
+	printf("Add : %d Special Games into MD Dumper Database \n", non_empty_cells_in_col_A);
 
 	// open csv flash list File
 
 	if (csv_init(&p2, options) != 0)
 	{
-		SDL_Log("\n");
-		SDL_Log("\n");
-		SDL_Log(" ERROR Failed to init CSV Parser for Flashlist ...\n");
+		printf("\n");
+		printf("\n");
+		printf(" ERROR Failed to init CSV Parser for Flashlist ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p2,';');
@@ -675,9 +676,9 @@ int Open_CSV_Files(void)
 	FILE *fp2 = fopen("flashlist.csv", "r");
 	if (!fp)
 	{
-		SDL_Log("\n");
-		SDL_Log("\n");
-		SDL_Log(" ERROR Can't find flashlist.csv ...\n");
+		printf("\n");
+		printf("\n");
+		printf(" ERROR Can't find flashlist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -687,9 +688,9 @@ int Open_CSV_Files(void)
 	{
 		if (csv_parse(&p2, buffer2, bytes_read2, cb3, cb4, NULL) != bytes_read2)
 		{
-			SDL_Log("\n");
-			SDL_Log("\n");
-			SDL_Log(" ERROR while parsing file ...\n");
+			printf("\n");
+			printf("\n");
+			printf(" ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -698,15 +699,15 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	SDL_Log("CSV Flashlist file opened sucessfully\n");
+	printf("CSV Flashlist file opened sucessfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
-	SDL_Log("Add : %d Flash ID into MD Dumper Database \n", non_empty_cells_in_col_A2);
+	printf("Add : %d Flash ID into MD Dumper Database \n", non_empty_cells_in_col_A2);
 
 	// open csv sms-gg crc
 
 	if (csv_init(&p3, options) != 0)
 	{
-		SDL_Log("\n\n ERROR Failed to init CSV Parser for SMS-GG crc ...\n");
+		printf("\n\n ERROR Failed to init CSV Parser for SMS-GG crc ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p3,';');
@@ -715,7 +716,7 @@ int Open_CSV_Files(void)
 	FILE *fp3 = fopen("sms-gg_crc.csv", "r");
 	if (!fp)
 	{
-		SDL_Log("\n\n ERROR Can't find flashlist.csv ...\n");
+		printf("\n\n ERROR Can't find flashlist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -725,7 +726,7 @@ int Open_CSV_Files(void)
 	{
 		if (csv_parse(&p3, buffer3, bytes_read3, cb5, cb6, NULL) != bytes_read3)
 		{
-			SDL_Log("\n\n ERROR while parsing file ...\n");
+			printf("\n\n ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -734,9 +735,9 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	SDL_Log("CSV SMS-GG CRC file opened sucessfully\n");
+	printf("CSV SMS-GG CRC file opened sucessfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
-	SDL_Log("Add : %ld SMS/GG Games into MD Dumper Database \n", non_empty_cells_in_col_A3);
+	printf("Add : %ld SMS/GG Games into MD Dumper Database \n", non_empty_cells_in_col_A3);
 
 	return 0;
 }
@@ -768,18 +769,18 @@ void Game_Header_Infos(void)
 
 		if(memcmp((unsigned char *)buffer_header,"SEGA",4) == 0)
 		{
-			SDL_Log("\n");
-			SDL_Log("Megadrive/Genesis/32X cartridge detected!\n");
-			SDL_Log("\n");
-			SDL_Log(" --- HEADER ---\n");
+			printf("\n");
+			printf("Megadrive/Genesis/32X cartridge detected!\n");
+			printf("\n");
+			printf(" --- HEADER ---\n");
 			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+32, 48);
 			trim((unsigned char *)dump_name, 0);
-			SDL_Log(" Domestic: %.*s\n", 48, (char *)game_name);
+			printf(" Domestic: %.*s\n", 48, (char *)game_name);
 			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+80, 48);
 			trim((unsigned char *)dump_name, 0);
-			SDL_Log(" International: %.*s\n", 48, game_name);
-			SDL_Log(" Release date: %.*s\n", 16, buffer_header+0x10);
-			SDL_Log(" Version: %.*s\n", 14, buffer_header+0x80);
+			printf(" International: %.*s\n", 48, game_name);
+			printf(" Release date: %.*s\n", 16, buffer_header+0x10);
+			printf(" Version: %.*s\n", 14, buffer_header+0x80);
 			memcpy((unsigned char *)region, (unsigned char *)buffer_header +0xF0, 4);
 			for(i=0; i<4; i++)
 			{
@@ -799,43 +800,43 @@ void Game_Header_Infos(void)
 				game_region[3] = '\0';
 			}
 
-			SDL_Log(" Region: %s\n", game_region);
+			printf(" Region: %s\n", game_region);
 
 			checksum_header = (buffer_header[0x8E]<<8) | buffer_header[0x8F];
-			SDL_Log(" Checksum: %X\n", checksum_header);
+			printf(" Checksum: %X\n", checksum_header);
 
 			game_size = 1 + ((buffer_header[0xA4]<<24) | (buffer_header[0xA5]<<16) | (buffer_header[0xA6]<<8) | buffer_header[0xA7])/1024;
-			SDL_Log(" Game size: %dKB\n", game_size);
+			printf(" Game size: %dKB\n", game_size);
 
 			if((buffer_header[0xB0] + buffer_header[0xB1])!=0x93)
 			{
-				SDL_Log(" Extra Memory : No\n");
+				printf(" Extra Memory : No\n");
 			}
 			else
 			{
-				SDL_Log(" Extra Memory : Yes ");
+				printf(" Extra Memory : Yes ");
 				switch(buffer_header[0xB2])
 				{
 				case 0xF0:
-					SDL_Log(" 8bit backup SRAM (even addressing)\n");
+					printf(" 8bit backup SRAM (even addressing)\n");
 					break;
 				case 0xF8:
-					SDL_Log(" 8bit backup SRAM (odd addressing)\n");
+					printf(" 8bit backup SRAM (odd addressing)\n");
 					break;
 				case 0xB8:
-					SDL_Log(" 8bit volatile SRAM (odd addressing)\n");
+					printf(" 8bit volatile SRAM (odd addressing)\n");
 					break;
 				case 0xB0:
-					SDL_Log(" 8bit volatile SRAM (even addressing)\n");
+					printf(" 8bit volatile SRAM (even addressing)\n");
 					break;
 				case 0xE0:
-					SDL_Log(" 16bit backup SRAM\n");
+					printf(" 16bit backup SRAM\n");
 					break;
 				case 0xA0:
-					SDL_Log(" 16bit volatile SRAM\n");
+					printf(" 16bit volatile SRAM\n");
 					break;
 				case 0xE8:
-					SDL_Log(" Serial EEPROM\n");
+					printf(" Serial EEPROM\n");
 					break;
 				}
 				if ( buffer_header[0xB2] != 0xE0 | buffer_header[0xB2] != 0xA0 ) // 8 bit SRAM
@@ -848,12 +849,12 @@ void Game_Header_Infos(void)
 					save_size=(save_size/2) + 1; // 8bit size
 				}
 				save_address = (buffer_header[0xB4]<<24) | (buffer_header[0xB5]<<16) | (buffer_header[0xB6] << 8) | buffer_header[0xB7];
-				SDL_Log(" Save size: %dKb\n", save_size);
-				SDL_Log(" Save address: %lX\n", save_address);
+				printf(" Save size: %dKb\n", save_size);
+				printf(" Save address: %lX\n", save_address);
 
 				if(usb_buffer_in[0xB2]==0xE8) // EEPROM Game
 				{
-					SDL_Log(" No information on this game!\n");
+					printf(" No information on this game!\n");
 				}
 			}
 		}
@@ -866,8 +867,8 @@ void Game_Header_Infos(void)
 		for (i=0; i<512; i++)		buffer_header[i]=0x00;
 
 		i = 0;
-		SDL_Log("\n");
-		SDL_Log("Try to read SMS - GG cartridge...\n");
+		printf("\n");
+		printf("Try to read SMS - GG cartridge...\n");
 		address = 0x7FF0;
 
 		while (i<8)
@@ -886,8 +887,8 @@ void Game_Header_Infos(void)
 
 		if(memcmp((unsigned char *)buffer_header,"TMR SEGA",8) == 0)
 		{
-			SDL_Log("Valid cartridge detected !\n");
-			SDL_Log("\n");
+			printf("Valid cartridge detected !\n");
+			printf("\n");
 
 			// Calculate Checksum of first bank
 			//printf("\nRead First BANK...\n");
@@ -947,51 +948,51 @@ void Game_Header_Infos(void)
 				}
 			}
 
-			SDL_Log("\n");
-			SDL_Log("\n");
-			SDL_Log(" --- HEADER --- \n");
+			printf("\n");
+			printf("\n");
+			printf(" --- HEADER --- \n");
 
-			SDL_Log("Game Name: %.*s\n",48, (char *)txt_csv_game_name2);
+			printf("Game Name: %.*s\n",48, (char *)txt_csv_game_name2);
 			if(memcmp((unsigned char *)txt_csv_game_type2,"GG ",3) == 0)
 			{
-				SDL_Log("Game Type : GAME GEAR \n");
+				printf("Game Type : GAME GEAR \n");
 			}
 			if(memcmp((unsigned char *)txt_csv_game_type2,"SMS",3) == 0)
 			{
-				SDL_Log("Game Type : MASTER SYSTEM / MARK3\n");
+				printf("Game Type : MASTER SYSTEM / MARK3\n");
 				gg_mode=0;
 			}
 
 			game_size = buffer_header[15] & 0xF;
 			if (game_size == 0x00)
 			{
-				SDL_Log("Game Size (Header) : 256 Ko");
+				printf("Game Size (Header) : 256 Ko");
 				game_size = 256*1024;
 			}
 			if (game_size == 0x01)
 			{
-				SDL_Log("Game Size (Header) : 512 Ko");
+				printf("Game Size (Header) : 512 Ko");
 				game_size = 512*1024;
 			}
 			if (game_size == 0x0c)
 			{
-				SDL_Log("Game Size (Header) : 32 Ko");
+				printf("Game Size (Header) : 32 Ko");
 				game_size = 32*1024;
 			}
 			if (game_size == 0x0e)
 			{
-				SDL_Log("Game Size (Header) : 64 Ko");
+				printf("Game Size (Header) : 64 Ko");
 				game_size = 64*1024;
 			}
 			if (game_size == 0x0f)
 			{
-				SDL_Log("Game Size (Header) : 128 Ko");
+				printf("Game Size (Header) : 128 Ko");
 				game_size = 128*1024;
 			}
 
 			// Real Cartridge Size
-			SDL_Log("\n");
-			SDL_Log("Game Size (Real): %.*s Ko\n",4, (char *)txt_csv_game_size2);
+			printf("\n");
+			printf("Game Size (Real): %.*s Ko\n",4, (char *)txt_csv_game_size2);
 			game_size=strtol(txt_csv_game_size2, NULL, 10);
 			game_size=game_size*1024;
 
@@ -999,16 +1000,16 @@ void Game_Header_Infos(void)
 
 			if ( buffer_header[15] >> 6 == 0x01 )
 			{
-				SDL_Log("Game Region (Header) : Export");
+				printf("Game Region (Header) : Export");
 			}
 			if ( buffer_header[15] >> 4 == 0x03 )
 			{
-				SDL_Log("Game Region (Header) : Japan");
+				printf("Game Region (Header) : Japan");
 			}
 
 			// Region REAL
-			SDL_Log("\n");
-			SDL_Log("Game Region (Real) : %.*s\n",40, (char *)txt_csv_region2);
+			printf("\n");
+			printf("Game Region (Real) : %.*s\n",40, (char *)txt_csv_region2);
 		}
 	}
 }
