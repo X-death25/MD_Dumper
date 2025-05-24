@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 {
 
 #ifdef SDLGUI
-	printfSetPriority(printf_CATEGORY_APPLICATION, printf_PRIORITY_INFO); //Display informations on console
+	SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO); //Display informations on console
 #endif
 	
 	if(argc == 1)
