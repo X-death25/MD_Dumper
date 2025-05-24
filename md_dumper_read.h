@@ -1,7 +1,7 @@
 int Read_ROM_Auto(void)
 {
-    printf("\n");
-    printf("Read Mode : Read ROM in automatic mode\n");
+    printf_mode("\n");
+    printf_mode("Read Mode : Read ROM in automatic mode\n");
     timer_start();
 
     // First Search if game is in special csv gamelist
@@ -11,35 +11,35 @@ int Read_ROM_Auto(void)
     for (i = 0; i < chksm_text_values_count ; i++)
     {
         strncpy(txt_csv_chksm,chksm_text_values[i],4);
-        //printf(" txt chksm value : %s \n",txt_csv_chksm);
+        //printf_mode(" txt chksm value : %s \n",txt_csv_chksm);
         csv_chksm = (unsigned short)strtol(txt_csv_chksm, NULL, 16);
 
         if ( checksum_header == csv_chksm  )
         {
             Index_chksm = i;
-            printf("\n");
-            printf("Found game in extra CSV Gamelist  \n");
-            //printf("Position in csv table %d \n",i);
+            printf_mode("\n");
+            printf_mode("Found game in extra CSV Gamelist  \n");
+            //printf_mode("Position in csv table %d \n",i);
             strncpy(txt_csv_game_size,chksm_text_values[i]+5,4);
             txt_csv_game_size[4] = '\0'; // Null-terminate the output string
-            //printf(" txt game size : %s \n",txt_csv_game_size);
+            //printf_mode(" txt game size : %s \n",txt_csv_game_size);
             csv_game_size = (unsigned char)strtol(txt_csv_game_size, NULL, 10);
-            //printf(" CSV Game Size  %d \n",csv_game_size);
+            //printf_mode(" CSV Game Size  %d \n",csv_game_size);
             game_size=1024*csv_game_size;
-            //printf("ROM Size from CSV is %ld Ko \n",game_size);
+            //printf_mode("ROM Size from CSV is %ld Ko \n",game_size);
 
             //Return Hardware type
             strncpy(txt_mapper_number,chksm_text_values[i]+10,2);
             txt_mapper_number[1] = '\0'; // Null-terminate the output string
-            //printf(" CSV Mapper Type  %s \n",txt_mapper_number);
+            //printf_mode(" CSV Mapper Type  %s \n",txt_mapper_number);
             Hardwaretype = (unsigned char)strtol(txt_mapper_number, NULL, 10);
-            //printf(" Hardware type  %d \n",Hardwaretype);
+            //printf_mode(" Hardware type  %d \n",Hardwaretype);
         }
     }
 
     if ( sms_mode == 0 && Hardwaretype == 0 ) // Dump Megadrive cartridge in no mapper mode
     {
-        printf("Rom Size : %ld Ko \n",game_size);
+        printf_mode("Rom Size : %ld Ko \n",game_size);
         game_size = game_size*1024;
         BufferROM = (unsigned char*)malloc(game_size);
         // Cleaning ROM Buffer
@@ -54,15 +54,15 @@ int Read_ROM_Auto(void)
         usb_buffer_out[4]=1;
 
         libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-        printf("ROM dump in progress...\n");
+        printf_mode("ROM dump in progress...\n");
         res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
         if (res != 0)
         {
-            printf("Error \n");
+            printf_mode("Error \n");
             return 1;
         }
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         myfile = fopen("dump_smd.bin","wb");
@@ -71,11 +71,11 @@ int Read_ROM_Auto(void)
     }
     else if ( sms_mode == 0 && Hardwaretype == 2 ) // Automatic Dump Megadrive cartridge in SSF2 mapper mode
     {
-        printf("Extra Hardware detected dump in mode : Sega SSF \n");
+        printf_mode("Extra Hardware detected dump in mode : Sega SSF \n");
         NumberOfBank = game_size/512;
-        //printf("Game Size is %ld Ko \n",game_size);
-        printf("Number of Banks is %d \n",NumberOfBank);
-        printf("Bank Size is 512 Ko  \n");
+        //printf_mode("Game Size is %ld Ko \n",game_size);
+        printf_mode("Number of Banks is %d \n",NumberOfBank);
+        printf_mode("Bank Size is 512 Ko  \n");
 
         game_size = game_size * 1024;
         BufferROM = (unsigned char*)malloc(game_size);
@@ -84,9 +84,9 @@ int Read_ROM_Auto(void)
             BufferROM[i]=0x00;
 
         // Dump the first 4MB of the ROM as fast as possible
-        printf("Bankswith bank O-7 to $080000 - $3FFFFF \n");
+        printf_mode("Bankswith bank O-7 to $080000 - $3FFFFF \n");
 
-        printf("Dumping please wait ...\n");
+        printf_mode("Dumping please wait ...\n");
         timer_start();
         address = 0;
         i=0;
@@ -98,11 +98,11 @@ int Read_ROM_Auto(void)
         usb_buffer_out[4]=1;
 
         libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-        printf("ROM dump in progress...\n");
+        printf_mode("ROM dump in progress...\n");
         res = libusb_bulk_transfer(handle, 0x82,BufferROM,4096*1024, &numBytes,0);
         if (res != 0)
         {
-            printf("Error \n");
+            printf_mode("Error \n");
             return 1;
         }
 
@@ -111,8 +111,8 @@ int Read_ROM_Auto(void)
 
         while ( offset != (game_size/1024)-1024)
         {
-            printf("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
-            printf("Dumping please wait ...\n");
+            printf_mode("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
+            printf_mode("Dumping please wait ...\n");
 
             address = 0xA130F9/2; // bank 4
             usb_buffer_out[0] = MAPPER_SSF2;
@@ -159,8 +159,8 @@ int Read_ROM_Auto(void)
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
             res = libusb_bulk_transfer(handle, 0x82,BufferROM+offset*1024,1024*1024, &numBytes, 60000);
         }
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         myfile = fopen("dump_smd.bin","wb");
@@ -172,10 +172,10 @@ int Read_ROM_Auto(void)
 
     else if ( sms_mode == 0 && Hardwaretype == 3 ) // Automatic Dump Megadrive cartridge in Lock-on mapper mode
     {
-        printf("Extra Hardware detected dump in mode : Sega Lock-ON \n");
-        printf("Lower Cartridge is : ");
-        printf("%.*s\n", 48, (char *)game_name);
-        printf("Upper Cartridge is : ");
+        printf_mode("Extra Hardware detected dump in mode : Sega Lock-ON \n");
+        printf_mode("Lower Cartridge is : ");
+        printf_mode("%.*s\n", 48, (char *)game_name);
+        printf_mode("Upper Cartridge is : ");
 
         address=(0x200100)/2;
         usb_buffer_out[0] = READ_MD;
@@ -189,12 +189,12 @@ int Read_ROM_Auto(void)
 
         memcpy((unsigned char *)dump_name, (unsigned char *)usb_buffer_in+32,32);
         trim((unsigned char *)dump_name, 0);
-        printf("%.*s\n",32, (char *)dump_name);
+        printf_mode("%.*s\n",32, (char *)dump_name);
         //trim((unsigned char *)dump_name, 0);
 
         if(memcmp((unsigned char *)dump_name,"SONIC THE               HEDGEHOG",32) == 0)
         {
-            //printf("%.*s\n",32, (char *)game_name);
+            //printf_mode("%.*s\n",32, (char *)game_name);
             game_size=2560*1024;
 
             BufferROM = (unsigned char*)malloc(game_size);
@@ -206,21 +206,21 @@ int Read_ROM_Auto(void)
             usb_buffer_out[4]=1;
 
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-            printf("Starting Dump ...\n");
+            printf_mode("Starting Dump ...\n");
             res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
-            printf("Dump ROM completed !\n");
+            printf_mode("Dump ROM completed !\n");
             myfile = fopen("Sonic & Knuckles + Sonic The Hedgehog.bin","wb");
             fwrite(BufferROM, 1,game_size, myfile);
             fclose(myfile);
         }
         else if(memcmp((unsigned char *)dump_name,"                                ",32) == 0) // Tanglewood use fake header
         {
-            //printf("TANGLEWOOD (R)				  ");
+            //printf_mode("TANGLEWOOD (R)				  ");
             game_size=4096*1024;
             BufferROM = (unsigned char*)malloc(game_size);
             address = 0;
@@ -231,21 +231,21 @@ int Read_ROM_Auto(void)
             usb_buffer_out[4]=1;
 
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-            printf("Starting Dump ...\n");
+            printf_mode("Starting Dump ...\n");
             res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
-            printf("Dump ROM completed !\n");
+            printf_mode("Dump ROM completed !\n");
             myfile = fopen("Sonic & Knuckles + TANGLEWOOD.bin","wb");
             fwrite(BufferROM, 1,game_size, myfile);
             fclose(myfile);
         }
         else if(memcmp((unsigned char *)dump_name,"SONIC THE             HEDGEHOG 2",32) == 0)
         {
-            //printf("%.*s\n",32, (char *)game_name);
+            //printf_mode("%.*s\n",32, (char *)game_name);
             game_size=3328*1024;
             BufferROM = (unsigned char*)malloc(game_size);
 
@@ -258,11 +258,11 @@ int Read_ROM_Auto(void)
             usb_buffer_out[4]=1;
 
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-            printf("Starting Dump ...\n");
+            printf_mode("Starting Dump ...\n");
             res = libusb_bulk_transfer(handle, 0x82,BufferROM,3072*1024, &numBytes, 0);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
 
@@ -303,19 +303,19 @@ int Read_ROM_Auto(void)
             res = libusb_bulk_transfer(handle, 0x82,BufferROM+3072*1024,256*1024, &numBytes, 60000);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
 
 
-            printf("Dump ROM completed !\n");
+            printf_mode("Dump ROM completed !\n");
             myfile = fopen("Sonic & Knuckles + Sonic The Hedgehog2.bin","wb");
             fwrite(BufferROM, 1,3328*1024, myfile);
             fclose(myfile);
         }
         else if(memcmp((unsigned char *)dump_name,"SONIC THE             HEDGEHOG 3",32) == 0)
         {
-            //printf("%.*s\n",32, (char *)game_name);
+            //printf_mode("%.*s\n",32, (char *)game_name);
             game_size=4096*1024;
             BufferROM = (unsigned char*)malloc(game_size);
 
@@ -352,22 +352,22 @@ int Read_ROM_Auto(void)
             usb_buffer_out[4]=1;
 
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-            printf("Starting Dump S&K + Sonic 3 ...\n");
+            printf_mode("Starting Dump S&K + Sonic 3 ...\n");
             res = libusb_bulk_transfer(handle, 0x82,BufferROM,1024*4096, &numBytes, 0);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
 
-            printf("Dump ROM completed !\n");
+            printf_mode("Dump ROM completed !\n");
             myfile = fopen("Sonic & Knuckles + Sonic The Hedgehog3.bin","wb");
             fwrite(BufferROM, 1,game_size, myfile);
             fclose(myfile);
         }
         else
         {
-            //printf("No Cartridge");
+            //printf_mode("No Cartridge");
             game_size=2048*1024;
             BufferROM = (unsigned char*)malloc(game_size);
             address = 0;
@@ -378,14 +378,14 @@ int Read_ROM_Auto(void)
             usb_buffer_out[4]=1;
 
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-            printf("\nStarting Dump of Sonic & Knuckles\n");
+            printf_mode("\nStarting Dump of Sonic & Knuckles\n");
             res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
             if (res != 0)
             {
-                printf("Error \n");
+                printf_mode("Error \n");
                 return 1;
             }
-            printf("Dump ROM completed !\n");
+            printf_mode("Dump ROM completed !\n");
             myfile = fopen("Sonic & Knuckles.bin","wb");
             fwrite(BufferROM, 1,game_size, myfile);
             fclose(myfile);
@@ -398,9 +398,9 @@ int Read_ROM_Auto(void)
         BufferROM = (unsigned char*)malloc(game_size);
 
         if (gg_mode == 0 )
-            printf("Master System Mode : ROM dump in progress...\n");
+            printf_mode("Master System Mode : ROM dump in progress...\n");
         else if (gg_mode == 1 )
-            printf("GAME GEAR Mode : ROM dump in progress...\n");
+            printf_mode("GAME GEAR Mode : ROM dump in progress...\n");
 
         while (i<game_size)
         {
@@ -415,8 +415,8 @@ int Read_ROM_Auto(void)
             address +=64;
             i+=64;
         }
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         if (gg_mode == 0)
@@ -431,11 +431,11 @@ int Read_ROM_Auto(void)
 
 int Read_ROM_Manual(void)
 {
-    printf("\n");
-    printf("Read Mode : Read ROM in manual mode\n");
+    printf_mode("\n");
+    printf_mode("Read Mode : Read ROM in manual mode\n");
 
-    printf("Sending command Dump ROM \n");
-    printf("Dumping please wait ...\n");
+    printf_mode("Sending command Dump ROM \n");
+    printf_mode("Dumping please wait ...\n");
     timer_start();
     switch(dump_rom_size_opts)
     {
@@ -468,8 +468,8 @@ int Read_ROM_Manual(void)
         break;
     }
 
-    printf("\n");
-    printf("Rom Size (Manual Mode) : %ld Ko \n",game_size/1024);
+    printf_mode("\n");
+    printf_mode("Rom Size (Manual Mode) : %ld Ko \n",game_size/1024);
     BufferROM = (unsigned char*)malloc(game_size);
     // Cleaning ROM Buffer
     for (i=0; i<game_size; i++)
@@ -479,7 +479,7 @@ int Read_ROM_Manual(void)
     {
         int i=0;
         address=0;
-        printf("GAME GEAR Mode : ROM dump in progress...\n");
+        printf_mode("GAME GEAR Mode : ROM dump in progress...\n");
 
         while (i<game_size)
         {
@@ -495,8 +495,8 @@ int Read_ROM_Manual(void)
             i+=64;
         }
 
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         myfile = fopen("dump_rom.gg","wb");
@@ -513,16 +513,16 @@ int Read_ROM_Manual(void)
         usb_buffer_out[4]=1;
 
         libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
-        printf("Mega Drive Mode : ROM dump in progress...\n");
+        printf_mode("Mega Drive Mode : ROM dump in progress...\n");
         res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
         if (res != 0)
         {
-            printf("Error \n");
+            printf_mode("Error \n");
             return 1;
         }
 
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         myfile = fopen("dump_smd.bin","wb");
@@ -533,7 +533,7 @@ int Read_ROM_Manual(void)
     {
         address = 0;
         int i=0;
-        printf("Master System Mode : ROM dump in progress...\n");
+        printf_mode("Master System Mode : ROM dump in progress...\n");
         while (i<game_size)
         {
             usb_buffer_out[0] = READ_SMS;
@@ -547,8 +547,8 @@ int Read_ROM_Manual(void)
             address +=64;
             i+=64;
         }
-        printf("\n");
-        printf("Dump ROM completed !\n");
+        printf_mode("\n");
+        printf_mode("Dump ROM completed !\n");
         timer_end();
         timer_show();
         myfile = fopen("dump_sms.sms","wb");
@@ -560,8 +560,8 @@ int Read_ROM_Manual(void)
 
 int Read_ROM_Bankswitch(void)
 {
-    printf("\n");
-    printf("Read Mode : Read ROM in mode : Bankswitch SSF2 \n");
+    printf_mode("\n");
+    printf_mode("Read Mode : Read ROM in mode : Bankswitch SSF2 \n");
     i=0;
     while (i<8)
     {
@@ -579,19 +579,19 @@ int Read_ROM_Bankswitch(void)
 
     if(memcmp((unsigned char *)buffer_header,"SEGA",4) == 0)
     {
-        printf("\n");
-        printf("Megadrive/Genesis/32X cartridge detected!\n");
-        printf("\n");
-        printf(" --- HEADER ---\n");
+        printf_mode("\n");
+        printf_mode("Megadrive/Genesis/32X cartridge detected!\n");
+        printf_mode("\n");
+        printf_mode(" --- HEADER ---\n");
         memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+32, 48);
         trim((unsigned char *)dump_name, 0);
-        printf(" Domestic: %.*s\n", 48, (char *)game_name);
+        printf_mode(" Domestic: %.*s\n", 48, (char *)game_name);
         memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+80, 48);
         trim((unsigned char *)dump_name, 0);
 
-        printf(" International: %.*s\n", 48, game_name);
-        printf(" Release date: %.*s\n", 16, buffer_header+0x10);
-        printf(" Version: %.*s\n", 14, buffer_header+0x80);
+        printf_mode(" International: %.*s\n", 48, game_name);
+        printf_mode(" Release date: %.*s\n", 16, buffer_header+0x10);
+        printf_mode(" Version: %.*s\n", 14, buffer_header+0x80);
         memcpy((unsigned char *)region, (unsigned char *)buffer_header +0xF0, 4);
         for(i=0; i<4; i++)
         {
@@ -611,11 +611,11 @@ int Read_ROM_Bankswitch(void)
             game_region[3] = '\0';
         }
 
-        printf(" Region: %s\n", game_region);
+        printf_mode(" Region: %s\n", game_region);
         checksum_header = (buffer_header[0x8E]<<8) | buffer_header[0x8F];
-        printf(" Checksum: %X\n", checksum_header);
+        printf_mode(" Checksum: %X\n", checksum_header);
         game_size = 1 + ((buffer_header[0xA4]<<24) | (buffer_header[0xA5]<<16) | (buffer_header[0xA6]<<8) | buffer_header[0xA7])/1024;
-        printf(" Game size: %dKB\n", game_size);
+        printf_mode(" Game size: %dKB\n", game_size);
     }
 
     // Search checksum cartridge in Custom Hardware games csv table
@@ -623,27 +623,27 @@ int Read_ROM_Bankswitch(void)
     for (i = 0; i < chksm_text_values_count ; i++)
     {
         strncpy(txt_csv_chksm,chksm_text_values[i],4);
-        //printf(" txt chksm value : %s \n",txt_csv_chksm);
+        //printf_mode(" txt chksm value : %s \n",txt_csv_chksm);
         csv_chksm = (unsigned short)strtol(txt_csv_chksm, NULL, 16);
         if ( checksum_header == csv_chksm  )
         {
             Index_chksm = i;
-            printf("\n");
-            printf("Found game in extra CSV Gamelist  \n");
-            printf("Position in csv table %d \n",i);
+            printf_mode("\n");
+            printf_mode("Found game in extra CSV Gamelist  \n");
+            printf_mode("Position in csv table %d \n",i);
             strncpy(txt_csv_game_size,chksm_text_values[i]+5,4);
             txt_csv_game_size[4] = '\0'; // Null-terminate the output string
-            //printf(" txt game size : %s \n",txt_csv_game_size);
+            //printf_mode(" txt game size : %s \n",txt_csv_game_size);
             csv_game_size = (unsigned char)strtol(txt_csv_game_size, NULL, 10);
-            //printf(" CSV Game Size  %d \n",csv_game_size);
+            //printf_mode(" CSV Game Size  %d \n",csv_game_size);
             game_size=1024*csv_game_size;
-            printf("ROM Size from CSV is %ld Ko \n",game_size);
+            printf_mode("ROM Size from CSV is %ld Ko \n",game_size);
         }
     }
     NumberOfBank = game_size/512;
-    //printf("Game Size is %ld Ko \n",game_size);
-    printf("Number of Banks is %d \n",NumberOfBank);
-    printf("Bank Size is 512 Ko  \n");
+    //printf_mode("Game Size is %ld Ko \n",game_size);
+    printf_mode("Number of Banks is %d \n",NumberOfBank);
+    printf_mode("Bank Size is 512 Ko  \n");
 
     game_size = game_size * 1024;
     BufferROM = (unsigned char*)malloc(game_size);
@@ -652,9 +652,9 @@ int Read_ROM_Bankswitch(void)
         BufferROM[i]=0x00;
 
     // Dump the first 4MB of the ROM as fast as possible
-    printf("Bankswith bank O-7 to $080000 - $3FFFFF \n");
+    printf_mode("Bankswith bank O-7 to $080000 - $3FFFFF \n");
 
-    printf("Dumping please wait ...\n");
+    printf_mode("Dumping please wait ...\n");
     timer_start();
     address = 0;
     i=0;
@@ -666,11 +666,11 @@ int Read_ROM_Bankswitch(void)
     usb_buffer_out[4]=1;
 
     libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-    printf("ROM dump in progress...\n");
+    printf_mode("ROM dump in progress...\n");
     res = libusb_bulk_transfer(handle, 0x82,BufferROM,4096*1024, &numBytes,0);
     if (res != 0)
     {
-        printf("Error \n");
+        printf_mode("Error \n");
         return 1;
     }
 
@@ -679,8 +679,8 @@ int Read_ROM_Bankswitch(void)
 
     while ( offset != (game_size/1024)-1024)
     {
-        printf("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
-        printf("Dumping please wait ...\n");
+        printf_mode("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
+        printf_mode("Dumping please wait ...\n");
 
         address = 0xA130F9/2; // bank 4
         usb_buffer_out[0] = MAPPER_SSF2;
@@ -727,8 +727,8 @@ int Read_ROM_Bankswitch(void)
         libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
         res = libusb_bulk_transfer(handle, 0x82,BufferROM+offset*1024,1024*1024, &numBytes, 60000);
     }
-    printf("\n");
-    printf("Dump ROM completed !\n");
+    printf_mode("\n");
+    printf_mode("Dump ROM completed !\n");
     timer_end();
     timer_show();
     myfile = fopen("dump_smd.bin","wb");
@@ -739,7 +739,7 @@ int Read_ROM_Bankswitch(void)
 
 int Read_RAM_Auto(void)
 {
-    printf("Read Mode Auto: Read Save Data\n");
+    printf_mode("Read Mode Auto: Read Save Data\n");
     save_size *= 1024;
     // if (save_size < 8*1024){save_size=8*1024;}  // SRAM chip can't be low as 8 Ko
 
@@ -778,8 +778,8 @@ int Read_RAM_Auto(void)
     myfile = fopen("dump_smd.srm","wb");
     fwrite(BufferSAVE,1,save_size*2, myfile);
     fclose(myfile);
-    printf("\n");
-    printf("Save Data completed !\n");
+    printf_mode("\n");
+    printf_mode("Save Data completed !\n");
     timer_end();
     timer_show();
     return 0;
@@ -787,15 +787,15 @@ int Read_RAM_Auto(void)
 
 int Read_RAM_Bankswitch(void)
 {
-    printf("Read Mode Bankswitch: Read Save Data\n");
-    printf("TODO !...\n");
+    printf_mode("Read Mode Bankswitch: Read Save Data\n");
+    printf_mode("TODO !...\n");
 }
 
 int Read_RAM_Manual(void)
 {
-    printf("Read Mode Manual : Read Save Data\n");
-    printf("Reading in progress...\n");
-    printf("%ld",dump_sram_size_opts);
+    printf_mode("Read Mode Manual : Read Save Data\n");
+    printf_mode("Reading in progress...\n");
+    printf_mode("%ld",dump_sram_size_opts);
     timer_start();
     if(dump_sram_size_opts==0)
         save_size = 8192;
@@ -839,8 +839,8 @@ int Read_RAM_Manual(void)
     myfile = fopen("dump_smd.srm","wb");
     fwrite(BufferSAVE,1,save_size*2, myfile);
     fclose(myfile);
-    printf("\n");
-    printf("Save Data completed !\n");
+    printf_mode("\n");
+    printf_mode("Save Data completed !\n");
     timer_end();
     timer_show();
     return 0;

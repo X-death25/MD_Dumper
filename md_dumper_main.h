@@ -2,7 +2,9 @@
 // SDL Libraries for GUI
 #include <SDL.h>												//Main Library file
 #include <SDL_image.h>											//For PNG loading files
-#define SDL_Log(...) printf(__VA_ARGS__)
+#define SDL_Log(...) printf_mode(__VA_ARGS__)
+#else
+#define printf(...) printf_mode(__VA_ARGS__)
 #endif
 
 #include <libusb.h>												//Library for detecting the MD Dumper device
@@ -209,23 +211,23 @@ unsigned char Hardwaretype=0;
 //Others Functions
 void Display_Help(char *prog_name)
 {
-	printf("\n");
-	printf("How to use the program:\n");
-	printf("\n");
-	printf("CLI Mode:\n");
-	printf("\n");
-	printf("  %s -read auto  -  Auto Mode\n", prog_name);
-	printf("  %s -read bankswitch  -  Bankswitch Mode\n", prog_name);
-	printf("  %s -read manual (32|64|128|256|512|1024|2048|4096|8192) (gg|md|sms) -  Manual Mode\n", prog_name);
-	printf("  %s -backup auto  -  Auto Mode\n", prog_name);
-	printf("  %s -backup bankswitch  -  Bankswitch Mode\n", prog_name);
-	printf("  %s -backup manual (8192|32768) (serial_spi|serial_i2c|parallel_sram) -  Manual Mode\n", prog_name);
-	printf("\n");
-	printf("  %s -erase_flash -  Erase Flash Data\n", prog_name);
-	printf("  %s -write_flash -  Write Flash Data\n", prog_name);
-	printf("  %s -erase_memory (serial_spi|serial_i2c|parallel_sram) -  Erase Save/Memory Data\n", prog_name);
-	printf("  %s -restore_memory (serial_spi|serial_i2c|parallel_sram) - Write Save/Memory Data\n", prog_name);
-	printf("\n");
+	printf_mode("\n");
+	printf_mode("How to use the program:\n");
+	printf_mode("\n");
+	printf_mode("CLI Mode:\n");
+	printf_mode("\n");
+	printf_mode("  %s -read auto  -  Auto Mode\n", prog_name);
+	printf_mode("  %s -read bankswitch  -  Bankswitch Mode\n", prog_name);
+	printf_mode("  %s -read manual (32|64|128|256|512|1024|2048|4096|8192) (gg|md|sms) -  Manual Mode\n", prog_name);
+	printf_mode("  %s -backup auto  -  Auto Mode\n", prog_name);
+	printf_mode("  %s -backup bankswitch  -  Bankswitch Mode\n", prog_name);
+	printf_mode("  %s -backup manual (8192|32768) (serial_spi|serial_i2c|parallel_sram) -  Manual Mode\n", prog_name);
+	printf_mode("\n");
+	printf_mode("  %s -erase_flash -  Erase Flash Data\n", prog_name);
+	printf_mode("  %s -write_flash -  Write Flash Data\n", prog_name);
+	printf_mode("  %s -erase_memory (serial_spi|serial_i2c|parallel_sram) -  Erase Save/Memory Data\n", prog_name);
+	printf_mode("  %s -restore_memory (serial_spi|serial_i2c|parallel_sram) - Write Save/Memory Data\n", prog_name);
+	printf_mode("\n");
 }
 
 void cb1(void *s, size_t len, void *data)
@@ -378,8 +380,8 @@ unsigned int crc32(unsigned int seed, const void* data, int data_size)
 
 	void timer_show()
 	{
-		printf("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000);
-		printf(" (%ldms)\n", (microsec_end - microsec_start));
+		printf_mode("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000);
+		printf_mode(" (%ldms)\n", (microsec_end - microsec_start));
 	}
 #else 				//Others
 	struct timeval ostime;
@@ -400,8 +402,8 @@ unsigned int crc32(unsigned int seed, const void* data, int data_size)
 
 	void timer_show()
 	{
-		printf("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000000);
-		printf(" (%ldms)\n", (microsec_end - microsec_start)/1000);
+		printf_mode("~ Elapsed time: %lds", (microsec_end - microsec_start)/1000000);
+		printf_mode(" (%ldms)\n", (microsec_end - microsec_start)/1000);
 	}
 #endif
 
@@ -479,20 +481,20 @@ unsigned int trim(unsigned char * buf, unsigned char is_out)
 
 int Detect_Device(void)
 {		
-	printf("Init LibUSB... \n");
+	printf_mode("Init LibUSB... \n");
 	res = libusb_init(&context);
 	if (res != 0)
 	{
-		printf("Error initialising libusb.\n");
+		printf_mode("Error initialising libusb.\n");
 		return 1;
 	}
-	printf("LibUSB Init Sucessfully ! \n");
+	printf_mode("LibUSB Init Sucessfully ! \n");
 
-	printf("Detecting MD Dumper... \n");
+	printf_mode("Detecting MD Dumper... \n");
 	count = libusb_get_device_list(context, &devs);
 	if (count <= 0)
 	{
-		printf("Error getting device list\n");
+		printf_mode("Error getting device list\n");
 		return 1;
 	}
 
@@ -509,25 +511,25 @@ int Detect_Device(void)
 	
 	if(device_found!=-1)
 	{
-		printf("MD Dumper Device Found !\n");
+		printf_mode("MD Dumper Device Found !\n");
 		libusb_device *device = devs[device_found];
 		struct libusb_device_descriptor desc = {0};
 		res = libusb_get_device_descriptor(device, &desc);
 
-		printf("LibUSB Device ID = %d\n",device_found);
-		printf("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
+		printf_mode("LibUSB Device ID = %d\n",device_found);
+		printf_mode("LibUSB Device Vendor = %04x:%04x\n",desc.idVendor,desc.idProduct);
 		
 		libusb_open(device, &handle);
-		printf("Handle result : %s\n", libusb_error_name(res));
+		printf_mode("Handle result : %s\n", libusb_error_name(res));
 		
 		if (!handle)
 		{
-			printf("Unable to open MD Dumper Device.\n");
+			printf_mode("Unable to open MD Dumper Device.\n");
 			return 1;
 		}
 		else
 		{
-			printf("MD Dumper Device opened !\n");
+			printf_mode("MD Dumper Device opened !\n");
 
 			for (if_num = 0; if_num < if_num_max; if_num++) 
 			{
@@ -539,16 +541,16 @@ int Detect_Device(void)
 				res = libusb_claim_interface(handle, if_num);
 				if (res < 0) 
 				{
-					printf("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
+					printf_mode("Error claiming interface %d: %s\n", if_num, libusb_error_name(res));
 					if(if_num==if_num_max-1)
 					{
-						printf("Exiting...");
+						printf_mode("Exiting...");
 						return 1;
 					}
 				}
 				else
 				{
-					printf("Interface %d claimed\n", if_num);
+					printf_mode("Interface %d claimed\n", if_num);
 					if_num=2;
 				}
 			}
@@ -556,7 +558,7 @@ int Detect_Device(void)
 	}
 	else
 	{
-		printf("MD Dumper Device Not Found !\n");
+		printf_mode("MD Dumper Device Not Found !\n");
 		return 1;
 	}
 
@@ -576,43 +578,43 @@ int Detect_Device(void)
 	usb_buffer_out[0] = WAKEUP;// Affect request to  WakeUP Command
 	libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0); // Send Packets to Sega Dumper
 	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
-	printf("\n");
-	printf("MD Dumper %.*s",6, (char *)usb_buffer_in);
-	printf("\n");
+	printf_mode("\n");
+	printf_mode("MD Dumper %.*s",6, (char *)usb_buffer_in);
+	printf_mode("\n");
 	
 	md_dumper_type = usb_buffer_in[24];
 	switch ( md_dumper_type )
 	{
 		case 0:
-			printf("MD Dumper type : Old Version \n");
+			printf_mode("MD Dumper type : Old Version \n");
 			break;
 		case 1:
-			printf("MD Dumper type : BluePill non aligned \n");
+			printf_mode("MD Dumper type : BluePill non aligned \n");
 			break;
 		case 2:
-			printf("MD Dumper type : BluePill aligned \n");
+			printf_mode("MD Dumper type : BluePill aligned \n");
 			break;
 		case 3:
-			printf("MD Dumper type : SMD ARM TQFP100 Aligned  \n");
+			printf_mode("MD Dumper type : SMD ARM TQFP100 Aligned  \n");
 			break;
 		case 4:
-			printf("MD Dumper type : Marv17 aligned tqfp48  \n");
+			printf_mode("MD Dumper type : Marv17 aligned tqfp48  \n");
 			break;
 	}
 
-	printf("Hardware Firmware version : %d.%d\n", usb_buffer_in[20],usb_buffer_in[21]);
+	printf_mode("Hardware Firmware version : %d.%d\n", usb_buffer_in[20],usb_buffer_in[21]);
 
 	sms_mode = usb_buffer_in[25];
 	if ( sms_mode == 0 )
 	{
-		printf("Dumper started in 16 bit mode \n");
+		printf_mode("Dumper started in 16 bit mode \n");
 		//Hardwaretype = 0 ;
 	}
 	if ( sms_mode == 1 )
 	{
-		printf("Dumper started in 8 bit mode \n");
+		printf_mode("Dumper started in 8 bit mode \n");
 	}
-	printf("\n");
+	printf_mode("\n");
 
 	return 0;
 }
@@ -621,9 +623,9 @@ int Open_CSV_Files(void)
 {
 	if (csv_init(&p, options) != 0)
 	{
-		printf("\n");
-		printf("\n");
-		printf("ERROR Failed to init CSV Parser for Gamelist ...\n");
+		printf_mode("\n");
+		printf_mode("\n");
+		printf_mode("ERROR Failed to init CSV Parser for Gamelist ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p,';');
@@ -631,9 +633,9 @@ int Open_CSV_Files(void)
 	FILE *fp = fopen("gameslist.csv", "r");
 	if (!fp)
 	{
-		printf("\n");
-		printf("\n");
-		printf("ERROR Can't find gamelist.csv ...\n");
+		printf_mode("\n");
+		printf_mode("\n");
+		printf_mode("ERROR Can't find gamelist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -644,9 +646,9 @@ int Open_CSV_Files(void)
 		if (csv_parse(&p, buffer, bytes_read, cb1, cb2, NULL) != bytes_read)
 		{
 			buffer_header[i]=0x00;
-			printf("\n");
-			printf("\n");
-			printf("ERROR while parsing file ...\n");
+			printf_mode("\n");
+			printf_mode("\n");
+			printf_mode("ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -656,18 +658,18 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	printf("\n");
-	printf("CSV Gamelist file opened sucessfully\n");
+	printf_mode("\n");
+	printf_mode("CSV Gamelist file opened sucessfully\n");
 	//Afficher le nombre de cellules non vides en colonne A
-	printf("Add : %d Special Games into MD Dumper Database \n", non_empty_cells_in_col_A);
+	printf_mode("Add : %d Special Games into MD Dumper Database \n", non_empty_cells_in_col_A);
 
 	// open csv flash list File
 
 	if (csv_init(&p2, options) != 0)
 	{
-		printf("\n");
-		printf("\n");
-		printf(" ERROR Failed to init CSV Parser for Flashlist ...\n");
+		printf_mode("\n");
+		printf_mode("\n");
+		printf_mode(" ERROR Failed to init CSV Parser for Flashlist ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p2,';');
@@ -676,9 +678,9 @@ int Open_CSV_Files(void)
 	FILE *fp2 = fopen("flashlist.csv", "r");
 	if (!fp)
 	{
-		printf("\n");
-		printf("\n");
-		printf(" ERROR Can't find flashlist.csv ...\n");
+		printf_mode("\n");
+		printf_mode("\n");
+		printf_mode(" ERROR Can't find flashlist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -688,9 +690,9 @@ int Open_CSV_Files(void)
 	{
 		if (csv_parse(&p2, buffer2, bytes_read2, cb3, cb4, NULL) != bytes_read2)
 		{
-			printf("\n");
-			printf("\n");
-			printf(" ERROR while parsing file ...\n");
+			printf_mode("\n");
+			printf_mode("\n");
+			printf_mode(" ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -699,15 +701,15 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	printf("CSV Flashlist file opened sucessfully\n");
+	printf_mode("CSV Flashlist file opened sucessfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
-	printf("Add : %d Flash ID into MD Dumper Database \n", non_empty_cells_in_col_A2);
+	printf_mode("Add : %d Flash ID into MD Dumper Database \n", non_empty_cells_in_col_A2);
 
 	// open csv sms-gg crc
 
 	if (csv_init(&p3, options) != 0)
 	{
-		printf("\n\n ERROR Failed to init CSV Parser for SMS-GG crc ...\n");
+		printf_mode("\n\n ERROR Failed to init CSV Parser for SMS-GG crc ...\n");
 		exit(EXIT_FAILURE);
 	}
 	csv_set_quote(&p3,';');
@@ -716,7 +718,7 @@ int Open_CSV_Files(void)
 	FILE *fp3 = fopen("sms-gg_crc.csv", "r");
 	if (!fp)
 	{
-		printf("\n\n ERROR Can't find flashlist.csv ...\n");
+		printf_mode("\n\n ERROR Can't find flashlist.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
@@ -726,7 +728,7 @@ int Open_CSV_Files(void)
 	{
 		if (csv_parse(&p3, buffer3, bytes_read3, cb5, cb6, NULL) != bytes_read3)
 		{
-			printf("\n\n ERROR while parsing file ...\n");
+			printf_mode("\n\n ERROR while parsing file ...\n");
 			return EXIT_FAILURE;
 		}
 	}
@@ -735,9 +737,9 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	printf("CSV SMS-GG CRC file opened sucessfully\n");
+	printf_mode("CSV SMS-GG CRC file opened sucessfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
-	printf("Add : %ld SMS/GG Games into MD Dumper Database \n", non_empty_cells_in_col_A3);
+	printf_mode("Add : %ld SMS/GG Games into MD Dumper Database \n", non_empty_cells_in_col_A3);
 
 	return 0;
 }
@@ -769,18 +771,18 @@ void Game_Header_Infos(void)
 
 		if(memcmp((unsigned char *)buffer_header,"SEGA",4) == 0)
 		{
-			printf("\n");
-			printf("Megadrive/Genesis/32X cartridge detected!\n");
-			printf("\n");
-			printf(" --- HEADER ---\n");
+			printf_mode("\n");
+			printf_mode("Megadrive/Genesis/32X cartridge detected!\n");
+			printf_mode("\n");
+			printf_mode(" --- HEADER ---\n");
 			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+32, 48);
 			trim((unsigned char *)dump_name, 0);
-			printf(" Domestic: %.*s\n", 48, (char *)game_name);
+			printf_mode(" Domestic: %.*s\n", 48, (char *)game_name);
 			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+80, 48);
 			trim((unsigned char *)dump_name, 0);
-			printf(" International: %.*s\n", 48, game_name);
-			printf(" Release date: %.*s\n", 16, buffer_header+0x10);
-			printf(" Version: %.*s\n", 14, buffer_header+0x80);
+			printf_mode(" International: %.*s\n", 48, game_name);
+			printf_mode(" Release date: %.*s\n", 16, buffer_header+0x10);
+			printf_mode(" Version: %.*s\n", 14, buffer_header+0x80);
 			memcpy((unsigned char *)region, (unsigned char *)buffer_header +0xF0, 4);
 			for(i=0; i<4; i++)
 			{
@@ -800,43 +802,43 @@ void Game_Header_Infos(void)
 				game_region[3] = '\0';
 			}
 
-			printf(" Region: %s\n", game_region);
+			printf_mode(" Region: %s\n", game_region);
 
 			checksum_header = (buffer_header[0x8E]<<8) | buffer_header[0x8F];
-			printf(" Checksum: %X\n", checksum_header);
+			printf_mode(" Checksum: %X\n", checksum_header);
 
 			game_size = 1 + ((buffer_header[0xA4]<<24) | (buffer_header[0xA5]<<16) | (buffer_header[0xA6]<<8) | buffer_header[0xA7])/1024;
-			printf(" Game size: %dKB\n", game_size);
+			printf_mode(" Game size: %dKB\n", game_size);
 
 			if((buffer_header[0xB0] + buffer_header[0xB1])!=0x93)
 			{
-				printf(" Extra Memory : No\n");
+				printf_mode(" Extra Memory : No\n");
 			}
 			else
 			{
-				printf(" Extra Memory : Yes ");
+				printf_mode(" Extra Memory : Yes ");
 				switch(buffer_header[0xB2])
 				{
 				case 0xF0:
-					printf(" 8bit backup SRAM (even addressing)\n");
+					printf_mode(" 8bit backup SRAM (even addressing)\n");
 					break;
 				case 0xF8:
-					printf(" 8bit backup SRAM (odd addressing)\n");
+					printf_mode(" 8bit backup SRAM (odd addressing)\n");
 					break;
 				case 0xB8:
-					printf(" 8bit volatile SRAM (odd addressing)\n");
+					printf_mode(" 8bit volatile SRAM (odd addressing)\n");
 					break;
 				case 0xB0:
-					printf(" 8bit volatile SRAM (even addressing)\n");
+					printf_mode(" 8bit volatile SRAM (even addressing)\n");
 					break;
 				case 0xE0:
-					printf(" 16bit backup SRAM\n");
+					printf_mode(" 16bit backup SRAM\n");
 					break;
 				case 0xA0:
-					printf(" 16bit volatile SRAM\n");
+					printf_mode(" 16bit volatile SRAM\n");
 					break;
 				case 0xE8:
-					printf(" Serial EEPROM\n");
+					printf_mode(" Serial EEPROM\n");
 					break;
 				}
 				if ( buffer_header[0xB2] != 0xE0 | buffer_header[0xB2] != 0xA0 ) // 8 bit SRAM
@@ -849,12 +851,12 @@ void Game_Header_Infos(void)
 					save_size=(save_size/2) + 1; // 8bit size
 				}
 				save_address = (buffer_header[0xB4]<<24) | (buffer_header[0xB5]<<16) | (buffer_header[0xB6] << 8) | buffer_header[0xB7];
-				printf(" Save size: %dKb\n", save_size);
-				printf(" Save address: %lX\n", save_address);
+				printf_mode(" Save size: %dKb\n", save_size);
+				printf_mode(" Save address: %lX\n", save_address);
 
 				if(usb_buffer_in[0xB2]==0xE8) // EEPROM Game
 				{
-					printf(" No information on this game!\n");
+					printf_mode(" No information on this game!\n");
 				}
 			}
 		}
@@ -867,8 +869,8 @@ void Game_Header_Infos(void)
 		for (i=0; i<512; i++)		buffer_header[i]=0x00;
 
 		i = 0;
-		printf("\n");
-		printf("Try to read SMS - GG cartridge...\n");
+		printf_mode("\n");
+		printf_mode("Try to read SMS - GG cartridge...\n");
 		address = 0x7FF0;
 
 		while (i<8)
@@ -887,11 +889,11 @@ void Game_Header_Infos(void)
 
 		if(memcmp((unsigned char *)buffer_header,"TMR SEGA",8) == 0)
 		{
-			printf("Valid cartridge detected !\n");
-			printf("\n");
+			printf_mode("Valid cartridge detected !\n");
+			printf_mode("\n");
 
 			// Calculate Checksum of first bank
-			//printf("\nRead First BANK...\n");
+			//printf_mode("\nRead First BANK...\n");
 			// Read first 32 Ko of the ROM
 
 			SMS_Header = (unsigned char *)malloc(32*1024);
@@ -915,9 +917,9 @@ void Game_Header_Infos(void)
 				address+=64;
 				i=i+64;
 			}
-			//printf("Calculate CRC..\n");
+			//printf_mode("Calculate CRC..\n");
 			HeaderCRC = crc32(0,SMS_Header,32*1024);
-			//  printf("BANK0 CRC value is : 0x%08X\n",HeaderCRC);
+			//  printf_mode("BANK0 CRC value is : 0x%08X\n",HeaderCRC);
 
 			// Search valid CRC in SMS-GG CRC csv table
 
@@ -925,9 +927,9 @@ void Game_Header_Infos(void)
 			for (i = 0; i < non_empty_cells_in_col_A3 ; i++)
 			{
 				strncpy(txt_csv_chksm1,smsgg_text_values[i],8);
-				//printf(" \n txt chksm value : %s \n",txt_csv_chksm1);
+				//printf_mode(" \n txt chksm value : %s \n",txt_csv_chksm1);
 				csv_chksm1 = (unsigned long)strtoul(txt_csv_chksm1, NULL, 16);
-				//printf("CRC value is : 0x%08X\n",csv_chksm1 );
+				//printf_mode("CRC value is : 0x%08X\n",csv_chksm1 );
 
 				if ( csv_chksm1 == HeaderCRC )
 				{
@@ -948,51 +950,51 @@ void Game_Header_Infos(void)
 				}
 			}
 
-			printf("\n");
-			printf("\n");
-			printf(" --- HEADER --- \n");
+			printf_mode("\n");
+			printf_mode("\n");
+			printf_mode(" --- HEADER --- \n");
 
-			printf("Game Name: %.*s\n",48, (char *)txt_csv_game_name2);
+			printf_mode("Game Name: %.*s\n",48, (char *)txt_csv_game_name2);
 			if(memcmp((unsigned char *)txt_csv_game_type2,"GG ",3) == 0)
 			{
-				printf("Game Type : GAME GEAR \n");
+				printf_mode("Game Type : GAME GEAR \n");
 			}
 			if(memcmp((unsigned char *)txt_csv_game_type2,"SMS",3) == 0)
 			{
-				printf("Game Type : MASTER SYSTEM / MARK3\n");
+				printf_mode("Game Type : MASTER SYSTEM / MARK3\n");
 				gg_mode=0;
 			}
 
 			game_size = buffer_header[15] & 0xF;
 			if (game_size == 0x00)
 			{
-				printf("Game Size (Header) : 256 Ko");
+				printf_mode("Game Size (Header) : 256 Ko");
 				game_size = 256*1024;
 			}
 			if (game_size == 0x01)
 			{
-				printf("Game Size (Header) : 512 Ko");
+				printf_mode("Game Size (Header) : 512 Ko");
 				game_size = 512*1024;
 			}
 			if (game_size == 0x0c)
 			{
-				printf("Game Size (Header) : 32 Ko");
+				printf_mode("Game Size (Header) : 32 Ko");
 				game_size = 32*1024;
 			}
 			if (game_size == 0x0e)
 			{
-				printf("Game Size (Header) : 64 Ko");
+				printf_mode("Game Size (Header) : 64 Ko");
 				game_size = 64*1024;
 			}
 			if (game_size == 0x0f)
 			{
-				printf("Game Size (Header) : 128 Ko");
+				printf_mode("Game Size (Header) : 128 Ko");
 				game_size = 128*1024;
 			}
 
 			// Real Cartridge Size
-			printf("\n");
-			printf("Game Size (Real): %.*s Ko\n",4, (char *)txt_csv_game_size2);
+			printf_mode("\n");
+			printf_mode("Game Size (Real): %.*s Ko\n",4, (char *)txt_csv_game_size2);
 			game_size=strtol(txt_csv_game_size2, NULL, 10);
 			game_size=game_size*1024;
 
@@ -1000,16 +1002,16 @@ void Game_Header_Infos(void)
 
 			if ( buffer_header[15] >> 6 == 0x01 )
 			{
-				printf("Game Region (Header) : Export");
+				printf_mode("Game Region (Header) : Export");
 			}
 			if ( buffer_header[15] >> 4 == 0x03 )
 			{
-				printf("Game Region (Header) : Japan");
+				printf_mode("Game Region (Header) : Japan");
 			}
 
 			// Region REAL
-			printf("\n");
-			printf("Game Region (Real) : %.*s\n",40, (char *)txt_csv_region2);
+			printf_mode("\n");
+			printf_mode("Game Region (Real) : %.*s\n",40, (char *)txt_csv_region2);
 		}
 	}
 }
