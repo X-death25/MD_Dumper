@@ -20,9 +20,14 @@ Jackobo Le Chocobo (Akina Usagi) - 31/08/2024
 
 int main(int argc, char *argv[])
 {
+
+printf("hello\n");
+
 #ifdef SDLGUI
 	SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO); //Display informations on console
 #endif
+
+printf("hello\n");
 
 	if(argc == 1)
 	{
