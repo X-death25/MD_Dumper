@@ -2,7 +2,7 @@
 // SDL Libraries for GUI
 #include <SDL.h>												//Main Library file
 #include <SDL_image.h>											//For PNG loading files
-#define SDL_Log(...) printf(__VA_ARGS__)
+#define printf SDL_Log
 #endif
 
 #include <libusb.h>												//Library for detecting the MD Dumper device
