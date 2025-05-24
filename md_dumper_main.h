@@ -212,8 +212,6 @@ void Display_Help(char *prog_name)
 	printf("\n");
 	printf("How to use the program:\n");
 	printf("\n");
-	printf("CLI Mode:\n");
-	printf("\n");
 	printf("  %s -read auto  -  Auto Mode\n", prog_name);
 	printf("  %s -read bankswitch  -  Bankswitch Mode\n", prog_name);
 	printf("  %s -read manual (32|64|128|256|512|1024|2048|4096|8192) (gg|md|sms) -  Manual Mode\n", prog_name);
