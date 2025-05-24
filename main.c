@@ -1,4 +1,5 @@
 /*
+
 MD Dumper CLI Version
 X-death - 01/2025
 
@@ -19,11 +20,10 @@ Jackobo Le Chocobo (Akina Usagi) - 31/08/2024
 
 int main(int argc, char *argv[])
 {
-
 #ifdef SDLGUI
 	SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO); //Display informations on console
 #endif
-	
+
 	if(argc == 1)
 	{
 		Display_Help(argv[0]);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-#ifdef SDLGUI	
+#ifdef SDLGUI
 	//Using GUI Mode ?
 	int lang=0;
 	if(strcmp(argv[1], "-gui") == 0)
@@ -48,7 +48,11 @@ int main(int argc, char *argv[])
 		use_gui=1;
 		lang=1;
 	}
+#endif
 
+	if (use_gui==1)
+	{  
+#ifdef SDLGUI
 		int gui_scale=2;
 		int quit = 0;
 		SDL_Event event;
@@ -531,8 +535,10 @@ int main(int argc, char *argv[])
 					break;
 			}
 		}
-#else
-	
+#endif
+	}
+	else
+	{
 		printf("\n");
 		printf("----------------------------------------------------------------\n");
 		printf("8b   d8 888b.      888b. 8    8 8b   d8 888b. 8888 888b. \n");
@@ -543,7 +549,7 @@ int main(int argc, char *argv[])
 		printf("\n");
 		printf("Release : 02 Nov. 2024 \n");
 		printf("\n");
-#endif	
+	}
 
 	//LibUsb : Init & Detect
 	if(Detect_Device()!=0)		return 1;
