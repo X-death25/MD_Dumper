@@ -2,37 +2,37 @@ int Erase_Flash()
 {
 	if ( md_dumper_type == 0 ) // Keep the old detection code for oldest MD Dumper exemple STM32F4 / Blue Pill
 	{
-		SDL_Log("Write Mode : Erase Flash Data\n");
-		SDL_Log("Launch Flash Erase command ... \n");
-		SDL_Log("Detecting Flash Memory... \n");
+		printf("Write Mode : Erase Flash Data\n");
+		printf("Launch Flash Erase command ... \n");
+		printf("Detecting Flash Memory... \n");
 		usb_buffer_out[0] = INFOS_ID;
 		libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 		libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
 		manufacturer_id = usb_buffer_in[1];
 		chip_id = usb_buffer_in[3];
 		flash_id = (manufacturer_id<<8) | chip_id;
-		SDL_Log("Flash ID : %04X \n",flash_id);
+		printf("Flash ID : %04X \n",flash_id);
 
 		switch(flash_id)
 		{
 			case 0xBFB6 :
-				SDL_Log("SST Flash use algo number 1 \n");
+				printf("SST Flash use algo number 1 \n");
 				usb_buffer_out[1] = 1;
 				break;
 			case 0xBFB7 :
-				SDL_Log("SST Flash use algo number 1 \n");
+				printf("SST Flash use algo number 1 \n");
 				usb_buffer_out[1] = 1;
 				break;
 			case 0xC2CB :
-				SDL_Log("Macronix Flash use algo number 2 \n");
+				printf("Macronix Flash use algo number 2 \n");
 				usb_buffer_out[1] = 2;
 				break;
 			case 0x20ED :
-				SDL_Log("STMicroelectronics Flash use algo number 2 \n");
+				printf("STMicroelectronics Flash use algo number 2 \n");
 				usb_buffer_out[1] = 2;
 				break;
 			default :
-				SDL_Log("Flash use algo number 1 \n");
+				printf("Flash use algo number 1 \n");
 				usb_buffer_out[1] = 1;
 				break;
 		}
@@ -42,24 +42,24 @@ int Erase_Flash()
 		i=0;
 		while(usb_buffer_in[0]!=0xFF)
 		{
-			SDL_Log("ERASE SMD flash in progress: %s ", wheel[i]);
+			printf("ERASE SMD flash in progress: %s ", wheel[i]);
 			libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);   //wait status
 			fflush(stdout);
 			i++;
 			if(i==4)	i=0;
 		}
 
-		SDL_Log("\n");
-		SDL_Log("\n");
-		SDL_Log("Flash Erased sucessfully !");
+		printf("\n");
+		printf("\n");
+		printf("Flash Erased sucessfully !");
 		fflush(stdout);
 	}
 	else  // Erase Flash code for new STM32 board
 	{
-		SDL_Log("Execute Erase code V2\n");
-		SDL_Log("Write Mode : Erase Flash Data\n");
-		SDL_Log("Launch Flash Erase command ... \n");
-		SDL_Log("Detecting Flash Memory... \n");
+		printf("Execute Erase code V2\n");
+		printf("Write Mode : Erase Flash Data\n");
+		printf("Launch Flash Erase command ... \n");
+		printf("Detecting Flash Memory... \n");
 		address=0;
 		usb_buffer_out[0] = READ_MD;
 		usb_buffer_out[1] = address&0xFF ;
@@ -81,21 +81,21 @@ int Erase_Flash()
 		chip_id = usb_buffer_in[3];
 		flash_id = (manufacturer_id<<8) | chip_id;
 
-		SDL_Log("Flash ID : %04X \n",flash_id);
+		printf("Flash ID : %04X \n",flash_id);
 
 		for (i = 0; i < chipid_text_values_count; i++)
 		{
 			strncpy(txt_csv_deviceID,chipid_text_values[i],4);
-			//SDL_Log(" \n txt chipid value : %s \n",txt_csv_deviceID);
+			//printf(" \n txt chipid value : %s \n",txt_csv_deviceID);
 			csv_deviceID = (unsigned short)strtol(txt_csv_deviceID, NULL, 16);
-			//SDL_Log(" \n DEC Device ID value : %ld \n",csv_deviceID);
+			//printf(" \n DEC Device ID value : %ld \n",csv_deviceID);
 			// If found we need to copy all usefull info from CSV to MD dumper Var
 
 			if ( flash_id == csv_deviceID  )
 			{
 				Index_chksm = i;
-				SDL_Log("Found chip in CSV Flashlist ! \n");
-				SDL_Log("Position in csv table %d \n",i);
+				printf("Found chip in CSV Flashlist ! \n");
+				printf("Position in csv table %d \n",i);
 
 				// Flash Size
 				strncpy(txt_csv_flash_size,chipid_text_values[i]+5,3);
@@ -137,27 +137,27 @@ int Erase_Flash()
 				txt_csv_man_name[19] = '\0'; // Null-terminate the output string
 				//printf("Chip Manufacturer : %s \n",txt_csv_man_name);
 
-				SDL_Log("Memory : %s \n",txt_csv_flash_name);
-				SDL_Log("Capacity %ld Ko \n",flash_size);
-				SDL_Log("Chip Manufacturer : %s \n",txt_csv_man_name);
-				SDL_Log("Chip Voltage %ld V \n",csv_voltage);
-				SDL_Log("CSV Erase Algo  %d \n",csv_erase_algo);
-				SDL_Log("CSV Write Algo %d \n",csv_write_algo);
+				printf("Memory : %s \n",txt_csv_flash_name);
+				printf("Capacity %ld Ko \n",flash_size);
+				printf("Chip Manufacturer : %s \n",txt_csv_man_name);
+				printf("Chip Voltage %ld V \n",csv_voltage);
+				printf("CSV Erase Algo  %d \n",csv_erase_algo);
+				printf("CSV Write Algo %d \n",csv_write_algo);
 			}
 		}
 
-		if  ( flash_id == 0x9090 || flash_id == 0x0000)		SDL_Log("No compatible Flash detected ! \n");
+		if  ( flash_id == 0x9090 || flash_id == 0x0000)		printf("No compatible Flash detected ! \n");
 
 		usb_buffer_out[0] = ERASE_MD_FLASH;
 		usb_buffer_out[1] = csv_erase_algo;
-		SDL_Log("Memory : %s \n",txt_csv_flash_name);
-		SDL_Log("Erase flash with algo %d \n ",csv_erase_algo);
+		printf("Memory : %s \n",txt_csv_flash_name);
+		printf("Erase flash with algo %d \n ",csv_erase_algo);
 		libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 		i=0;
 		while(usb_buffer_in[0]!=0xFF)
 		{
 			libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);   //wait status
-			SDL_Log("\rERASE SMD flash in progress: %s ", wheel[i]);
+			printf("\rERASE SMD flash in progress: %s ", wheel[i]);
 			fflush(stdout);
 			i++;
 			if(i==4) i=0;
@@ -168,7 +168,7 @@ int Erase_Flash()
 
 int Write_Flash(void)
 {
-	SDL_Log("Write Mode : Write Flash Data\n");
+	printf("Write Mode : Write Flash Data\n");
 	sfd_Options opt =
 	{
 		.title		= "Select your Flash Data File",
@@ -177,10 +177,10 @@ int Write_Flash(void)
 	};
 	
 	const char *filename = sfd_open_dialog(&opt);
-	if (filename) SDL_Log("You selected the file: '%s'\n", filename);
+	if (filename) printf("You selected the file: '%s'\n", filename);
 	else
 	{
-		SDL_Log("Operation canceled\n");
+		printf("Operation canceled\n");
 		return 0;
 	}
 
@@ -189,7 +189,7 @@ int Write_Flash(void)
 
 	if ( md_dumper_type == 0 ) // Keep the old detection code for oldest MD Dumper exemple STM32F4 / Blue Pill
 	{
-		SDL_Log("Write Algo for OLD Version \n");
+		printf("Write Algo for OLD Version \n");
 		while (i<8)
 		{
 			usb_buffer_out[0] = READ_MD;
@@ -204,44 +204,44 @@ int Write_Flash(void)
 			i++;
 		}
 
-		SDL_Log("Detect if Flash is empty... \n");
-		if(memcmp((char *)dump_flash,(char *)empty_flash,512) == 0)		SDL_Log("Flash is empty !\n");
+		printf("Detect if Flash is empty... \n");
+		if(memcmp((char *)dump_flash,(char *)empty_flash,512) == 0)		printf("Flash is empty !\n");
 		else
 		{
-			SDL_Log("Flash Memory is not empty \n");
-			SDL_Log("Detecting Flash Memory ID... \n");
+			printf("Flash Memory is not empty \n");
+			printf("Detecting Flash Memory ID... \n");
 			usb_buffer_out[0] = INFOS_ID;
 			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 			libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
 			manufacturer_id = usb_buffer_in[1];
 			chip_id = usb_buffer_in[3];
 			flash_id = (manufacturer_id<<8) | chip_id;
-			SDL_Log("Flash ID : %04X \n",flash_id);
+			printf("Flash ID : %04X \n",flash_id);
 
 			switch(flash_id)
 			{
 				case 0xBFB6 :
-					SDL_Log("SST Flash use algo number 1 \n");
+					printf("SST Flash use algo number 1 \n");
 					usb_buffer_out[1] = 1;
 					flash_algo = 1;
 					break;
 				case 0xBFB7 :
-					SDL_Log("SST Flash use algo number 2 \n");
+					printf("SST Flash use algo number 2 \n");
 					usb_buffer_out[1] = 2;
 					flash_algo = 1;
 					break;
 				case 0x20ED :
-					SDL_Log("STMicroelectronics Flash use algo number 2 \n");
+					printf("STMicroelectronics Flash use algo number 2 \n");
 					usb_buffer_out[1] = 2;
 					flash_algo = 2;
 					break;
 				case 0xC2CB :
-					SDL_Log("Macronix Flash use algo number 2 \n");
+					printf("Macronix Flash use algo number 2 \n");
 					usb_buffer_out[1] = 2;
 					flash_algo = 2;
 					break;
 				default :
-					SDL_Log("Flash use algo number 2 \n");
+					printf("Flash use algo number 2 \n");
 					usb_buffer_out[1] = 2;
 					flash_algo = 2;
 					break;
@@ -255,21 +255,21 @@ int Write_Flash(void)
 			fread(BufferROM, 1, game_size, myfile);
 			fclose(myfile);
 
-			SDL_Log("Erasing flash with algo %d \n ",flash_algo);
+			printf("Erasing flash with algo %d \n ",flash_algo);
 			usb_buffer_out[0] = ERASE_MD_FLASH;
 			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 			i=0;
-			SDL_Log("ERASE SMD flash in progress...");
+			printf("ERASE SMD flash in progress...");
 			while(usb_buffer_in[0]!=0xFF)
 			{
 				libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);   //wait status
-				SDL_Log("ERASE SMD flash in progress: %s ", wheel[i]);
+				printf("ERASE SMD flash in progress: %s ", wheel[i]);
 				fflush(stdout);
 				i++;
 				if(i==4)	i=0;
 			}
 
-			SDL_Log("Flash Erased sucessfully !\n");
+			printf("Flash Erased sucessfully !\n");
 			fflush(stdout);
 		}
 
@@ -278,7 +278,7 @@ int Write_Flash(void)
 		int old =0;
 			
 		address = 0;
-		SDL_Log("Writing flash with algo %d . In progress...\n ",flash_algo);
+		printf("Writing flash with algo %d . In progress...\n ",flash_algo);
 		while(i<game_size)
 		{
 			usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
@@ -297,7 +297,7 @@ int Write_Flash(void)
 			if(new!=old)
 			{
 				old=new;
-				SDL_Log("WRITE SMD flash in progress: %ld%%", new);
+				printf("WRITE SMD flash in progress: %ld%%", new);
 				fflush(stdout);
 			}
 		}
@@ -305,10 +305,10 @@ int Write_Flash(void)
 	}
 	else  // MD Dumper New Flash write code with CSV
 	{
-		//SDL_Log("Execute Flash Write code CSV\n");
-		SDL_Log("Write Mode : Erase Flash Data\n");
-		SDL_Log("Launch Flash Erase command ... \n");
-		SDL_Log("Detecting Flash Memory... \n");
+		//printf("Execute Flash Write code CSV\n");
+		printf("Write Mode : Erase Flash Data\n");
+		printf("Launch Flash Erase command ... \n");
+		printf("Detecting Flash Memory... \n");
 		address=0;
 		i=0;
 		while (i<8)
@@ -324,7 +324,7 @@ int Write_Flash(void)
 			address+=32;
 			i++;
 		}
-		SDL_Log("Detecting Flash Memory... \n");
+		printf("Detecting Flash Memory... \n");
 		address=0;
 		usb_buffer_out[0] = READ_MD;
 		usb_buffer_out[1] = address&0xFF ;
@@ -347,21 +347,21 @@ int Write_Flash(void)
 		chip_id = usb_buffer_in[3];
 		flash_id = (manufacturer_id<<8) | chip_id;
 
-		SDL_Log("Flash ID : %04X \n",flash_id);
+		printf("Flash ID : %04X \n",flash_id);
 
 		for (i = 0; i < chipid_text_values_count; i++)
 		{
 			strncpy(txt_csv_deviceID,chipid_text_values[i],4);
-			//SDL_Log(" \n txt chipid value : %s \n",txt_csv_deviceID);
+			//printf(" \n txt chipid value : %s \n",txt_csv_deviceID);
 			csv_deviceID = (unsigned short)strtol(txt_csv_deviceID, NULL, 16);
-			//SDL_Log(" \n DEC Device ID value : %ld \n",csv_deviceID);
+			//printf(" \n DEC Device ID value : %ld \n",csv_deviceID);
 
 			// If found we need to copy all usefull info from CSV to MD dumper Var
 			if ( flash_id == csv_deviceID  )
 			{
 				Index_chksm = i;
-				SDL_Log("Found chip in CSV Flashlist ! \n");
-				SDL_Log("Position in csv table %d \n",i);
+				printf("Found chip in CSV Flashlist ! \n");
+				printf("Position in csv table %d \n",i);
 
 				// Flash Size
 				strncpy(txt_csv_flash_size,chipid_text_values[i]+5,3);
@@ -403,24 +403,24 @@ int Write_Flash(void)
 				txt_csv_man_name[19] = '\0'; // Null-terminate the output string
 				//printf("Chip Manufacturer : %s \n",txt_csv_man_name);
 
-				SDL_Log("Memory : %s \n",txt_csv_flash_name);
-				SDL_Log("Capacity %ld Ko \n",flash_size);
-				SDL_Log("Chip Manufacturer : %s \n",txt_csv_man_name);
-				SDL_Log("Chip Voltage %ld V \n",csv_voltage);
-				SDL_Log("CSV Erase Algo  %d \n",csv_erase_algo);
-				SDL_Log("CSV Write Algo %d \n",csv_write_algo);
+				printf("Memory : %s \n",txt_csv_flash_name);
+				printf("Capacity %ld Ko \n",flash_size);
+				printf("Chip Manufacturer : %s \n",txt_csv_man_name);
+				printf("Chip Voltage %ld V \n",csv_voltage);
+				printf("CSV Erase Algo  %d \n",csv_erase_algo);
+				printf("CSV Write Algo %d \n",csv_write_algo);
 			}
 		}
 		
 		// At this point flash ID is known so we can start Write flash with csv algo
-		SDL_Log("Memory : %s \n",txt_csv_flash_name);
-		SDL_Log("Detect if Flash is empty... \n");
-		if(memcmp((char *)dump_flash,(char *)empty_flash,512) == 0)		SDL_Log("Flash is empty !\n");
+		printf("Memory : %s \n",txt_csv_flash_name);
+		printf("Detect if Flash is empty... \n");
+		if(memcmp((char *)dump_flash,(char *)empty_flash,512) == 0)		printf("Flash is empty !\n");
 		else
 		{
-			SDL_Log("Flash Memory is not empty \n");
+			printf("Flash Memory is not empty \n");
 
-			SDL_Log("Erasing flash with algo %d \n ",csv_erase_algo);
+			printf("Erasing flash with algo %d \n ",csv_erase_algo);
 			usb_buffer_out[0] = ERASE_MD_FLASH;
 			usb_buffer_out[1] = csv_erase_algo;
 			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
@@ -428,15 +428,15 @@ int Write_Flash(void)
 			while(usb_buffer_in[0]!=0xFF)
 			{
 				libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);   //wait status
-				SDL_Log("\rERASE SMD flash in progress: %s ", wheel[i]);
+				printf("\rERASE SMD flash in progress: %s ", wheel[i]);
 				fflush(stdout);
 				i++;
 				if(i==4)	i=0;
 			}
 
-			SDL_Log("\rERASE SMD flash in progress: 100%%");
-			SDL_Log("\n");
-			SDL_Log("Flash Erased sucessfully \n");
+			printf("\rERASE SMD flash in progress: 100%%");
+			printf("\n");
+			printf("Flash Erased sucessfully \n");
 			fflush(stdout);
 		}
 		
@@ -454,7 +454,7 @@ int Write_Flash(void)
 			k=0;
 			address = 0;
 
-			SDL_Log("Writing flash with algo %d \n ",csv_write_algo);
+			printf("Writing flash with algo %d \n ",csv_write_algo);
 
 			// Send correct flah Algo to MD dumper
 			usb_buffer_out[0] = SEND_FLASH_ALGO;
@@ -484,12 +484,12 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					SDL_Log("WRITE SMD flash in progress: %ld%%", new);
+					printf("WRITE SMD flash in progress: %ld%%", new);
 					fflush(stdout);
 				}
 			}
 			
-			SDL_Log("\r SMD flash completed\n");
+			printf("\r SMD flash completed\n");
 			timer_end();
 			timer_show();
 			free(buffer_rom);
@@ -508,7 +508,7 @@ int Write_Flash(void)
 			k=0;
 			address = 0;
 
-			SDL_Log("Writing flash with algo %d \n ",csv_write_algo);
+			printf("Writing flash with algo %d \n ",csv_write_algo);
 
 			// Send correct flah Algo to MD dumper
 			usb_buffer_out[0] = SEND_FLASH_ALGO;
@@ -566,12 +566,12 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					SDL_Log("Flash ROM in progress: %ld%%", new);
+					printf("Flash ROM in progress: %ld%%", new);
 					fflush(stdout);
 				}
 			}
 
-			SDL_Log("MX Flashed sucessfully ! \n");
+			printf("MX Flashed sucessfully ! \n");
 			timer_end();
 			timer_show();
 		}
@@ -581,8 +581,8 @@ int Write_Flash(void)
 
 int Erase_RAM(void)
 {
-	SDL_Log("Write Mode : Erase Save Data\n");
-	SDL_Log("ALL SRAM DATAS WILL BE ERASED ...\n");
+	printf("Write Mode : Erase Save Data\n");
+	printf("ALL SRAM DATAS WILL BE ERASED ...\n");
 	address=(save_address/2);
 	usb_buffer_out[0] = WRITE_MD_SAVE; // Select write in 8bit Mode
 	usb_buffer_out[1]=address & 0xFF;
@@ -592,13 +592,13 @@ int Erase_RAM(void)
 	libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 	while ( usb_buffer_in[6] != 0xAA)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
 	
-	SDL_Log("SRAM Sucessfully Erased !\n");
+	printf("SRAM Sucessfully Erased !\n");
 	return 0;
 }
 
 int Write_RAM(void)
 {
-	SDL_Log("Write Mode : Write Save Data\n");
+	printf("Write Mode : Write Save Data\n");
 	sfd_Options opt =
 	{
 		.title		= "Select your Save Data File",
@@ -606,14 +606,14 @@ int Write_RAM(void)
 		.filter	   = "*.*",
 	};
 	const char *filename = sfd_open_dialog(&opt);
-	if (filename)	SDL_Log("You selected the file: '%s'\n", filename);
+	if (filename)	printf("You selected the file: '%s'\n", filename);
 	else
 	{
-		SDL_Log("Operation canceled\n");
+		printf("Operation canceled\n");
 		return 0;
 	}
 	
-	SDL_Log(" ALL DATAS WILL BE ERASED BEFORE ANY WRITE!\n");
+	printf(" ALL DATAS WILL BE ERASED BEFORE ANY WRITE!\n");
 	myfile = fopen(filename,"rb");
 	fseek(myfile,0,SEEK_END);
 	save_size = ftell(myfile);
@@ -632,7 +632,7 @@ int Write_RAM(void)
 	libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 	while ( usb_buffer_in[6] != 0xAA)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
 
-	SDL_Log("SRAM Sucessfully Erased\n");
+	printf("SRAM Sucessfully Erased\n");
 
 	// Write SRAM
 	i=0;
@@ -661,6 +661,6 @@ int Write_RAM(void)
 		address+=32;
 	}
 
-	SDL_Log("SRAM Sucessfully Writted !\n");
+	printf("SRAM Sucessfully Writted !\n");
 	return 0;
 }

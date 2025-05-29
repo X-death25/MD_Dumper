@@ -20,8 +20,10 @@ Jackobo Le Chocobo (Akina Usagi) - 31/08/2024
 
 int main(int argc, char *argv[])
 {
+#ifdef SDLGUI
 	SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO); //Display informations on console
-	
+#endif
+
 	if(argc == 1)
 	{
 		Display_Help(argv[0]);
@@ -33,6 +35,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+#ifdef SDLGUI
 	//Using GUI Mode ?
 	int lang=0;
 	if(strcmp(argv[1], "-gui") == 0)
@@ -45,9 +48,11 @@ int main(int argc, char *argv[])
 		use_gui=1;
 		lang=1;
 	}
-	
+#endif
+
 	if (use_gui==1)
 	{  
+#ifdef SDLGUI
 		int gui_scale=2;
 		int quit = 0;
 		SDL_Event event;
@@ -530,19 +535,20 @@ int main(int argc, char *argv[])
 					break;
 			}
 		}
+#endif
 	}
 	else
 	{
-		SDL_Log("\n");
-		SDL_Log("----------------------------------------------------------------\n");
-		SDL_Log("8b   d8 888b.      888b. 8    8 8b   d8 888b. 8888 888b. \n");
-		SDL_Log("8YbmdP8 8   8      8   8 8    8 8YbmdP8 8  .8 8www 8  .8 \n");
-		SDL_Log("8     8 8   8 wwww 8   8 8b..d8 8     8 8wwP' 8    8wwK' \n");
-		SDL_Log("8     8 888P'      888P' `Y88P' 8     8 8     8888 8  Yb \n");
-		SDL_Log("----------------------------------------------------------------\n");
-		SDL_Log("\n");
-		SDL_Log("Release : 02 Nov. 2024 \n");
-		SDL_Log("\n");
+		printf("\n");
+		printf("----------------------------------------------------------------\n");
+		printf("8b   d8 888b.      888b. 8    8 8b   d8 888b. 8888 888b. \n");
+		printf("8YbmdP8 8   8      8   8 8    8 8YbmdP8 8  .8 8www 8  .8 \n");
+		printf("8     8 8   8 wwww 8   8 8b..d8 8     8 8wwP' 8    8wwK' \n");
+		printf("8     8 888P'      888P' `Y88P' 8     8 8     8888 8  Yb \n");
+		printf("----------------------------------------------------------------\n");
+		printf("\n");
+		printf("Release : 02 Nov. 2024 \n");
+		printf("\n");
 	}
 
 	//LibUsb : Init & Detect
@@ -583,7 +589,7 @@ int main(int argc, char *argv[])
 				else if (strcmp(argv[3], "8192") == 0)					dump_rom_size_opts = 8;
 				else
 				{
-					SDL_Log("You must write one of the following values to set the game size : 32, 64, 128, 256, 512, 1024, 2048, 4096.\n");
+					printf("You must write one of the following values to set the game size : 32, 64, 128, 256, 512, 1024, 2048, 4096.\n");
 					return 1;
 				}
 				
@@ -592,7 +598,7 @@ int main(int argc, char *argv[])
 				else if (strcmp(argv[4], "sms") == 0)					dump_cart_mode_opts = 2;
 				else
 				{
-					SDL_Log("You must write one of the following values to set the cartridge type : gg, md or sms.\n");
+					printf("You must write one of the following values to set the cartridge type : gg, md or sms.\n");
 					return 1;
 				}
 			}
@@ -604,7 +610,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				SDL_Log("You must select 'a' (Auto), 'b' (Bankswitch) or 'm' (Manual).\n");
+				printf("You must select 'a' (Auto), 'b' (Bankswitch) or 'm' (Manual).\n");
 				return 1;
 			}
 		}
@@ -626,7 +632,7 @@ int main(int argc, char *argv[])
 				else if (strcmp(argv[3], "32768") == 0)					dump_sram_size_opts = 1;
 				else
 				{
-					SDL_Log("You must write one of the following values to set the game size : 8192, 32768.\n");
+					printf("You must write one of the following values to set the game size : 8192, 32768.\n");
 					return 1;
 				}
 				
@@ -635,7 +641,7 @@ int main(int argc, char *argv[])
 				else if (strcmp(argv[4], "serial_spi") == 0)				dump_sram_type_opts = 2;
 				else
 				{
-					SDL_Log("You must write one of the following values to set the cartridge type : parallel_sram, serial_i2c or serial_spi.\n");
+					printf("You must write one of the following values to set the cartridge type : parallel_sram, serial_i2c or serial_spi.\n");
 					return 1;
 				}
 			}
@@ -647,7 +653,7 @@ int main(int argc, char *argv[])
 			}
 			else
 			{
-				SDL_Log("You must select 'a' (Auto), 'b' (Bankswitch) or 'm' (Manual).\n");
+				printf("You must select 'a' (Auto), 'b' (Bankswitch) or 'm' (Manual).\n");
 				return 1;
 			}
 		}
@@ -674,7 +680,7 @@ int main(int argc, char *argv[])
 			else if (strcmp(argv[2], "parallel_sram") == 0)					dump_sram_type_opts = 0;
 			else
 			{
-				SDL_Log("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
+				printf("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
 				return 1;
 			}
 		}
@@ -689,14 +695,14 @@ int main(int argc, char *argv[])
 			else if (strcmp(argv[2], "parallel_sram") == 0)					dump_sram_type_opts = 0;
 			else
 			{
-				SDL_Log("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
+				printf("You must write one of the following values to select the save type : serial_spi, serial_i2c, parallel_sram.\n");
 				return 1;
 			}
 		}
 		//Erreur
 		else
 		{
-			SDL_Log("You must write '-read', '-backup', '-erase_flash', '-write_flash', '-erase_memory' or '-write_memory' .\n");
+			printf("You must write '-read', '-backup', '-erase_flash', '-write_flash', '-erase_memory' or '-write_memory' .\n");
 			return 1;
 		}
 	}
