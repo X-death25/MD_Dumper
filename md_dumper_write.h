@@ -578,8 +578,66 @@ int Write_Flash(void)
 
 		if (csv_write_algo == 6 ) // BETA Code for MX29GL128
 		{
-			printf("Starting Flash Memory  : %s  write in SSF2 Mapper mode \n",txt_csv_flash_name);
+			printf("\n Starting Flash Memory  : %s  write in SSF2 Mapper mode \n",txt_csv_flash_name);
 			printf("Writing flash with algo %d \n ",csv_write_algo);
+
+			myfile = fopen(filename,"rb");
+			fseek(myfile,0,SEEK_END);
+			game_size = ftell(myfile);
+			buffer_rom = (unsigned char*)malloc(game_size);
+			rewind(myfile);
+			fread(buffer_rom, 1, game_size, myfile);
+			fclose(myfile);
+			i=0;
+			j=0;
+			k=0;
+			address = 0;
+
+			// Calculate Number of Bank
+
+			 NumberOfBank = game_size/512;
+             printf("Number of Banks is %d \n",NumberOfBank);
+             printf("Bank Size is 512 Ko  \n");
+
+			 // Write first part of the ROM as fast as possible
+
+            printf("Write bank O-7 to $000000 - $3FFFFF \n");
+            printf("Please wait ...\n");
+
+			// Send correct flah Algo to MD dumper
+			usb_buffer_out[0] = SEND_FLASH_ALGO;
+			usb_buffer_out[4] = 2;
+			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+			while ( usb_buffer_in[6] != 0xDD)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
+
+			timer_start();
+			int new=0;
+			int old=0;
+			while(i<1024*4096)
+			{
+				usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
+				usb_buffer_out[1] = address & 0xFF;
+				usb_buffer_out[2] = (address & 0xFF00)>>8;
+				usb_buffer_out[3] = (address & 0xFF0000)>>16;
+
+				if(((1024*4096) - i)<54)			usb_buffer_out[4] = ((1024*4096) - i); //adjust last packet
+				else							usb_buffer_out[4] = 54; //max 58 bytes - must by pair (word)
+
+				memcpy((unsigned char *)usb_buffer_out +5, (unsigned char *)buffer_rom +i, usb_buffer_out[4]);
+
+				libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+				i += usb_buffer_out[4];
+				address += (usb_buffer_out[4]>>1);
+				new=(100 * i)/(1024*4096);
+				if(new!=old)
+				{
+					old=new;
+					printf("WRITE SMD flash in progress: %ld%%", new);
+					fflush(stdout);
+				}
+			}
+
+			printf("Write Bank 0 to 7 completed ! \n");
 			
 
 		}
