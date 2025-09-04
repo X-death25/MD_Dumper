@@ -596,7 +596,7 @@ int Write_Flash(void)
 			// Calculate Number of Bank
 
 			printf("Game Size is %ld Ko \n",game_size);
-			 NumberOfBank = game_size/512;
+			 NumberOfBank = game_size/(1024*512);
              printf("Number of Banks is %d \n",NumberOfBank);
              printf("Bank Size is 512 Ko  \n");
 
