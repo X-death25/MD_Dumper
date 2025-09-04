@@ -440,7 +440,7 @@ int Write_Flash(void)
 			fflush(stdout);
 		}
 		
-		if (csv_write_algo == 1 || 2 || 3 || 4 )
+		if (csv_write_algo < 5 )
 		{
 			myfile = fopen(filename,"rb");
 			fseek(myfile,0,SEEK_END);
