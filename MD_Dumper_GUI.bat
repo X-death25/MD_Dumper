@@ -1,2 +1,2 @@
-MD_Dumper.exe -gui
+MD_Dumper_GUI.exe -gui
 PAUSE
