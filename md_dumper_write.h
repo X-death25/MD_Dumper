@@ -440,7 +440,7 @@ int Write_Flash(void)
 			fflush(stdout);
 		}
 		
-		if (csv_write_algo != 5 )
+		if (csv_write_algo < 5 )
 		{
 			myfile = fopen(filename,"rb");
 			fseek(myfile,0,SEEK_END);
@@ -574,6 +574,14 @@ int Write_Flash(void)
 			SDL_Log("MX Flashed sucessfully ! \n");
 			timer_end();
 			timer_show();
+		}
+
+		else if (csv_write_algo == 6 ) // BETA Code for MX29GL128
+		{
+			SDL_Log("Starting Flash Memory  : %s  write in SSF2 Mapper mode \n",txt_csv_flash_name);
+			SDL_Log("Writing flash with algo %d \n ",csv_write_algo);
+			
+
 		}
 	}
 	return 0;
