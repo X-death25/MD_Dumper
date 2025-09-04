@@ -576,7 +576,7 @@ int Write_Flash(void)
 			timer_show();
 		}
 
-		else if (csv_write_algo == 6 ) // BETA Code for MX29GL128
+		if (csv_write_algo == 6 ) // BETA Code for MX29GL128
 		{
 			SDL_Log("Starting Flash Memory  : %s  write in SSF2 Mapper mode \n",txt_csv_flash_name);
 			SDL_Log("Writing flash with algo %d \n ",csv_write_algo);
