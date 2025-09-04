@@ -72,7 +72,7 @@ int Read_ROM_Auto(void)
     else if ( sms_mode == 0 && Hardwaretype == 2 ) // Automatic Dump Megadrive cartridge in SSF2 mapper mode
     {
         printf("Extra Hardware detected dump in mode : Sega SSF \n");
-        NumberOfBank = game_size/512;
+        NumberOfBank = game_size/(1024*512);
         //printf("Game Size is %ld Ko \n",game_size);
         printf("Number of Banks is %d \n",NumberOfBank);
         printf("Bank Size is 512 Ko  \n");
