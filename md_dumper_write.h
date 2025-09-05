@@ -685,8 +685,8 @@ int Write_Flash(void)
 			while ( usb_buffer_in[6] != 0xDD)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
 
 			timer_start();
-			int new=0;
-			int old=0;
+			new=0;
+			old=0;
 			while(i<1024*2048)
 			{
 				usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
