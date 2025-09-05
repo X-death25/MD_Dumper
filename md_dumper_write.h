@@ -688,8 +688,6 @@ int Write_Flash(void)
 			usb_buffer_out[4] = 2;
 			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 			while ( usb_buffer_in[6] != 0xDD)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
-
-			timer_start();
 			new=0;
 			old=0;
 			i=0;
