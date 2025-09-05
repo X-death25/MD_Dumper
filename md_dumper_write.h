@@ -579,7 +579,7 @@ int Write_Flash(void)
 		if (csv_write_algo == 6 ) // BETA Code for MX29GL128
 		{
 			printf("\n Starting Flash Memory  : %s  write in SSF2 Mapper mode \n",txt_csv_flash_name);
-			printf("Writing flash with algo %d \n ",csv_write_algo);
+			printf("Writing flash with algo %d \n",csv_write_algo);
 
 			myfile = fopen(filename,"rb");
 			fseek(myfile,0,SEEK_END);
@@ -595,7 +595,7 @@ int Write_Flash(void)
 
 			// Calculate Number of Bank
 
-			printf("Game Size is %ld Ko \n",game_size);
+			 printf("Game Size is %ld Ko \n",game_size/1024);
 			 NumberOfBank = game_size/(1024*512);
              printf("Number of Banks is %d \n",NumberOfBank);
              printf("Bank Size is 512 Ko  \n");
@@ -640,6 +640,10 @@ int Write_Flash(void)
 
 			printf("\n\nWrite Bank 0 to 7 completed ! \n");
 			ActualBank = 8;
+		    offset = 4096 - 1024;
+
+		while ( offset != (game_size/1024)-1024)
+        {
 			printf("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
             printf("please wait ...\n");
 
@@ -675,11 +679,7 @@ int Write_Flash(void)
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
-			offset = 4096 - 1024;
 
-
-		while ( offset != (game_size/1024)-1024)
-        {
             // Re-start the write
 			address = (2048*1024)/2;
 			offset = offset + 1024;
