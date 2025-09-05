@@ -638,7 +638,7 @@ int Write_Flash(void)
 				}
 			}
 
-			printf("Write Bank 0 to 7 completed ! \n");
+			printf("\n\nWrite Bank 0 to 7 completed ! \n");
 			
 
 		}
