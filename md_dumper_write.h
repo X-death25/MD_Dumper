@@ -639,6 +639,82 @@ int Write_Flash(void)
 			}
 
 			printf("\n\nWrite Bank 0 to 7 completed ! \n");
+			ActualBank = 8;
+			printf("Bankswith bank %d - %d to $200000 - $2FFFFF \n",ActualBank,ActualBank+1);
+            printf("please wait ...\n");
+
+			address = 0xA130F9/2; // bank 4
+            usb_buffer_out[0] = MAPPER_SSF2;
+            usb_buffer_out[1]=address & 0xFF;
+            usb_buffer_out[2]=(address & 0xFF00)>>8;
+            usb_buffer_out[3]=(address & 0xFF0000)>>16;
+            usb_buffer_out[4]=0;
+            usb_buffer_out[5]=ActualBank;
+
+            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+
+            // Send 0x09 to the bank 7
+            address = 0xA130FB/2; // bank 5
+            usb_buffer_out[0] = MAPPER_SSF2;
+            usb_buffer_out[1]=address & 0xFF;
+            usb_buffer_out[2]=(address & 0xFF00)>>8;
+            usb_buffer_out[3]=(address & 0xFF0000)>>16;
+            usb_buffer_out[4]=0;
+            usb_buffer_out[5]=ActualBank+1;
+
+            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            address = (2048*1024)/2;
+            // Dump lastMB
+            // Do a simple read maybe needed for init bank or slow down the dumper :D
+            usb_buffer_out[0] = READ_MD;
+            usb_buffer_out[1]=address & 0xFF;
+            usb_buffer_out[2]=(address & 0xFF00)>>8;
+            usb_buffer_out[3]=(address & 0xFF0000)>>16;
+            usb_buffer_out[4]=0;
+
+            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
+
+            // Re-start the write
+			address = (2048*1024)/2;
+			offset = offset + 1024;
+			// Send correct flah Algo to MD dumper
+			usb_buffer_out[0] = SEND_FLASH_ALGO;
+			usb_buffer_out[4] = 2;
+			libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+			while ( usb_buffer_in[6] != 0xDD)	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 6000);
+
+			timer_start();
+			int new=0;
+			int old=0;
+			while(i<1024*2048)
+			{
+				usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
+				usb_buffer_out[1] = address & 0xFF;
+				usb_buffer_out[2] = (address & 0xFF00)>>8;
+				usb_buffer_out[3] = (address & 0xFF0000)>>16;
+
+				if(((1024*2048) - i)<54)			usb_buffer_out[4] = ((1024*2048) - i); //adjust last packet
+				else							usb_buffer_out[4] = 54; //max 58 bytes - must by pair (word)
+
+				memcpy((unsigned char *)usb_buffer_out +5, (unsigned char *)buffer_rom +i +offset*1024, usb_buffer_out[4]);
+
+				libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+				i += usb_buffer_out[4];
+				address += (usb_buffer_out[4]>>1);
+				new=(100 * i)/(1024*2048);
+				if(new!=old)
+				{
+					old=new;
+					printf("\nWRITE SMD flash in progress: %ld%%", new);
+					fflush(stdout);
+				}
+			}
+
+			printf("Writing bank %d - %d completed ! \n",ActualBank,ActualBank+1);
+			printf("MX Flashed sucessfully ! \n");
+			timer_end();
+			timer_show();
 			
 
 		}
