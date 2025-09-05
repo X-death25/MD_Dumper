@@ -687,6 +687,7 @@ int Write_Flash(void)
 			timer_start();
 			new=0;
 			old=0;
+			i=0;
 			while(i<1024*2048)
 			{
 				usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
