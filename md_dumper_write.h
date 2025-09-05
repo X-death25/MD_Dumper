@@ -677,6 +677,7 @@ int Write_Flash(void)
 
             // Re-start the write
 			address = (2048*1024)/2;
+			offset = 4096 - 1024;
 			offset = offset + 1024;
 			// Send correct flah Algo to MD dumper
 			usb_buffer_out[0] = SEND_FLASH_ALGO;
@@ -688,14 +689,14 @@ int Write_Flash(void)
 			new=0;
 			old=0;
 			i=0;
-			while(i<1024*2048)
+			while(i<1024*1024)
 			{
 				usb_buffer_out[0] = WRITE_MD_FLASH; // Select write in 16bit Mode
 				usb_buffer_out[1] = address & 0xFF;
 				usb_buffer_out[2] = (address & 0xFF00)>>8;
 				usb_buffer_out[3] = (address & 0xFF0000)>>16;
 
-				if(((1024*2048) - i)<54)			usb_buffer_out[4] = ((1024*2048) - i); //adjust last packet
+				if(((1024*1024) - i)<54)			usb_buffer_out[4] = ((1024*1024) - i); //adjust last packet
 				else							usb_buffer_out[4] = 54; //max 58 bytes - must by pair (word)
 
 				memcpy((unsigned char *)usb_buffer_out +5, (unsigned char *)buffer_rom +i +offset*1024, usb_buffer_out[4]);
@@ -703,7 +704,7 @@ int Write_Flash(void)
 				libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 				i += usb_buffer_out[4];
 				address += (usb_buffer_out[4]>>1);
-				new=(100 * i)/(1024*2048);
+				new=(100 * i)/(1024*1024);
 				if(new!=old)
 				{
 					old=new;
@@ -712,7 +713,9 @@ int Write_Flash(void)
 				}
 			}
 
-			printf("Writing bank %d - %d completed ! \n",ActualBank,ActualBank+1);
+			printf("\n\nWriting bank %d - %d completed ! \n",ActualBank,ActualBank+1);
+			
+
 			printf("MX Flashed sucessfully ! \n");
 			timer_end();
 			timer_show();
