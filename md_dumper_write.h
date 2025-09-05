@@ -675,9 +675,13 @@ int Write_Flash(void)
             libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
+			offset = 4096 - 1024;
+
+
+		while ( offset != (game_size/1024)-1024)
+        {
             // Re-start the write
 			address = (2048*1024)/2;
-			offset = 4096 - 1024;
 			offset = offset + 1024;
 			// Send correct flah Algo to MD dumper
 			usb_buffer_out[0] = SEND_FLASH_ALGO;
@@ -714,6 +718,8 @@ int Write_Flash(void)
 			}
 
 			printf("\n\nWriting bank %d - %d completed ! \n",ActualBank,ActualBank+1);
+			ActualBank = ActualBank +2;
+		}
 			
 
 			printf("MX Flashed sucessfully ! \n");
