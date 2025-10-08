@@ -71,7 +71,7 @@ char txt_csv_chksm[4];
 unsigned short csv_chksm				= 0;
 unsigned char txt_csv_game_size[4+1];
 unsigned char csv_game_size				= 0;
-char txt_mapper_number[1];
+char txt_mapper_number[2];
 unsigned char csv_mapper_number				= 0;
 char txt_save_type[1];
 unsigned char csv_save_type				= 0;
@@ -161,7 +161,7 @@ unsigned char *buffer_header				= NULL;
 unsigned char *buffer_rom				= NULL;
 unsigned char md_dumper_type				= 0;
 unsigned char sms_mode					= 0;
-unsigned char dump_name[32];
+unsigned char dump_name[64];
 unsigned char region[5];
 char *game_region					= NULL;
 const char unk[]					= {"unknown"};
@@ -502,7 +502,7 @@ int Detect_Device(void)
 		res = libusb_get_device_descriptor(device, &desc);
 		assert(res == 0);
 
-		if(desc.idVendor=VENDOR_ID && desc.idProduct==PRODUCT_ID) device_found=idx;
+		if(desc.idVendor==VENDOR_ID && desc.idProduct==PRODUCT_ID) device_found=idx;
 	}
 	
 	if(device_found!=-1)
@@ -572,7 +572,7 @@ int Detect_Device(void)
 	}
 
 	usb_buffer_out[0] = WAKEUP;// Affect request to  WakeUP Command
-	libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0); // Send Packets to Sega Dumper
+	libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0); // Send Packets to Sega Dumper
 	libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 	printf("\n");
 	printf("MD Dumper %.*s",6, (char *)usb_buffer_in);
@@ -735,7 +735,7 @@ int Open_CSV_Files(void)
 
 	printf("CSV SMS-GG CRC file opened sucessfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
-	printf("Add : %ld SMS/GG Games into MD Dumper Database \n", non_empty_cells_in_col_A3);
+	printf("Add : %d SMS/GG Games into MD Dumper Database\n", non_empty_cells_in_col_A3);
 
 	return 0;
 }
@@ -744,11 +744,8 @@ void Game_Header_Infos(void)
 {
 	if ( sms_mode == 0 ) //Read in 16 bits mode
 	{
-		buffer_header = (unsigned char *)malloc(0x200);
+		buffer_header = (unsigned char *)calloc(1, 0x200);
 		address = 0x80;
-
-		// Cleaning header Buffer
-		for (i=0; i<512; i++)		buffer_header[i]=0x00;
 
 		i = 0;
 		while (i<8)
@@ -765,27 +762,28 @@ void Game_Header_Infos(void)
 			i++;
 		}
 
-		if(memcmp((unsigned char *)buffer_header,"SEGA",4) == 0)
+		if(memcmp(buffer_header, "SEGA", 4) == 0)
 		{
 			printf("\n");
 			printf("Megadrive/Genesis/32X cartridge detected!\n");
 			printf("\n");
 			printf(" --- HEADER ---\n");
-			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+32, 48);
-			trim((unsigned char *)dump_name, 0);
+			memcpy(dump_name, buffer_header+32, 48);
+			trim(dump_name, 0);
 			printf(" Domestic: %.*s\n", 48, (char *)game_name);
-			memcpy((unsigned char *)dump_name, (unsigned char *)buffer_header+80, 48);
-			trim((unsigned char *)dump_name, 0);
+			memcpy(dump_name, buffer_header+80, 48);
+			trim(dump_name, 0);
 			printf(" International: %.*s\n", 48, game_name);
 			printf(" Release date: %.*s\n", 16, buffer_header+0x10);
 			printf(" Version: %.*s\n", 14, buffer_header+0x80);
-			memcpy((unsigned char *)region, (unsigned char *)buffer_header +0xF0, 4);
+
+			memcpy(region, buffer_header +0xF0, 4);
 			for(i=0; i<4; i++)
 			{
 				if(region[i]==0x20)
 				{
 					game_region = (char *)malloc(i);
-					memcpy((unsigned char *)game_region, (unsigned char *)buffer_header +0xF0, i);
+					memcpy(game_region, buffer_header +0xF0, i);
 					game_region[i] = '\0';
 					break;
 				}
@@ -794,7 +792,7 @@ void Game_Header_Infos(void)
 			if(game_region[0]=='0')
 			{
 				game_region = (char *)malloc(4);
-				memcpy((char *)game_region, (char *)unk, 3);
+				memcpy(game_region, unk, 3);
 				game_region[3] = '\0';
 			}
 
@@ -847,10 +845,10 @@ void Game_Header_Infos(void)
 					save_size=(save_size/2) + 1; // 8bit size
 				}
 				save_address = (buffer_header[0xB4]<<24) | (buffer_header[0xB5]<<16) | (buffer_header[0xB6] << 8) | buffer_header[0xB7];
-				printf(" Save size: %dKb\n", save_size);
+				printf(" Save size: %luKb\n", save_size);
 				printf(" Save address: %lX\n", save_address);
 
-				if(usb_buffer_in[0xB2]==0xE8) // EEPROM Game
+				if(buffer_header[0xB2]==0xE8) // EEPROM Game
 				{
 					printf(" No information on this game!\n");
 				}

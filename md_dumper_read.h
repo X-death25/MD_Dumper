@@ -39,7 +39,7 @@ int Read_ROM_Auto(void)
 
     if ( sms_mode == 0 && Hardwaretype == 0 ) // Dump Megadrive cartridge in no mapper mode
     {
-        printf("Rom Size : %ld Ko \n",game_size);
+        printf("Rom Size : %d Ko\n",game_size);
         game_size = game_size*1024;
         BufferROM = (unsigned char*)malloc(game_size);
         // Cleaning ROM Buffer
@@ -469,7 +469,7 @@ int Read_ROM_Manual(void)
     }
 
     printf("\n");
-    printf("Rom Size (Manual Mode) : %ld Ko \n",game_size/1024);
+    printf("Rom Size (Manual Mode) : %d Ko\n",game_size/1024);
     BufferROM = (unsigned char*)malloc(game_size);
     // Cleaning ROM Buffer
     for (i=0; i<game_size; i++)
@@ -630,14 +630,14 @@ int Read_ROM_Bankswitch(void)
             Index_chksm = i;
             printf("\n");
             printf("Found game in extra CSV Gamelist  \n");
-            printf("Position in csv table %d \n",i);
+            printf("Position in csv table %lu\n",i);
             strncpy(txt_csv_game_size,chksm_text_values[i]+5,4);
             txt_csv_game_size[4] = '\0'; // Null-terminate the output string
             //printf(" txt game size : %s \n",txt_csv_game_size);
             csv_game_size = (unsigned char)strtol(txt_csv_game_size, NULL, 10);
             //printf(" CSV Game Size  %d \n",csv_game_size);
             game_size=1024*csv_game_size;
-            printf("ROM Size from CSV is %ld Ko \n",game_size);
+            printf("ROM Size from CSV is %d Ko\n",game_size);
         }
     }
     NumberOfBank = game_size/512;
@@ -785,7 +785,7 @@ int Read_RAM_Auto(void)
     return 0;
 }
 
-int Read_RAM_Bankswitch(void)
+void Read_RAM_Bankswitch(void)
 {
     printf("Read Mode Bankswitch: Read Save Data\n");
     printf("TODO !...\n");
@@ -795,7 +795,7 @@ int Read_RAM_Manual(void)
 {
     printf("Read Mode Manual : Read Save Data\n");
     printf("Reading in progress...\n");
-    printf("%ld",dump_sram_size_opts);
+    printf("%d",dump_sram_size_opts);
     timer_start();
     if(dump_sram_size_opts==0)
         save_size = 8192;

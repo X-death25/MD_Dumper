@@ -95,11 +95,11 @@ int Erase_Flash()
 			{
 				Index_chksm = i;
 				printf("Found chip in CSV Flashlist ! \n");
-				printf("Position in csv table %d \n",i);
+				printf("Position in csv table %lu\n",i);
 
 				// Flash Size
 				strncpy(txt_csv_flash_size,chipid_text_values[i]+5,3);
-				txt_csv_flash_size[4] = '\0'; // Null-terminate the output string
+				txt_csv_flash_size[3] = '\0'; // Null-terminate the output string
 				//printf("Txt flash size : %s \n",txt_csv_flash_size);
 				csv_flash_size = (unsigned char)strtol(txt_csv_flash_size, NULL, 10);
 				//printf("CSV Flash Size  %d \n",csv_flash_size);
@@ -122,7 +122,7 @@ int Erase_Flash()
 
 				// Chip Name
 				strncpy(txt_csv_flash_name,chipid_text_values[i]+15,11);
-				txt_csv_flash_name[12] = '\0'; // Null-terminate the output string
+				txt_csv_flash_name[11] = '\0'; // Null-terminate the output string
 				//printf("Flash Device Reference : %s \n",txt_csv_flash_name);
 
 				// Voltage
@@ -134,15 +134,15 @@ int Erase_Flash()
 
 				// Manufacturer
 				strncpy(txt_csv_man_name,chipid_text_values[i]+30,18);
-				txt_csv_man_name[19] = '\0'; // Null-terminate the output string
+				txt_csv_man_name[18] = '\0'; // Null-terminate the output string
 				//printf("Chip Manufacturer : %s \n",txt_csv_man_name);
 
-				printf("Memory : %s \n",txt_csv_flash_name);
-				printf("Capacity %ld Ko \n",flash_size);
-				printf("Chip Manufacturer : %s \n",txt_csv_man_name);
-				printf("Chip Voltage %ld V \n",csv_voltage);
-				printf("CSV Erase Algo  %d \n",csv_erase_algo);
-				printf("CSV Write Algo %d \n",csv_write_algo);
+				printf("Memory : %s\n",txt_csv_flash_name);
+				printf("Capacity %ld Ko\n",flash_size);
+				printf("Chip Manufacturer : %s\n",txt_csv_man_name);
+				printf("Chip Voltage %hhu V\n",csv_voltage);
+				printf("CSV Erase Algo  %d\n",csv_erase_algo);
+				printf("CSV Write Algo %d\n",csv_write_algo);
 			}
 		}
 
@@ -297,7 +297,7 @@ int Write_Flash(void)
 			if(new!=old)
 			{
 				old=new;
-				printf("WRITE SMD flash in progress: %ld%%", new);
+				printf("WRITE SMD flash in progress: %d", new);
 				fflush(stdout);
 			}
 		}
@@ -360,12 +360,12 @@ int Write_Flash(void)
 			if ( flash_id == csv_deviceID  )
 			{
 				Index_chksm = i;
-				printf("Found chip in CSV Flashlist ! \n");
-				printf("Position in csv table %d \n",i);
+				printf("Found chip in CSV Flashlist !\n");
+				printf("Position in csv table %lu\n",i);
 
 				// Flash Size
 				strncpy(txt_csv_flash_size,chipid_text_values[i]+5,3);
-				txt_csv_flash_size[4] = '\0'; // Null-terminate the output string
+				txt_csv_flash_size[3] = '\0'; // Null-terminate the output string
 				//printf("Txt flash size : %s \n",txt_csv_flash_size);
 				csv_flash_size = (unsigned char)strtol(txt_csv_flash_size, NULL, 10);
 				//printf("CSV Flash Size  %d \n",csv_flash_size);
@@ -388,7 +388,7 @@ int Write_Flash(void)
 
 				// Chip Name
 				strncpy(txt_csv_flash_name,chipid_text_values[i]+15,11);
-				txt_csv_flash_name[12] = '\0'; // Null-terminate the output string
+				txt_csv_flash_name[11] = '\0'; // Null-terminate the output string
 				//printf("Flash Device Reference : %s \n",txt_csv_flash_name);
 
 				// Voltage
@@ -400,13 +400,13 @@ int Write_Flash(void)
 
 				// Manufacturer
 				strncpy(txt_csv_man_name,chipid_text_values[i]+30,18);
-				txt_csv_man_name[19] = '\0'; // Null-terminate the output string
+				txt_csv_man_name[18] = '\0'; // Null-terminate the output string
 				//printf("Chip Manufacturer : %s \n",txt_csv_man_name);
 
 				printf("Memory : %s \n",txt_csv_flash_name);
 				printf("Capacity %ld Ko \n",flash_size);
 				printf("Chip Manufacturer : %s \n",txt_csv_man_name);
-				printf("Chip Voltage %ld V \n",csv_voltage);
+				printf("Chip Voltage %hhu V \n",csv_voltage);
 				printf("CSV Erase Algo  %d \n",csv_erase_algo);
 				printf("CSV Write Algo %d \n",csv_write_algo);
 			}
@@ -484,7 +484,7 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					printf("WRITE SMD flash in progress: %ld%%", new);
+					printf("WRITE SMD flash in progress: %d", new);
 					fflush(stdout);
 				}
 			}
@@ -566,7 +566,7 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					printf("Flash ROM in progress: %ld%%", new);
+					printf("Flash ROM in progress: %d", new);
 					fflush(stdout);
 				}
 			}
@@ -595,12 +595,12 @@ int Write_Flash(void)
 
 			// Calculate Number of Bank
 
-			 printf("Game Size is %ld Ko \n",game_size/1024);
-			 NumberOfBank = game_size/(1024*512);
-             printf("Number of Banks is %d \n",NumberOfBank);
-             printf("Bank Size is 512 Ko  \n");
+			printf("Game Size is %d Ko\n", game_size/1024);
+			NumberOfBank = game_size/(1024*512);
+			printf("Number of Banks is %d\n", NumberOfBank);
+			printf("Bank Size is 512 Ko\n");
 
-			 // Write first part of the ROM as fast as possible
+			// Write first part of the ROM as fast as possible
 
             printf("Write bank O-7 to $000000 - $3FFFFF \n");
             printf("Please wait ...\n");
@@ -633,7 +633,7 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					printf("\nWRITE SMD flash in progress: %ld%%", new);
+					printf("\nWRITE SMD flash in progress: %d", new);
 					fflush(stdout);
 				}
 			}
@@ -710,7 +710,7 @@ int Write_Flash(void)
 				if(new!=old)
 				{
 					old=new;
-					printf("\nWRITE SMD flash in progress: %ld%%", new);
+					printf("\nWRITE SMD flash in progress: %d", new);
 					fflush(stdout);
 				}
 			}
