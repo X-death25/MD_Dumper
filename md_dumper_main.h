@@ -714,7 +714,7 @@ int Open_CSV_Files(void)
 	FILE *fp3 = fopen("sms-gg_crc.csv", "r");
 	if (!fp)
 	{
-		printf("\n\n ERROR Can't find flashlist.csv ...\n");
+		printf("\n\n ERROR Can't find sms-gg_crc.csv ...\n");
 		return EXIT_FAILURE;
 	}
 
