@@ -484,7 +484,7 @@ int Detect_Device(void)
 		printf("Error initialising libusb.\n");
 		return 1;
 	}
-	printf("LibUSB Init Sucessfully ! \n");
+	printf("LibUSB Init Successfully ! \n");
 
 	printf("Detecting MD Dumper... \n");
 	count = libusb_get_device_list(context, &devs);
@@ -655,7 +655,7 @@ int Open_CSV_Files(void)
 	fclose(fp);
 
 	printf("\n");
-	printf("CSV Gamelist file opened sucessfully\n");
+	printf("CSV Gamelist file opened successfully\n");
 	//Afficher le nombre de cellules non vides en colonne A
 	printf("Add : %d Special Games into MD Dumper Database \n", non_empty_cells_in_col_A);
 
@@ -697,7 +697,7 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	printf("CSV Flashlist file opened sucessfully\n");
+	printf("CSV Flashlist file opened successfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
 	printf("Add : %d Flash ID into MD Dumper Database \n", non_empty_cells_in_col_A2);
 
@@ -733,7 +733,7 @@ int Open_CSV_Files(void)
 	csv_free(&p);
 	fclose(fp);
 
-	printf("CSV SMS-GG CRC file opened sucessfully\n");
+	printf("CSV SMS-GG CRC file opened successfully\n");
 	// Afficher le nombre de cellules non vides en colonne A
 	printf("Add : %d SMS/GG Games into MD Dumper Database\n", non_empty_cells_in_col_A3);
 
