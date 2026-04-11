@@ -48,14 +48,17 @@ int Read_ROM_Auto(void)
 
         address=0;
         usb_buffer_out[0] = READ_MD;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=1;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 1;
+        usb_buffer_out[5] = game_size & 0xFF;
+        usb_buffer_out[6] = (game_size & 0xFF00)>>8;
+        usb_buffer_out[7] = (game_size & 0xFF0000)>>16;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
         printf("ROM dump in progress...\n");
-        res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
+        res = libusb_bulk_transfer(handle, 0x82, BufferROM, game_size, &numBytes, 0);
         if (res != 0)
         {
             printf("Error \n");
@@ -92,14 +95,17 @@ int Read_ROM_Auto(void)
         i=0;
 
         usb_buffer_out[0] = READ_MD;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=1;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 1;
+        usb_buffer_out[5] = (4096*1024) & 0xFF; // Should maybe cache this into a local variable if C89 is not a necessity
+        usb_buffer_out[6] = (4096*1024 & 0xFF00)>>8;
+        usb_buffer_out[7] = (4096*1024 & 0xFF0000)>>16;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
         printf("ROM dump in progress...\n");
-        res = libusb_bulk_transfer(handle, 0x82,BufferROM,4096*1024, &numBytes,0);
+        res = libusb_bulk_transfer(handle, 0x82, BufferROM, 4096*1024, &numBytes,0);
         if (res != 0)
         {
             printf("Error \n");
@@ -116,48 +122,51 @@ int Read_ROM_Auto(void)
 
             address = 0xA130F9/2; // bank 4
             usb_buffer_out[0] = MAPPER_SSF2;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
-            usb_buffer_out[5]=ActualBank;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
+            usb_buffer_out[5] = ActualBank;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 
             // Send 0x09 to the bank 7
             address = 0xA130FB/2; // bank 5
             usb_buffer_out[0] = MAPPER_SSF2;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
-            usb_buffer_out[5]=ActualBank+1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
+            usb_buffer_out[5] = ActualBank+1;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
             address = (2048*1024)/2;
             // Dump lastMB
             // Do a simple read maybe needed for init bank or slow down the dumper :D
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
             // Re-start the dump
             address = (2048*1024)/2;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = 1024*1024 & 0xFF;
+            usb_buffer_out[6] = (1024*1024 & 0xFF00)>>8;
+            usb_buffer_out[7] = (1024*1024 & 0xFF0000)>>16;
 
             offset = offset + 1024;
             ActualBank = ActualBank +2;
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM+offset*1024,1024*1024, &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM+offset*1024, 1024*1024, &numBytes, 60000);
         }
         printf("\n");
         printf("Dump ROM completed !\n");
@@ -181,11 +190,11 @@ int Read_ROM_Auto(void)
         usb_buffer_out[0] = READ_MD;
         usb_buffer_out[1] = address&0xFF ;
         usb_buffer_out[2] = (address&0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
         usb_buffer_out[4] = 0; // Slow Mode
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-        libusb_bulk_transfer(handle, 0x82,usb_buffer_in,64, &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x82, usb_buffer_in, 64, &numBytes, 60000);
 
         memcpy((unsigned char *)dump_name, (unsigned char *)usb_buffer_in+32,32);
         trim((unsigned char *)dump_name, 0);
@@ -200,14 +209,17 @@ int Read_ROM_Auto(void)
             BufferROM = (unsigned char*)malloc(game_size);
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = game_size & 0xFF;
+            usb_buffer_out[6] = (game_size & 0xFF00)>>8;
+            usb_buffer_out[7] = (game_size & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             printf("Starting Dump ...\n");
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM, game_size, &numBytes, 0);
             if (res != 0)
             {
                 printf("Error \n");
@@ -225,14 +237,17 @@ int Read_ROM_Auto(void)
             BufferROM = (unsigned char*)malloc(game_size);
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = game_size & 0xFF;
+            usb_buffer_out[6] = (game_size & 0xFF00)>>8;
+            usb_buffer_out[7] = (game_size & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             printf("Starting Dump ...\n");
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM, game_size, &numBytes, 0);
             if (res != 0)
             {
                 printf("Error \n");
@@ -252,14 +267,17 @@ int Read_ROM_Auto(void)
             // Dump the SK + S2 part of the ROM
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = 3072*1024 & 0xFF;
+            usb_buffer_out[6] = (3072*1024 & 0xFF00)>>8;
+            usb_buffer_out[7] = (3072*1024 & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             printf("Starting Dump ...\n");
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM,3072*1024, &numBytes, 0);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM, 3072*1024, &numBytes, 0);
             if (res != 0)
             {
                 printf("Error \n");
@@ -270,37 +288,40 @@ int Read_ROM_Auto(void)
 
             address = 0xA130F1/2; // bank 6
             usb_buffer_out[0] = MAPPER_SSF2;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
-            usb_buffer_out[5]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
+            usb_buffer_out[5] = 1;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 
             // Do a simple read maybe needed for init bank or slow down the dumper :D
 
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
             // Restart the dump
 
             address = (3072*1024)/2;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = 256*1024 & 0xFF;
+            usb_buffer_out[6] = (256*1024 & 0xFF00)>>8;
+            usb_buffer_out[7] = (256*1024 & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM+3072*1024,256*1024, &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM+3072*1024, 256*1024, &numBytes, 60000);
             if (res != 0)
             {
                 printf("Error \n");
@@ -322,38 +343,41 @@ int Read_ROM_Auto(void)
             // Be sure to have Lock-ON disabled
             address = 0xA130F1/2; // bank 6
             usb_buffer_out[0] = MAPPER_SSF2;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
-            usb_buffer_out[5]=0;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
+            usb_buffer_out[5] = 0;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 
             // Do a simple read maybe needed for init bank or slow down the dumper :D
 
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=0;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 0;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
             // Restart the dump
 
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = 1024*4096 & 0xFF;
+            usb_buffer_out[6] = (1024*4096 & 0xFF00)>>8;
+            usb_buffer_out[7] = (1024*4096 & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             printf("Starting Dump S&K + Sonic 3 ...\n");
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM,1024*4096, &numBytes, 0);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM, 1024*4096, &numBytes, 0);
             if (res != 0)
             {
                 printf("Error \n");
@@ -372,14 +396,17 @@ int Read_ROM_Auto(void)
             BufferROM = (unsigned char*)malloc(game_size);
             address = 0;
             usb_buffer_out[0] = READ_MD;
-            usb_buffer_out[1]=address & 0xFF;
-            usb_buffer_out[2]=(address & 0xFF00)>>8;
-            usb_buffer_out[3]=(address & 0xFF0000)>>16;
-            usb_buffer_out[4]=1;
+            usb_buffer_out[1] = address & 0xFF;
+            usb_buffer_out[2] = (address & 0xFF00)>>8;
+            usb_buffer_out[3] = (address & 0xFF0000)>>16;
+            usb_buffer_out[4] = 1;
+            usb_buffer_out[5] = game_size & 0xFF;
+            usb_buffer_out[6] = (game_size & 0xFF00)>>8;
+            usb_buffer_out[7] = (game_size & 0xFF0000)>>16;
 
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
             printf("\nStarting Dump of Sonic & Knuckles\n");
-            res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
+            res = libusb_bulk_transfer(handle, 0x82, BufferROM, game_size, &numBytes, 0);
             if (res != 0)
             {
                 printf("Error \n");
@@ -489,8 +516,8 @@ int Read_ROM_Manual(void)
             usb_buffer_out[3] = (address & 0xFF0000)>>16;
             usb_buffer_out[4] = 0; // Slow Mode
             usb_buffer_out[5] = 0;
-            libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-            libusb_bulk_transfer(handle, 0x82,(BufferROM+i),64, &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+            libusb_bulk_transfer(handle, 0x82, (BufferROM+i), 64, &numBytes, 60000);
             address +=64;
             i+=64;
         }
@@ -507,14 +534,17 @@ int Read_ROM_Manual(void)
     {
         address = 0;
         usb_buffer_out[0] = READ_MD;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=1;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 1;
+        usb_buffer_out[5] = game_size & 0xFF;
+        usb_buffer_out[6] = (game_size & 0xFF00)>>8;
+        usb_buffer_out[7] = (game_size & 0xFF0000)>>16;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
         printf("Mega Drive Mode : ROM dump in progress...\n");
-        res = libusb_bulk_transfer(handle, 0x82,BufferROM,game_size, &numBytes, 0);
+        res = libusb_bulk_transfer(handle, 0x82, BufferROM, game_size, &numBytes, 0);
         if (res != 0)
         {
             printf("Error \n");
@@ -568,7 +598,7 @@ int Read_ROM_Bankswitch(void)
         usb_buffer_out[0] = READ_MD;
         usb_buffer_out[1] = address&0xFF ;
         usb_buffer_out[2] = (address&0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
         usb_buffer_out[4] = 0; // Slow Mode
 
         libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
@@ -660,14 +690,17 @@ int Read_ROM_Bankswitch(void)
     i=0;
 
     usb_buffer_out[0] = READ_MD;
-    usb_buffer_out[1]=address & 0xFF;
-    usb_buffer_out[2]=(address & 0xFF00)>>8;
-    usb_buffer_out[3]=(address & 0xFF0000)>>16;
-    usb_buffer_out[4]=1;
+    usb_buffer_out[1] = address & 0xFF;
+    usb_buffer_out[2] = (address & 0xFF00)>>8;
+    usb_buffer_out[3] = (address & 0xFF0000)>>16;
+    usb_buffer_out[4] = 1;
+    usb_buffer_out[5] = 4096*1024 & 0xFF;
+    usb_buffer_out[6] = (4096*1024 & 0xFF00)>>8;
+    usb_buffer_out[7] = (4096*1024 & 0xFF0000)>>16;
 
-    libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+    libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
     printf("ROM dump in progress...\n");
-    res = libusb_bulk_transfer(handle, 0x82,BufferROM,4096*1024, &numBytes,0);
+    res = libusb_bulk_transfer(handle, 0x82, BufferROM, 4096*1024, &numBytes,0);
     if (res != 0)
     {
         printf("Error \n");
@@ -684,48 +717,51 @@ int Read_ROM_Bankswitch(void)
 
         address = 0xA130F9/2; // bank 4
         usb_buffer_out[0] = MAPPER_SSF2;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=0;
-        usb_buffer_out[5]=ActualBank;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 0;
+        usb_buffer_out[5] = ActualBank;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
 
         // Send 0x09 to the bank 7
         address = 0xA130FB/2; // bank 5
         usb_buffer_out[0] = MAPPER_SSF2;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=0;
-        usb_buffer_out[5]=ActualBank+1;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 0;
+        usb_buffer_out[5] = ActualBank+1;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
         address = (2048*1024)/2;
         // Dump lastMB
         // Do a simple read maybe needed for init bank or slow down the dumper :D
         usb_buffer_out[0] = READ_MD;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=0;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 0;
 
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 0);
         libusb_bulk_transfer(handle, 0x82, usb_buffer_in, sizeof(usb_buffer_in), &numBytes, 0);
 
         // Re-start the dump
         address = (2048*1024)/2;
         usb_buffer_out[0] = READ_MD;
-        usb_buffer_out[1]=address & 0xFF;
-        usb_buffer_out[2]=(address & 0xFF00)>>8;
-        usb_buffer_out[3]=(address & 0xFF0000)>>16;
-        usb_buffer_out[4]=1;
+        usb_buffer_out[1] = address & 0xFF;
+        usb_buffer_out[2] = (address & 0xFF00)>>8;
+        usb_buffer_out[3] = (address & 0xFF0000)>>16;
+        usb_buffer_out[4] = 1;
+        usb_buffer_out[5] = 1024*1024 & 0xFF;
+        usb_buffer_out[6] = (1024*1024 & 0xFF00)>>8;
+        usb_buffer_out[7] = (1024*1024 & 0xFF0000)>>16;
 
         offset = offset + 1024;
         ActualBank = ActualBank +2;
-        libusb_bulk_transfer(handle, 0x01,usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
-        res = libusb_bulk_transfer(handle, 0x82,BufferROM+offset*1024,1024*1024, &numBytes, 60000);
+        libusb_bulk_transfer(handle, 0x01, usb_buffer_out, sizeof(usb_buffer_out), &numBytes, 60000);
+        res = libusb_bulk_transfer(handle, 0x82, BufferROM+offset*1024, 1024*1024, &numBytes, 60000);
     }
     printf("\n");
     printf("Dump ROM completed !\n");
